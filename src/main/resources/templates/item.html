@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Items</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Items</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Item</h6>
+        </div>
+        <div class="card-body">
+            <div style="padding-left: 100px; padding-right: 100px;">
+                <div class="row">
+                    <div class="col">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Add new Item!</h1>
+                            </div>
+                            <div th:if="${param.success}">
+                                <div class="alert alert-info">
+                                    Item successfully saved in application.
+                                </div>
+                            </div>
+
+                            <div th:if="${errorResponse != null && errorResponse.hasErrors()}">
+                                <ul>
+                                    has errors
+                                    <div class="alert alert-danger">
+                                        <li th:each="error : ${errorResponse.errors}" th:text="${error.description}"></li>
+                                    </div>
+                                </ul>
+                            </div>
+                            <form class="user" method="post"
+                                  id="itemForm"
+                                  role="form"
+                                  th:action="@{/item/save}"
+                                  th:object="${itemMaster}">
+                                <div class="form-group row">
+                                    <div class="col mb-sm-0">
+                                        <div class="custom-control" style="display: flex">
+                                            <div class="custom-radio small">
+                                                <input type="radio" class="custom-control-input" th:field="*{itemMetal}" th:value="GOLD" id="gold" >
+                                                <label class="custom-control-label pt-1" for="gold">GOLD</label>
+                                            </div>
+                                            <div class="custom-radio small pl-5">
+                                                <input type="radio" class="custom-control-input" th:field="*{itemMetal}" th:value="SILVER" id="silver" >
+                                                <label class="custom-control-label pt-1" for="silver">SILVER</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="itemName"
+                                               name="itemName"
+                                               placeholder="Enter item name"
+                                               th:field="*{itemName}">
+                                        <p th:errors = "*{lastName}" class="text-danger"
+                                           th:if="${#fields.hasErrors('itemName')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="hidden" class="form-control form-control-user" id="id" name="id" th:field="*{id}">
+                                        <input type="text" class="form-control form-control-user" id="itemCode"
+                                               placeholder="Item Code" name="itemCode" th:field="*{itemCode}">
+                                        <p th:errors = "*{itemCode}" class="text-danger"
+                                           th:if="${#fields.hasErrors('itemCode')}"></p>
+                                    </div>
+
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user" id="tagNo"
+                                               name="tagNo"
+                                               placeholder="Enter tag number"
+                                               th:field="*{tagNo}"
+                                               type="text">
+                                        <p th:errors = "*{email}" class="text-danger"
+                                           th:if="${#fields.hasErrors('tagNo')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="pcs"
+                                               name="pcs"
+                                               placeholder="Enter no of pieces"
+                                               th:field="*{pcs}"
+                                               type="text">
+                                        <p th:errors = "*{pcs}" class="text-danger"
+                                           th:if="${#fields.hasErrors('pcs')}"></p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="weight"
+                                               name="weight"
+                                               placeholder="Enter gross weight"
+                                               th:field="*{weight}"
+                                               type="text">
+                                        <p th:errors = "*{weight}" class="text-danger"
+                                           th:if="${#fields.hasErrors('weight')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="vaPercentage"
+                                               name="vaPercentage"
+                                               placeholder="Enter VA %"
+                                               th:field="*{vaPercentage}"
+                                               type="text">
+                                        <p th:errors = "*{vaPercentage}" class="text-danger"
+                                           th:if="${#fields.hasErrors('vaPercentage')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="wastageInGms"
+                                               name="wastageInGms"
+                                               placeholder="Enter wastage in grams"
+                                               th:field="*{wastageInGms}"
+                                               type="text">
+                                        <p th:errors = "*{wastageInGms}" class="text-danger"
+                                           th:if="${#fields.hasErrors('wastageInGms')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="mc"
+                                               name="pcs"
+                                               placeholder="Enter Making charge"
+                                               th:field="*{mc}"
+                                               type="text">
+                                        <p th:errors = "*{mc}" class="text-danger"
+                                           th:if="${#fields.hasErrors('mc')}"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="stoneName"
+                                               name="stoneName"
+                                               placeholder="Enter Stones Type"
+                                               th:field="*{stoneName}"
+                                               type="text">
+                                        <p th:errors = "*{stoneName}" class="text-danger"
+                                           th:if="${#fields.hasErrors('stoneName')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="stoneWeight"
+                                               name="stoneWeight"
+                                               placeholder="Enter Stone Weight"
+                                               th:field="*{stoneWeight}"
+                                               type="text">
+                                        <p th:errors = "*{itemQuality}" class="text-danger"
+                                           th:if="${#fields.hasErrors('stoneWeight')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="stoneWtInCts"
+                                               name="stoneWtInCts"
+                                               placeholder="Enter Stone Weight in Cts"
+                                               th:field="*{stoneWtInCts}"
+                                               type="text">
+                                        <p th:errors = "*{stoneWtInCts}" class="text-danger"
+                                           th:if="${#fields.hasErrors('stoneWtInCts')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="stonePcs"
+                                               name="pcs"
+                                               placeholder="Enter stone pieces"
+                                               th:field="*{stonePcs}"
+                                               type="text">
+                                        <p th:errors = "*{stonePcs}" class="text-danger"
+                                           th:if="${#fields.hasErrors('stonePcs')}"></p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="itemQuality"
+                                               name="pcs"
+                                               placeholder="916"
+                                               th:field="*{itemQuality}"
+                                               type="text">
+                                        <p th:errors = "*{itemQuality}" class="text-danger"
+                                           th:if="${#fields.hasErrors('itemQuality')}"></p>
+                                    </div>
+
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="itemHuid"
+                                               name="itemHuid"
+                                               placeholder="Enter HUID"
+                                               th:field="*{itemHuid}"
+                                               type="text">
+                                        <p th:errors = "*{itemHuid}" class="text-danger"
+                                           th:if="${#fields.hasErrors('itemHuid')}"></p>
+                                    </div>
+
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+
+                                    </div>
+
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+
+                                    </div>
+
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-primary btn-user btn-block" type="submit">Save</button>
+                                    </div>
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-danger btn-user btn-block" type="button" id="cancelBtn">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Item list</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Metal</th>
+                        <th>Weight</th>
+                        <th>Pcs.</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Metal</th>
+                        <th>Weight</th>
+                        <th>Pcs.</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr th:each = "itemMaster : ${itemMasterList}">
+                        <td th:text = "${itemMaster.itemName}"></td>
+                        <td th:text = "${itemMaster.itemMetal}"></td>
+                        <td th:text = "${itemMaster.weight}"></td>
+                        <td th:text = "${itemMaster.pcs}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/item.js}"></script>
+</th:block>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Items</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Home</h1>
+    <p class="mb-4">
+
+    </p>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Home</h6>
+        </div>
+        <div class="card-body">
+            <div style="padding-left: 100px; padding-right: 100px;">
+                <div class="row">
+                    <!--                            <div style="">-->
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            New</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Estimation</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-receipt fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            New invoice</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Sale</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-file-invoice fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Orders</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">New Order</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-plus-square fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            New Purchase Entry</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Purchase</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-money-check fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--                            <div style="">-->
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            All</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Customer</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <!--                                                    <i class="far fa-file-alt"></i>-->
+                                        <i class="fas fa-users fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            All</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Supplier</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-user-tie fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            All</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Worker</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-bacon fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Application</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Users</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-user fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!--                            <div style="">-->
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Update</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Board Rate</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-chalkboard fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            Add</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Expenses</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-money-bill-wave-alt fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-md-6 mb-4 pr-4 pl-4">
+                        <div class="card border-left-primary shadow h-100 py-2 gold-bg" role="button">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            All</div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800">Reports</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <i class="fas fa-file-alt fa-6x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--                        </div>-->
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /.container-fluid -->
+
+</html>
