@@ -11296,3 +11296,14 @@ body.sidebar-toggled footer.sticky-footer {
     max-height: 100vh;
     overflow: scroll;
 }
+
+.text-start {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+.text-end {
+    text-align: right;
+}

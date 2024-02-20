@@ -45,7 +45,6 @@ public class ItemMasterController {
             System.out.println("Found X-Application-Name in header");
         }
         ErrorResponse errorResponse = itemMasterService.validateItemMaster(itemMaster);
-
         model.addAttribute("itemMasterList", itemMasterService.getAll());
         if(errorResponse.hasErrors()) {
             model.addAttribute("itemMaster", itemMaster);

@@ -5,6 +5,7 @@ import com.billing.constant.Metal;
 import com.billing.dto.EstRequest;
 import com.billing.dto.EstResponse;
 import com.billing.dto.EstimationList;
+import com.billing.entity.ItemMaster;
 import com.billing.utils.BillingUtils;
 import org.springframework.beans.BeanUtils;
 
@@ -277,17 +278,19 @@ public class POSPrinter implements Printable {
         EstRequest estRequest = EstRequest.builder()
                 .goldRate(BigDecimal.valueOf(5800))
                 .silverRate(BigDecimal.valueOf(80))
-                .itemDesc("POTA DESIGNER")
-                .itemCode("-")
-                .itemHuid("7865T8")
-                .itemQuality("916")
-                .itemMetal(Metal.GOLD)
-                .stonePcs(1)
-                .stoneName("Stones")
-                .pcs(1)
-                .weight(BigDecimal.valueOf(14.851))
-                .stoneWeight(BigDecimal.valueOf(0.256))
-                .vaPercentage(BigDecimal.valueOf(16.49))
+                .itemMaster(ItemMaster.builder()
+                        .itemName("POTA DESIGNER")
+                        .itemCode("-")
+                        .itemHuid("7865T8")
+                        .itemQuality("916")
+                        .itemMetal(Metal.GOLD)
+                        .stonePcs(1)
+                        .stoneName("Stones")
+                        .pcs(1)
+                        .weight(BigDecimal.valueOf(14.851))
+                        .stoneWeight(BigDecimal.valueOf(0.256))
+                        .vaPercentage(BigDecimal.valueOf(16.49))
+                        .build())
                 .defaultMcEnabled("YES")
                 .isGstEstimation("YES")
                 .discount(BigDecimal.ZERO)
