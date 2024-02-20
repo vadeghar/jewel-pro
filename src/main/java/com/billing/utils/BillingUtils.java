@@ -9,6 +9,8 @@ import com.billing.exception.EstimationException;
 import com.billing.service.StoneMasterService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -75,27 +77,27 @@ public class BillingUtils {
         int randomNumber = (int) (Math.random() * 90000) + 10000;
         estResponse.setEstimationNo(String.valueOf(randomNumber));
         BigDecimal metalPrice = BigDecimal.ZERO;
-        if (estimation.getItemMetal() == Metal.GOLD) {
+        if (estimation.getItemMaster().getItemMetal() == Metal.GOLD) {
             metalPrice = estimation.getGoldRate();
-        } else if (estimation.getItemMetal() == Metal.SILVER) {
+        } else if (estimation.getItemMaster().getItemMetal() == Metal.SILVER) {
             metalPrice = estimation.getSilverRate();
         } else {
             throw new EstimationException("Invalid metal.");
         }
         BigDecimal totalPrice = BigDecimal.ZERO;
-        log.info("Item gross weight: {}", estimation.getWeight());
-        BigDecimal vaWeight = roundToNearestForWeight(estimation.getWeight().multiply(estimation.getVaPercentage()).divide(BigDecimal.valueOf(100)));
+        log.info("Item gross weight: {}", estimation.getItemMaster().getWeight());
+        BigDecimal vaWeight = roundToNearestForWeight(estimation.getItemMaster().getWeight().multiply(estimation.getVaPercentage()).divide(BigDecimal.valueOf(100)));
         log.info("VA weight for {}% is {}", estimation.getVaPercentage(), vaWeight);
 //        log.info("After rounding: {}", roundToNearestForWeight(vaWeight));
         BigDecimal vaPrice = roundToNearestForCurrency(vaWeight.multiply(metalPrice));
         log.info("VA Rate: {} ", vaPrice);
         estResponse.setVaPrice(vaPrice);
-        log.info("Stone weight {}", estimation.getStoneWeight());
-        BigDecimal netWeight = estimation.getWeight();
+        log.info("Stone weight {}", estimation.getItemMaster().getStoneWeight());
+        BigDecimal netWeight = estimation.getItemMaster().getWeight();
         estResponse.setStonePrice(BigDecimal.ZERO);
-        if (Objects.nonNull(estimation.getStoneWeight()) && estimation.getStoneWeight() != BigDecimal.ZERO) {
-            netWeight = estimation.getWeight().subtract(estimation.getStoneWeight()); // Net weight
-            BigDecimal stoneCts = estimation.getStoneWeight().divide(BigDecimal.valueOf(0.2)); // Stone weight in cts
+        if (Objects.nonNull(estimation.getItemMaster().getStoneWeight()) && estimation.getItemMaster().getStoneWeight() != BigDecimal.ZERO) {
+            netWeight = estimation.getItemMaster().getWeight().subtract(estimation.getItemMaster().getStoneWeight()); // Net weight
+            BigDecimal stoneCts = estimation.getItemMaster().getStoneWeight().divide(BigDecimal.valueOf(0.2)); // Stone weight in cts
             log.info("Stone Wt in cts: {}", stoneCts);
             estResponse.setStoneWtInCts(stoneCts);
             StoneMaster stoneMaster = new StoneMaster();
@@ -165,5 +167,15 @@ public class BillingUtils {
     public static BigDecimal roundToNearestForWeight(BigDecimal value) {
         BigDecimal nickelValue = new BigDecimal("0.001");
         return value.divide(nickelValue, 0, RoundingMode.HALF_UP).multiply(nickelValue);
+    }
+
+    public static String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null) {
+            log.debug("Current user: {}", authentication.getName());
+            return authentication.getName();
+        }
+        log.debug("Authentication not found in SSecurityContextHolder");
+        return null;
     }
 }
