@@ -1,0 +1,67 @@
+package com.billing.controller;
+
+import com.billing.dto.ErrorResponse;
+import com.billing.entity.Customer;
+import com.billing.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@Controller
+@RequestMapping("/customers")
+public class CustomerController {
+    @Autowired
+    private CustomerService customerService;
+
+    @GetMapping
+    public String showCustomerList(Model model) {
+        List<Customer> customers = customerService.getAllCustomers();
+        model.addAttribute("customerList", customerService.getAllCustomers());
+        model.addAttribute("customer", new Customer());
+        return "customer";
+    }
+
+//    @GetMapping("/add")
+//    public String showAddCustomerForm(Model model) {
+//        model.addAttribute("customerList", customerService.getAllCustomers());
+//        model.addAttribute("customer", new Customer());
+//        return "customer";
+//    }
+
+    @PostMapping("/save")
+    public String addCustomer(@ModelAttribute Customer customer, Model model) {
+        ErrorResponse errorResponse = customerService.validateCustomer(customer);
+        model.addAttribute("customerList", customerService.getAllCustomers());
+        if(errorResponse.hasErrors()) {
+            model.addAttribute("customer", customer);
+            model.addAttribute("errorResponse", errorResponse);
+            return "customer";
+        }
+
+        customerService.createCustomer(customer);
+        return "redirect:/customers";
+    }
+
+//    @GetMapping("/edit/{id}")
+//    public String showEditCustomerForm(@PathVariable Long id, Model model) {
+//        Optional<Customer> customer = customerService.getCustomerById(id);
+//        customer.ifPresent(value -> model.addAttribute("customer", value));
+//        model.addAttribute("customerList", customerService.getAllCustomers());
+//        return "customer";
+//    }
+
+    @PostMapping("/edit/{id}")
+    public String editCustomer(@PathVariable Long id, @ModelAttribute Customer customer) {
+        customerService.updateCustomer(id, customer);
+        return "redirect:/customers";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteCustomer(@PathVariable Long id) {
+        customerService.deleteCustomer(id);
+        return "redirect:/customers";
+    }
+}
+

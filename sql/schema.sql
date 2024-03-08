@@ -97,4 +97,19 @@ location varchar(99),
 name varchar(55),
 primary key (id));
 
+create table address (
+id bigint not null auto_increment,
+city varchar(50),
+state varchar(50),
+street varchar(50),
+zip_code varchar(8),
+primary key (id));
 
+create table customer (
+id bigint not null auto_increment,
+email varchar(30),
+first_name varchar(50),
+last_name varchar(50),
+phone varchar(10),
+address_id bigint,
+primary key (id));
