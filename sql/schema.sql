@@ -113,3 +113,9 @@ last_name varchar(50),
 phone varchar(10),
 address_id bigint,
 primary key (id));
+
+create table worker (id bigint not null auto_increment,
+area varchar(50),
+name varchar(50),
+phone varchar(15),
+primary key (id));

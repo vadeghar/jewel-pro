@@ -6,6 +6,8 @@ public enum ErrorCode {
     DATA_ERROR_ITEM("00010", "Data validation error for item master."),
     DATA_ERROR_METAL_RATE("00010", "Data validation error for metal rate."),
     DATA_ERROR_CUSTOMER("00090", "Data validation error for Customer."),
+
+    DATA_ERROR_WORKER("00100", "Data validation error for Worker."),
     ;
 
     

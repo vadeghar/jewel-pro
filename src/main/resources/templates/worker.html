@@ -1,0 +1,98 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Worker Management</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Worker</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3"></div>
+        <div class="card-body">
+            <div style="padding-left: 100px; padding-right: 100px;">
+                <div class="row">
+                    <div class="col">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Add New Worker</h1>
+                            </div>
+                            <form class="user" method="post"
+                                  id="workerForm"
+                                  role="form"
+                                  th:action="@{/worker/save}"
+                                  th:object="${worker}">
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="name"
+                                               name="name"
+                                               placeholder="Enter name"
+                                               th:field="*{name}">
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="phone"
+                                               name="phone"
+                                               placeholder="Enter phone"
+                                               th:field="*{phone}">
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="area"
+                                               name="area"
+                                               placeholder="Enter area"
+                                               th:field="*{area}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-primary btn-user btn-block" type="submit">Save</button>
+                                    </div>
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-danger btn-user btn-block" type="button" id="cancelBtn">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Worker List</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Area</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Area</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr th:each="worker : ${workerList}">
+                        <td th:text="${worker.name}"></td>
+                        <td th:text="${worker.phone}"></td>
+                        <td th:text="${worker.area}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</html>
