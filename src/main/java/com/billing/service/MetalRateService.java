@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.billing.constant.ErrorCode.DATA_ERROR_METAL_RATE;
+
 @Service
 @Slf4j
 public class MetalRateService {
@@ -67,7 +69,7 @@ public class MetalRateService {
     public ErrorResponse validateMetalRate(MetalRate metalRate) {
         log.debug("Validating metalRate {}", metalRate);
         List<Error> errors = new ArrayList<>();
-        ErrorResponse errorResponse = new ErrorResponse(errors, LocalDateTime.now());
+        ErrorResponse errorResponse = new ErrorResponse(errors, LocalDateTime.now(), DATA_ERROR_METAL_RATE.getCode());
         if (metalRate.getItemMetal() == null) {
             errorResponse.getErrors().add(new Error("Select metal.", "Error"));
         }

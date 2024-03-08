@@ -40,7 +40,7 @@
                                 </ul>
                             </div>
                             <form class="user" method="post"
-                                  id="itemForm"
+                                  id="estimationForm"
                                   role="form"
                                   th:action="@{/estimation/estimate}"
                                   th:object="${estimation}">
@@ -53,7 +53,8 @@
 <!--                                            <input type="hidden" id="goldRate" th:field="*{goldRate}">-->
 <!--                                            <input type="hidden" id="silverRate" th:field="*{silverRate}">-->
                                             <input type="hidden" id="rate" th:field="*{rate}">
-                                            <input type="hidden" id="estimationDateTs" th:field="*{estimationDateTs}">
+                                            <input type="hidden" id="estimationDateTs" name="estimationDateTs" th:value="${#temporals.format(estimation.estimationDateTs, 'yyyy-MM-dd''T''HH:mm:ss')}">
+
                                             <input type="hidden" id="itemMasterId" th:field="*{itemMasterId}">
                                             <input type="hidden" id="vaPrice" th:field="*{vaPrice}">
                                             <input type="hidden" id="stonePrice" th:field="*{stonePrice}">
@@ -99,13 +100,13 @@
                                         </div>
                                     </div>
                                     <div class="col mb-sm-0 d-none" id="itemTagNoId">
-                                        <input class="form-control form-control-user" id="itemTagNo"
-                                               name="itemTagNo"
+                                        <input class="form-control form-control-user" id="tagNo"
+                                               name="tagNo"
                                                placeholder="Enter item tag number."
-                                               th:field="*{itemTagNo}"
+                                               th:field="*{tagNo}"
                                                type="text">
-                                        <p th:errors = "*{itemTagNo}" class="text-danger"
-                                           th:if="${#fields.hasErrors('itemTagNo')}"></p>
+                                        <p th:errors = "*{tagNo}" class="text-danger"
+                                           th:if="${#fields.hasErrors('tagNo')}"></p>
                                     </div>
                                 </div>
 
@@ -139,13 +140,6 @@
                                                th:field="*{itemCode}">
                                     </div>
 
-                                    <div class="col-sm-3 mb-2 mb-sm-0">
-                                        <input class="form-control form-control-user" id="tagNo"
-                                               name="tagNo"
-                                               placeholder="Tag number"
-                                               th:field="*{tagNo}"
-                                               type="text">
-                                    </div>
                                     <div class="col-sm-3 mb-2 mb-sm-0">
                                         <input class="form-control form-control-user"
                                                id="pcs"
@@ -268,7 +262,7 @@
                         <label>Date :</label>
                     </div>
                     <div class="col text-start">
-                        <span th:text="${#temporals.format(estimation.estimationDateTs, 'yyyy-MM-dd')}"/>
+                        <span th:text="${#temporals.format(estimation.estimationDateTs, 'yyyy-MM-dd HH:mm')}"/>
                     </div>
                     <div class="col pr-0"></div>
                     <div class="col pr-0"></div>
@@ -480,9 +474,9 @@
                 <div class="row pt-4">
                     <div class="col pr-0"></div>
                     <div class="col pr-0 text-center">
-                        <button class="btn btn-primary" type="submit">Save</button>
-                        <button class="btn btn-primary" type="submit">Print</button>
-                        <button class="btn btn-primary" type="submit">Save & Print</button>
+                        <button class="btn btn-primary" id="saveEstimation" type="submit">Save</button>
+                        <button class="btn btn-primary" id="printEstimation" type="submit">Print</button>
+                        <button class="btn btn-primary" id="saveAndPrintEstimation" type="submit">Save & Print</button>
                     </div>
                     <div class="col pr-0"></div>
                 </div>

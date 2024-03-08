@@ -71,3 +71,30 @@ last_update_at datetime,
 last_updated_by varchar(45),
 rate decimal(19,2),
 primary key (id));
+
+create table purchase (id bigint not null auto_increment,
+c_gst_amount decimal(19,2),
+description varchar(255),
+gross_weight decimal(19,2),
+mc_amount decimal(19,2),
+metal_type varchar(255),
+net_weight decimal(19,2),
+payment_mode varchar(255), p
+urchase_bill_no varchar(255),
+purchase_date_ts datetime,
+purchase_type varchar(255),
+qty integer, rate decimal(19,2),
+s_gst_amount decimal(19,2),
+stn_weight decimal(19,2),
+supplier_name varchar(255),
+total_purchase_amount decimal(19,2),
+primary key (id));
+
+
+create table supplier (
+id bigint not null auto_increment,
+location varchar(99),
+name varchar(55),
+primary key (id));
+
+

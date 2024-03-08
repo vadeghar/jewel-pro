@@ -1,6 +1,7 @@
 package com.billing.entity;
 
 import com.billing.constant.Metal;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,14 +22,11 @@ public class Estimation {
     private Long id;
 
     private String existingItem;
-    private String itemTagNo;
-
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime estimationDateTs;
     private String estimationNo;
     @Enumerated(EnumType.STRING)
     private Metal itemMetal;
-//    private BigDecimal goldRate;
-//    private BigDecimal silverRate;
     private BigDecimal rate;
 
     private String itemCode;

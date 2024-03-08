@@ -1,0 +1,415 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Estimation</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Purchase</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <div class="d-flex flex-row-reverse">
+                <h6 class="m-0 font-weight-bold text-primary pr-4" th:text="'SILVER: ' + ${currentSilverRate}" ></h6>
+                <h6 class="m-0 font-weight-bold text-primary pr-4" th:text="'GOLD: ' + ${currentGoldRate}" ></h6>
+            </div>
+
+        </div>
+        <div class="card-body">
+            <div style="padding-left: 100px; padding-right: 100px;">
+                <div class="row">
+                    <div class="col">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">New Purchase</h1>
+                            </div>
+                            <div th:if="${param.success}">
+                                <div class="alert alert-info">
+                                    Purchase saved successfully.
+                                </div>
+                            </div>
+
+                            <div th:if="${errorResponse != null && errorResponse.hasErrors()}">
+                                <ul>
+                                    <div class="alert alert-danger">
+                                        <li th:each="error : ${errorResponse.errors}" th:text="${error.description}"></li>
+                                    </div>
+                                </ul>
+                            </div>
+                            <form class="user" method="post"
+                                  id="estimationForm"
+                                  role="form"
+                                  th:action="@{/purchase/save}"
+                                  th:object="${purchase}">
+
+                                <div id="itemContent" class="d-none">
+                                <div class="form-group row">
+                                    <div class="col mb-sm-0">
+                                        <div class="custom-control" style="display: flex">
+                                            <div class="custom-radio small">
+                                                <input type="radio" class="custom-control-input" th:field="*{metalType}" th:value="GOLD" id="gold" >
+                                                <label class="custom-control-label pt-1" for="gold">GOLD</label>
+                                            </div>
+                                            <div class="custom-radio small pl-5">
+                                                <input type="radio" class="custom-control-input" th:field="*{metalType}" th:value="SILVER" id="silver" >
+                                                <label class="custom-control-label pt-1" for="silver">SILVER</label>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="id" th:field="*{id}">
+                                    </div>
+                                    <div class="col mb-sm-0">
+                                        <div class="custom-control d-flex">
+                                            <label class="pr-5">GST? </label>
+                                            <div class="custom-radio small">
+                                                <input type="radio" class="custom-control-input enableGst" th:field="*{isGstPurchase}" th:value="YES" id="gstYes" >
+                                                <label class="custom-control-label pt-1" for="gstYes">YES</label>
+                                            </div>
+                                            <div class="custom-radio small pl-5">
+                                                <input type="radio" class="custom-control-input enableGst" th:field="*{isGstPurchase}" th:value="NO" id="gstNo" >
+                                                <label class="custom-control-label pt-1" for="gstNo">NO</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="supplierName"
+                                               name="supplierName"
+                                               placeholder="Supplier"
+                                               th:field="*{supplierName}">
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="purchaseBillNo"
+                                               placeholder="Purchase Bill #"
+                                               name="purchaseBillNo"
+                                               th:field="*{purchaseBillNo}">
+                                    </div>
+
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="pcs"
+                                               name="pcs"
+                                               placeholder="Enter no of pieces"
+                                               th:field="*{pcs}"
+                                               type="text">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="grossWeight"
+                                               name="grossWeight"
+                                               placeholder="Enter gross weight"
+                                               th:field="*{grossWeight}"
+                                               type="text">
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="netWeight"
+                                               name="netWeight"
+                                               placeholder="Net Weight"
+                                               th:field="*{netWeight}"
+                                               type="text">
+                                    </div>
+
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="mcAmount"
+                                               name="mcAmount"
+                                               placeholder="Enter Making charge"
+                                               th:field="*{mcAmount}"
+                                               type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="rate"
+                                               name="rate"
+                                               placeholder="Rate"
+                                               th:field="*{rate}"
+                                               type="text">
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="cGstAmount"
+                                               name="cGstAmount"
+                                               placeholder="CGST"
+                                               th:field="*{cGstAmount}"
+                                               type="text">
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="rate"
+                                               name="rate"
+                                               placeholder="Rate"
+                                               th:field="*{rate}"
+                                               type="text">
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-primary btn-user btn-block" type="submit">Save</button>
+                                    </div>
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-danger btn-user btn-block" type="button" id="cancelBtn">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    <div class="card shadow mb-4">-->
+<!--        <div class="card-body">-->
+<!--            <div style="padding-left: 100px; padding-right: 100px;">-->
+<!--                <div class="row">-->
+<!--                    <div class="col">-->
+<!--                        <div class="p-5">-->
+<!--                            <div class="text-center">-->
+<!--                                <h1 class="h4 text-gray-900 mb-4" th:text="'Estimation# ' + ${purchase.estimationNo}"></h1>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Date :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-start">-->
+<!--                        <span th:text="${#temporals.format(purchase.estimationDateTs, 'yyyy-MM-dd HH:mm')}"/>-->
+<!--                    </div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Existing item :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-start">-->
+<!--                        <label th:text="${purchase.existingItem}"></label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Metal :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-start">-->
+<!--                        <label th:text="${purchase.metalType}"></label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Rate :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-start">-->
+<!--                        <label th:text="${purchase.rate}"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--<hr/>-->
+<!--                <div class="row">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0 text-end">No. Pcs. :</div>-->
+<!--                    <div class="col pr-0">-->
+<!--                        <label th:text="${purchase.pcs}"></label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Weight :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Gr. ' + ${purchase.itemWeight} + ' mg.'"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row"  th:if="${purchase.stoneWeight != null}">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Stone Wt. :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'- Gr. ' + ${purchase.stoneWeight} + ' mg.'"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <hr th:if="${purchase.stoneWeight != null}"/>-->
+<!--                <div class="row" th:if="${purchase.stoneWeight != null}">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Net Wt. :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Gr. ' + ${purchase.netWeight} + ' mg.'"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>VA (Tarugu) :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Gr. ' + ${purchase.vaWeight} + ' mg.'"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <hr/>-->
+<!--                <div class="row">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Total Wt. :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Gr. ' + ${purchase.weightInclVaWt} + ' mg.'"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <hr/>-->
+<!--                <div class="row">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Price. :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.totalPriceInclVa}"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="row" th:if="${purchase.stoneWeight != null}">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Stones Wt in Cts. :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="${purchase.stoneWtInCts} + ' Cts'"></label>-->
+<!--                    </div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                </div>-->
+<!--                <div class="row" th:if="${purchase.stoneWeight != null}">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Stones rate per Ct. :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.stonePricePerCt}"></label>-->
+<!--                    </div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                </div>-->
+
+<!--                <div class="row" th:if="${purchase.stoneWeight != null}">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0 text-end">-->
+<!--                        <label>Stones cost :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.stonePrice}"></label>-->
+<!--                    </div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.stonePrice}"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+
+<!--                <div class="row">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Making Charge :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.mc}"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <hr/>-->
+<!--                <div class="row" th:if="${purchase.isGstEstimation eq 'YES'}">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>Total :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.totalPriceInclMc}"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row" th:if="${purchase.isGstEstimation eq 'YES'}">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>CGST(1.5%) :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.cGstPrice}"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row" th:if="${purchase.isGstEstimation eq 'YES'}">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0">-->
+<!--                        <label>SGST(1.5%) :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.sGstPrice}"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <hr th:if="${purchase.isGstEstimation eq 'YES'}"/>-->
+<!--                <div class="row">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col text-end pr-0 bg-light">-->
+<!--                        <label>Total :</label>-->
+<!--                    </div>-->
+<!--                    <div class="col text-end bg-light">-->
+<!--                        <label th:text="'Rs. ' + ${purchase.totalPrice}"></label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row pt-4">-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                    <div class="col pr-0 text-center">-->
+<!--                        <button class="btn btn-primary" id="saveEstimation" type="submit">Save</button>-->
+<!--                        <button class="btn btn-primary" id="printEstimation" type="submit">Print</button>-->
+<!--                        <button class="btn btn-primary" id="saveAndPrintEstimation" type="submit">Save & Print</button>-->
+<!--                    </div>-->
+<!--                    <div class="col pr-0"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/purchase.js}"></script>
+</th:block>
+</html>
