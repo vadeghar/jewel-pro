@@ -43,6 +43,26 @@ public class PurchaseController {
         return "purchase";
     }
 
+    @PostMapping
+    public String edit(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
+                      BindingResult result,
+                      Model model) {
+        if (httpHeaders.containsKey("X-Application-Name")) {
+            System.out.println("Found X-Application-Name in header");
+        }
+        if (purchase.getId() == null) {
+            throw new RuntimeException("purchase id missing.");
+        }
+        List<Purchase> purchaseList = purchaseService.getAll();
+        BigDecimal goldRate = metalRateService.getRate(Metal.GOLD);
+        BigDecimal silverRate = metalRateService.getRate(Metal.SILVER);
+        model.addAttribute("currentGoldRate", goldRate.toPlainString());
+        model.addAttribute("currentSilverRate", silverRate.toPlainString());
+        model.addAttribute("purchaseList", purchaseList);
+        model.addAttribute("purchase", purchaseService.getById(purchase.getId()));
+        return "purchase";
+    }
+
     @PostMapping("/save")
     public String registration(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
                                BindingResult result,

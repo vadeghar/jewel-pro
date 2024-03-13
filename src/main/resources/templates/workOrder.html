@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Work Order Management</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Work Order</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3"></div>
+        <div class="card-body">
+            <div style="padding-left: 100px; padding-right: 100px;">
+                <div class="row">
+                    <div class="col">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Add New Work Order</h1>
+                            </div>
+                            <form class="user" method="post"
+                                  id="workOrderForm"
+                                  role="form"
+                                  th:action="@{/workorder/save}"
+                                  th:object="${workOrder}">
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <select class="form-control" id="customerId" name="customerId">
+                                            <option value="">Select Customer</option>
+                                            <!-- Iterate over customers and populate options -->
+                                            <!-- Example: -->
+                                            <!-- <option th:each="customer : ${customers}" th:value="${customer.id}" th:text="${customer.name}"></option> -->
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <select class="form-control" id="workerId" name="workerId">
+                                            <option value="">Select Worker</option>
+                                            <!-- Iterate over workers and populate options -->
+                                            <!-- Example: -->
+                                            <!-- <option th:each="worker : ${workers}" th:value="${worker.id}" th:text="${worker.name}"></option> -->
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="itemName"
+                                               name="itemName"
+                                               placeholder="Enter item name"
+                                               th:field="*{itemName}">
+                                    </div>
+                                    <!-- Add more fields for other WorkOrder attributes -->
+                                    <!-- Example: -->
+                                    <!-- <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="datetime-local" class="form-control form-control-user" id="orderDate"
+                                               name="orderDate"
+                                               placeholder="Order Date"
+                                               th:field="*{orderDate}">
+                                    </div> -->
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="datetime-local" class="form-control form-control-user" id="orderDate"
+                                               name="orderDate"
+                                               placeholder="Order Date"
+                                               th:field="*{orderDate}">
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="datetime-local" class="form-control form-control-user" id="deliveryDate"
+                                               name="deliveryDate"
+                                               placeholder="Order Date"
+                                               th:field="*{deliveryDate}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-primary btn-user btn-block" type="submit">Save</button>
+                                    </div>
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-danger btn-user btn-block" type="button" id="cancelBtn">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Work Order List</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Worker</th>
+                        <th>Item Name</th>
+                        <!-- Add headers for other WorkOrder attributes here -->
+                        <!-- Example: -->
+                        <!-- <th>Order Date</th> -->
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Worker</th>
+                        <th>Item Name</th>
+                        <!-- Add footers for other WorkOrder attributes here -->
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <!-- Use Thymeleaf iteration to display WorkOrder list -->
+                    <!-- Example: -->
+                    <!-- <tr th:each="workOrder : ${workOrders}">
+                        <td th:text="${workOrder.customer.name}"></td>
+                        <td th:text="${workOrder.worker.name}"></td>
+                        <td th:text="${workOrder.itemName}"></td>
+                        Add more columns as needed
+                    </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

@@ -50,6 +50,10 @@ public class SupplierService {
         supplierRepository.deleteById(id);
     }
 
+    public List<Supplier> getSuppliersNameLike(String like) {
+        return supplierRepository.findByNameContainingIgnoreCase(like);
+    }
+
     public ErrorResponse validateSupplier(Supplier supplier) {
         log.debug("Validating supplier {}", supplier);
         List<Error> errors = new ArrayList<>();

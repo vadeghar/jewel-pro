@@ -72,24 +72,30 @@ last_updated_by varchar(45),
 rate decimal(19,2),
 primary key (id));
 
-create table purchase (id bigint not null auto_increment,
+create table purchase
+(id bigint not null auto_increment,
 c_gst_amount decimal(19,2),
 description varchar(255),
-gross_weight decimal(19,2),
+gross_weight decimal(19,3),
+is_gst_purchase varchar(5),
+last_updated_ts datetime,
 mc_amount decimal(19,2),
-metal_type varchar(255),
-net_weight decimal(19,2),
-payment_mode varchar(255), p
-urchase_bill_no varchar(255),
-purchase_date_ts datetime,
-purchase_type varchar(255),
-qty integer, rate decimal(19,2),
+metal_type varchar(8),
+net_weight decimal(19,3),
+payment_mode varchar(8),
+pcs integer,
+purchase_bill_no varchar(12),
+purchase_date date,
+purchase_type varchar(8),
+purity varchar(6),
+rate decimal(19,2),
 s_gst_amount decimal(19,2),
-stn_weight decimal(19,2),
-supplier_name varchar(255),
+sale_purity varchar(255),
+stn_weight decimal(19,3),
+effective_weight decimal(19,3),
+supplier_name varchar(50),
 total_purchase_amount decimal(19,2),
-primary key (id));
-
+primary key (id))
 
 create table supplier (
 id bigint not null auto_increment,
@@ -119,3 +125,40 @@ area varchar(50),
 name varchar(50),
 phone varchar(15),
 primary key (id));
+
+create table work_order (
+id bigint not null auto_increment,
+advance_paid decimal(19,2),
+balance decimal(19,2),
+delivery_date datetime,
+gross_weight decimal(19,3),
+item_name varchar(150),
+mc decimal(19,2),
+net_weight decimal(19,3),
+order_date datetime,
+order_total decimal(19,3),
+rate decimal(19,2),
+va_or_wastage decimal(19,3),
+customer_id bigint,
+worker_id bigint,
+primary key (id));
+alter table work_order add constraint FKt0bw3op1441q7wxibmxsk5ekv foreign key (customer_id) references customer (id);
+alter table work_order add constraint FKi36l9ysh77e5lxpeqntkymygo foreign key (worker_id) references worker (id);
+
+
+create table purchase_item (
+id bigint not null auto_increment,
+code varchar(50),
+huid varchar(50),
+making_charge decimal(19,2),
+name varchar(50),
+pcs integer not null,
+stn_cost_per_ct decimal(19,2),
+stn_type varchar(50),
+stn_weight decimal(19,3),
+va_weight decimal(19,3),
+weight decimal(19,3),
+purchase_id bigint,
+primary key (id));
+
+alter table purchase_item add constraint FK1mncc5yaore1sibgpj3jc4a7u foreign key (purchase_id) references purchase (id)

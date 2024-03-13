@@ -37,6 +37,10 @@ public class PurchaseService {
         return purchaseRepository.findAll();
     }
 
+    public Purchase getById(Long id) {
+        return purchaseRepository.getById(id);
+    }
+
     public Purchase update(Long id, Purchase purchase) {
         log.debug("Saving Item id {} with data {}", id, purchase);
         Purchase estimationDb = purchaseRepository.getReferenceById(id);

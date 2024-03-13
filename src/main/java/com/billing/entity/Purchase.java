@@ -1,10 +1,13 @@
 package com.billing.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,15 +21,20 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String purchaseType; // Purchase / Purchase Return
+    private String purchaseType = "PURCHASE"; // Purchase / Purchase Return
     private String supplierName;
     private String purchaseBillNo;
-    private LocalDateTime purchaseDateTs;
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate purchaseDate;
+    private LocalDateTime lastUpdatedTs = LocalDateTime.now();
     private String metalType;
     private BigDecimal grossWeight;
     private BigDecimal netWeight;
-    private Integer qty;
+    private String purity;
+    private String salePurity;
+    private Integer pcs;
     private BigDecimal stnWeight;
+    private BigDecimal effectiveWeight;
 
     private String paymentMode;
     private BigDecimal mcAmount;
@@ -38,7 +46,8 @@ public class Purchase {
 
     private String description;
 
-
+    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PurchaseItem> purchaseItems;
 
 
 
