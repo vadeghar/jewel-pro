@@ -3,7 +3,7 @@
       layout:decorate="~{layout}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Estimation</title>
+    <title>Purchase</title>
 </head>
 
 <!-- Begin Page Content -->
@@ -270,7 +270,7 @@
                         <td th:text = "${purchase.totalPurchaseAmount}"></td>
                         <td>
                             <a class="btn btn-primary editPurchase" th:attr="data-id=${purchase.id}" href="#" title="Edit Purchase"><i class="fas fa-pencil"></i></a>
-                            <a class="btn btn-primary deletePurchase" th:attr="data-id=${purchase.id}" href="#" title="Purchase Items"><i class="fas fa-bars"></i></a>
+                            <a class="btn btn-primary purchaseItems" th:attr="data-id=${purchase.id}" href="#" title="Purchase Items"><i class="fas fa-bars"></i></a>
                             <a class="btn btn-danger deletePurchase" th:attr="data-id=${purchase.id}" href="#" title="Delete Purchase"><i class="fas fa-trash"></i></a>
                         </td>
                     </tr>

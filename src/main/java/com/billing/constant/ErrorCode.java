@@ -8,6 +8,7 @@ public enum ErrorCode {
     DATA_ERROR_CUSTOMER("00090", "Data validation error for Customer."),
 
     DATA_ERROR_WORKER("00100", "Data validation error for Worker."),
+    DATA_ERROR_PURCHASE_ITEM("00100", "Data validation error for purchase item."),
     ;
 
     

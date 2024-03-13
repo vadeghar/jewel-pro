@@ -38,7 +38,7 @@ public class PurchaseService {
     }
 
     public Purchase getById(Long id) {
-        return purchaseRepository.getById(id);
+        return purchaseRepository.findById(id).get();
     }
 
     public Purchase update(Long id, Purchase purchase) {

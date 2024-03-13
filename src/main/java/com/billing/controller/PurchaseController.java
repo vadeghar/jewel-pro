@@ -4,7 +4,9 @@ import com.billing.constant.Metal;
 import com.billing.dto.ErrorResponse;
 import com.billing.entity.Estimation;
 import com.billing.entity.Purchase;
+import com.billing.entity.PurchaseItem;
 import com.billing.service.MetalRateService;
+import com.billing.service.PurchaseItemService;
 import com.billing.service.PurchaseService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
@@ -20,8 +22,10 @@ import java.util.List;
 @RequestMapping("/purchase")
 public class PurchaseController {
     private final PurchaseService purchaseService;
-    public PurchaseController(PurchaseService purchaseService) {
+    private final PurchaseItemService purchaseItemService;
+    public PurchaseController(PurchaseService purchaseService, PurchaseItemService purchaseItemService) {
         this.purchaseService = purchaseService;
+        this.purchaseItemService = purchaseItemService;
     }
 
     @GetMapping
@@ -70,4 +74,34 @@ public class PurchaseController {
         model.addAttribute("purchase", purchaseService.save(purchase));
         return "redirect:/purchase?success";
     }
+
+
+    @PostMapping("/items")
+    public String items(@ModelAttribute("purchase") Purchase purchase,
+                                                  BindingResult result,
+                                                  Model model) {
+        Purchase dbPurchase = purchaseService.getById(purchase.getId());
+        System.out.println("DB Purchase: "+dbPurchase);
+        model.addAttribute("purchase", dbPurchase);
+        model.addAttribute("purchaseItems", purchase.getPurchaseItems());
+        return "purchaseItems";
+    }
+
+    @PostMapping("/items/saveItems")
+    public String saveItems(@ModelAttribute("purchase") Purchase purchase,
+                                      BindingResult result,
+                                      Model model) {
+        System.out.println("Save items: "+purchase.getPurchaseItems());
+        Purchase dbPurchase = purchaseService.getById(purchase.getId());
+        purchase.getPurchaseItems()
+                .stream()
+                        .forEach(pi -> pi.setPurchase(dbPurchase));
+        dbPurchase.setPurchaseItems(purchase.getPurchaseItems());
+        purchaseService.save(dbPurchase);
+//        Purchase dbPurchase = purchaseService.getById(purchase.getId());
+//        System.out.println("DB Purchase: "+dbPurchase);
+//        model.addAttribute("purchase", dbPurchase);
+        return "redirect:/purchase?success";
+    }
+
 }

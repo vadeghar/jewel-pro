@@ -26,7 +26,8 @@ public class PurchaseItem {
     private BigDecimal stnCostPerCt;
     private int pcs;
     private String huid;
-    @ManyToOne
+    @ToString.Exclude
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "purchase_id")
     private Purchase purchase;
 }

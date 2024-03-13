@@ -46,8 +46,9 @@ public class Purchase {
 
     private String description;
 
-    @OneToMany(mappedBy = "purchase", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "purchase", cascade = CascadeType.ALL)
     private List<PurchaseItem> purchaseItems;
+
 
 
 

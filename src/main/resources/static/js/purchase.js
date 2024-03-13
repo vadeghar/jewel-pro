@@ -43,6 +43,25 @@ $(document).ready(function(){
         alert($(this).data("id"));
     });
 
+    $('.purchaseItems').click(function(event) {
+        event.preventDefault();
+        var purchaseId = $(this).data('id');
+        var form = $('<form>').attr({
+            method: 'post',
+            action: '/purchase/items', // Set the form action
+            id: 'dynamicForm'
+        });
+        var inputField = $('<input>').attr({
+            type: 'text',
+            name: 'id',
+            value: purchaseId // Set the value to the purchase ID
+        });
+        form.append(inputField);
+        $('body').append(form);
+        form.submit();
+    });
+
+
 });
 
 function calcNetWeight() {
