@@ -20,10 +20,8 @@ import java.util.List;
 @RequestMapping("/purchase")
 public class PurchaseController {
     private final PurchaseService purchaseService;
-    private final MetalRateService metalRateService;
-    public PurchaseController(PurchaseService purchaseService, MetalRateService metalRateService) {
+    public PurchaseController(PurchaseService purchaseService) {
         this.purchaseService = purchaseService;
-        this.metalRateService = metalRateService;
     }
 
     @GetMapping
@@ -34,10 +32,6 @@ public class PurchaseController {
             System.out.println("Found X-Application-Name in header");
         }
         List<Purchase> purchaseList = purchaseService.getAll();
-        BigDecimal goldRate = metalRateService.getRate(Metal.GOLD);
-        BigDecimal silverRate = metalRateService.getRate(Metal.SILVER);
-        model.addAttribute("currentGoldRate", goldRate.toPlainString());
-        model.addAttribute("currentSilverRate", silverRate.toPlainString());
         model.addAttribute("purchaseList", purchaseList);
         model.addAttribute("purchase", new Purchase());
         return "purchase";
@@ -54,10 +48,6 @@ public class PurchaseController {
             throw new RuntimeException("purchase id missing.");
         }
         List<Purchase> purchaseList = purchaseService.getAll();
-        BigDecimal goldRate = metalRateService.getRate(Metal.GOLD);
-        BigDecimal silverRate = metalRateService.getRate(Metal.SILVER);
-        model.addAttribute("currentGoldRate", goldRate.toPlainString());
-        model.addAttribute("currentSilverRate", silverRate.toPlainString());
         model.addAttribute("purchaseList", purchaseList);
         model.addAttribute("purchase", purchaseService.getById(purchase.getId()));
         return "purchase";
@@ -71,10 +61,6 @@ public class PurchaseController {
             System.out.println("Found X-Application-Name in header");
         }
         ErrorResponse errorResponse = purchaseService.validatePurchase(purchase);
-        BigDecimal goldRate = metalRateService.getRate(Metal.GOLD);
-        BigDecimal silverRate = metalRateService.getRate(Metal.SILVER);
-        model.addAttribute("currentGoldRate", goldRate.toPlainString());
-        model.addAttribute("currentSilverRate", silverRate.toPlainString());
         model.addAttribute("purchaseList", purchaseService.getAll());
         if(errorResponse.hasErrors()) {
             model.addAttribute("purchase", purchase);
