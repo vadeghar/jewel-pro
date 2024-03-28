@@ -1,0 +1,514 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sale</title>
+    <style>
+        .ui-autocomplete {
+            z-index:2147483647;
+        }
+        .form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-control-placeholder {
+  position: absolute;
+  top: 0;
+  padding: 7px 0 0 10px;
+  transition: all 200ms;
+  opacity: 0.5;
+  color: black;
+}
+
+.form-control:focus + .form-control-placeholder,
+.form-control:valid + .form-control-placeholder {
+  font-size: 69%;
+  transform: translate3d(0, -100%, 0);
+  opacity: 1;
+  top:10px;
+}
+
+.form-control:not(:placeholder-shown) + .form-control-placeholder {
+    font-size: 69%;
+    transform: translate3d(0, -100%, 0);
+    opacity: 1;
+    top: 10px;
+}
+
+.form-control {
+  border: 0;
+  outline: 0;
+  background-color: transparent;
+    color: #373837;
+    border-bottom: 1px solid #949996;
+}
+
+.form-control:focus {
+        border: 0;
+    color: #373837;
+    background-color: transparent;
+    border-color: #949996;
+    outline: 0;
+    border-bottom: 2px solid #949996;
+    box-shadow: 0 0 0 0.2rem transparent;
+}
+    </style>
+
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Sale</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" th:text="${sale.id gt 0 ? 'Edit Sale' : 'New Sale'}">-</h6>
+<!--            <a class="addItem" th:attr="data-id=${sale.id}" href="#" title="Add item to Sale" data-toggle="modal" data-target="#itemModal"><i class="fa fa-plus"></i>ADD ITEM</a>-->
+        </div>
+        <div class="card-body">
+            <div style="padding-left: 100px; padding-right: 100px;">
+                <div class="row">
+                    <div class="col">
+                        <div class="p-5">
+                            <div th:if="${param.success}">
+                                <div class="alert alert-info">
+                                    Sale saved successfully.
+                                </div>
+                            </div>
+
+                            <div th:if="${errorResponse != null && errorResponse.hasErrors()}">
+                                <ul>
+                                    <div class="alert alert-danger">
+                                        <li th:each="error : ${errorResponse.errors}" th:text="${error.description}"></li>
+                                    </div>
+                                </ul>
+                            </div>
+                            <form class="user" method="post"
+                                  id="estimationForm"
+                                  role="form"
+                                  th:action="@{/sale/save}"
+                                  th:object="${sale}">
+
+                                <div id="itemContent">
+                                    <div class="form-group row">
+                                        <div class="col mb-sm-0">
+                                            <div class="custom-control d-flex">
+                                                <label class="pr-5">GST Sale? </label>
+                                                <div class="custom-radio small">
+                                                    <input type="radio" class="custom-control-input enableGst" th:field="*{isGstSale}" th:value="YES" id="gstYes" >
+                                                    <label class="custom-control-label pt-1" for="gstYes">YES</label>
+                                                </div>
+                                                <div class="custom-radio small pl-5">
+                                                    <input type="radio" class="custom-control-input enableGst" th:field="*{isGstSale}" th:value="NO" id="gstNo" >
+                                                    <label class="custom-control-label pt-1" for="gstNo">NO</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col mb-sm-0">
+                                            <input type="hidden" id="id" th:field="*{id}">
+                                            <div class="custom-control" style="display: flex">
+                                                <div class="custom-radio small">
+                                                    <input type="radio" class="custom-control-input" th:field="*{saleType}" th:value="SALE" id="SALE" >
+                                                    <label class="custom-control-label pt-1" for="SALE">SALE</label>
+                                                </div>
+                                                <div class="custom-radio small pl-5">
+                                                    <input type="radio" class="custom-control-input" th:field="*{saleType}" th:value="RETURN" id="RETURN" >
+                                                    <label class="custom-control-label pt-1" for="RETURN">RETURN</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <hr/>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+                                            <input type="text" class="form-control form-control-user" id="customerName"
+                                                   name="customerName"
+                                                   placeholder="Customer"
+                                                   th:field="*{customerName}">
+                                        </div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+                                            <input type="number" class="form-control form-control-user" id="invoiceNo"
+                                                   placeholder="Invoice Number"
+                                                   name="invoiceNo"
+                                                   th:field="*{invoiceNo}">
+                                        </div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+                                            <input type="date" class="form-control form-control-user" id="saleDate"
+                                                   placeholder="Date"
+                                                   name="saleDate"
+                                                   th:field="*{saleDate}">
+                                        </div>
+                                    </div>
+
+
+
+
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <form th:action="@{/purchase/items/saveItems}" th:object="${sale}" method="post" >
+                                                <table class="table table-bordered" id="saleItemsTable">
+                                                    <thead>
+                                                    <tr>
+                                                        <th style="width: 125px">Code</th>
+                                                        <th style="width: 175px">Name</th>
+                                                        <th>Wt</th>
+                                                        <th>VA Wt</th>
+                                                        <th>MC</th>
+<!--                                                        <th>Stn Wt</th>-->
+<!--                                                        <th>Stn Type</th>-->
+<!--                                                        <th>Stn Rate/Ct</th>-->
+                                                        <th>SGr. Wt</th>
+                                                        <th>Rate</th>
+                                                        <th>Item Total</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr th:if="${sale.saleItemList == null or #lists.isEmpty(sale.saleItemList)}">
+                                                        <td>
+                                                            <input type="text" name="saleItemList[0].code" id="saleItemList[0].code" class="form-control code">
+                                                            <input type="hidden" name="saleItemList[0].id" id="saleItemList[0].id" class="form-control">
+                                                        </td>
+                                                        <td><input type="text" name="saleItemList[0].name" id="saleItemList[0].name" class="form-control"></td>
+                                                        <td><input type="text" name="saleItemList[0].weight" id="saleItemList[0].weight" class="form-control item-weight"></td>
+                                                        <td><input type="text" name="saleItemList[0].vaWeight" id="saleItemList[0].vaWeight" class="form-control vaWeight"></td>
+                                                        <td><input type="text" name="saleItemList[0].makingCharge" id="saleItemList[0].makingCharge" class="form-control makingCharge"></td>
+<!--                                                        <td><input type="text" name="saleItemList[0].stnWeight" id="aleItemList[0].stnWeight" class="form-control"></td>-->
+<!--                                                        <td><input type="text" name="saleItemList[0].stnType" id="saleItemList[0].stnType" class="form-control"></td>-->
+<!--                                                        <td><input type="text" name="saleItemList[0].stnCostPerCt" id="saleItemList[0].stnCostPerCt" class="form-control"></td>-->
+                                                        <td><input type="text" name="saleItemList[0].netWeight" id="saleItemList[0].netWeight" class="form-control"></td>
+                                                        <td><input type="text" name="saleItemList[0].rate" id="saleItemList[0].rate" class="form-control rate"></td>
+                                                        <td><input type="text" name="saleItemList[0].itemTotal" id="saleItemList[0].itemTotal" class="form-control"></td>
+                                                        <td><button type="button" class="btn btn-danger removeRow">Remove</button></td>
+                                                    </tr>
+                                                    <tr th:each="item, itemStat : ${sale.saleItemList}">
+                                                        <td>
+                                                            <input type="hidden" th:field="*{saleItemList[__${itemStat.index}__].id}" class="form-control">
+                                                            <input type="text" th:field="*{saleItemList[__${itemStat.index}__].name}" class="form-control"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].code}" class="form-control"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].weight}" class="form-control item-weight"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].vaWeight}" class="form-control"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].makingCharge}" class="form-control"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].stnWeight}" class="form-control"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].stnType}" class="form-control"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].stnCostPerCt}" class="form-control"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].pcs}" class="form-control"></td>
+                                                        <td><input type="text" th:field="*{saleItemList[__${itemStat.index}__].huid}" class="form-control"></td>
+                                                        <td><button type="button" class="btn btn-danger removeRow">Remove</button></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-6 mb-2 mb-sm-0">
+                                                        <button class="btn btn-primary btn-user" type="button" id="addNewItem">Add Another Item</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+
+                                    <hr/>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0 text-right">Total:</div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0 text-right">Discount:</div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div id="gstBlock" th:class="${isGstSale != null && isGstSale == 'YES'} ? '' : 'd-none'">
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                            <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                            <div class="col-sm-3 mb-2 mb-sm-0 text-right">CGST:</div>
+                                            <div class="col-sm-3 mb-2 mb-sm-0">
+                                                <input class="form-control form-control-user"
+                                                       id="cGstAmount"
+                                                       name="cGstAmount"
+                                                       placeholder="CGST"
+                                                       th:field="*{cGstAmount}"
+                                                       type="hidden">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                            <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                            <div class="col-sm-3 mb-2 mb-sm-0 text-right">SGST:</div>
+                                            <div class="col-sm-3 mb-2 mb-sm-0">
+                                                <input class="form-control form-control-user"
+                                                       id="sGstAmount"
+                                                       name="sGstAmount"
+                                                       placeholder="SGST"
+                                                       th:field="*{sGstAmount}"
+                                                       type="hidden">
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0 text-right">Grand Total:</div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+                                            <input class="form-control form-control-user"
+                                                   id="totalSaleAmount"
+                                                   name="totalSaleAmount"
+                                                   placeholder="Total sale amount"
+                                                   readonly="readonly"
+                                                   th:field="*{totalSaleAmount}"
+                                                   type="hidden">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0 text-right">Payment Mode:</div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0 text-right">Paid Amount:</div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+
+                                        </div>
+                                    </div>
+                                    <hr/>
+                                    <div class="form-group row">
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0"></div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0 text-right">Balance Amount:</div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col mb-2 mb-sm-0">
+                                            <input class="form-control form-control-user"
+                                                   id="description"
+                                                   name="description"
+                                                   placeholder="Sale Details"
+                                                   th:field="*{description}"
+                                                   type="text">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                            <button class="btn btn-primary btn-user" type="submit">Save</button>
+                                        </div>
+                                        <div class="col-sm-6 mb-2 mb-sm-0">
+                                            <button class="btn btn-danger btn-user" type="button" id="cancelBtn">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--    <div class="card shadow mb-4">-->
+<!--        <div class="card-header py-3">-->
+<!--            <h6 class="m-0 font-weight-bold text-primary">Sale List</h6>-->
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--            <div class="table-responsive">-->
+<!--                <table class="table table-bordered" id="saleItems" width="100%" cellspacing="0">-->
+<!--                    <thead>-->
+<!--                    <tr>-->
+<!--                        <th>Item Code</th>-->
+<!--                        <th>Metal</th>-->
+<!--                        <th>Name</th>-->
+<!--                        <th>Weight</th>-->
+<!--                        <th>VA Weight</th>-->
+<!--                        <th>Gr.Wt</th>-->
+<!--                        <th>MC</th>-->
+<!--                        <th>Rate</th>-->
+<!--                        <th>TOTAL</th>-->
+<!--                    </tr>-->
+<!--                    </thead>-->
+
+<!--                    <tbody>-->
+<!--&lt;!&ndash;                    <tr th:each = "sale : ${saleList}">&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text = "${sale.supplierName}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text = "${#temporals.format(sale.saleDate, 'MM/dd/yyyy')}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text = "${sale.invoiceNo}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td th:text = "${sale.totalSaleAmount}"></td>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <td>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a class="btn btn-primary editSale" th:attr="data-id=${sale.id}" href="#" title="Edit Sale"><i class="fas fa-pencil"></i></a>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a class="btn btn-primary saleItems" th:attr="data-id=${sale.id}" href="#" title="Sale Items"><i class="fas fa-bars"></i></a>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <a class="btn btn-danger deleteSale" th:attr="data-id=${sale.id}" href="#" title="Delete Sale"><i class="fas fa-trash"></i></a>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </td>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </tr>&ndash;&gt;-->
+<!--                    </tbody>-->
+<!--                </table>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+    <!-- Modal -->
+<!--    <div class="modal fade" id="itemModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true" data-backdrop="static">-->
+<!--        <div class="modal-dialog modal-dialog-centered" role="document">-->
+<!--            <div class="modal-content">-->
+<!--                <div class="modal-header">-->
+<!--                    <h5 class="modal-title" id="itemModalLabel">Item Details</h5>-->
+<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                        <span aria-hidden="true">&times;</span>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--                <div class="modal-body">-->
+<!--                    <div class="row">-->
+<!--                        <input id="purchaseItemId" name="id" type="hidden">-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="text" id="code" name="code" class="form-control" required>-->
+<!--                                <label class="form-control-placeholder" for="code">Code</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+<!--                    <div class="row">-->
+<!--                        <div class="col mb-sm-0">-->
+<!--                            <div class="form-group">-->
+<!--                                <div class="custom-control" style="display: flex">-->
+<!--                                    <div class="custom-radio small">-->
+<!--                                        <input type="radio" class="custom-control-input" name= "metalType" value="GOLD" id="gold" >-->
+<!--                                        <label class="custom-control-label pt-1" for="gold">GOLD</label>-->
+<!--                                    </div>-->
+<!--                                    <div class="custom-radio small pl-5">-->
+<!--                                        <input type="radio" class="custom-control-input" name= "metalType"  value="SILVER" id="silver" >-->
+<!--                                        <label class="custom-control-label pt-1" for="silver">SILVER</label>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="text" id="name" name="name" class="form-control" required>-->
+<!--                                <label class="form-control-placeholder" for="name">Name</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="purity" name="purity" class="form-control" required>-->
+<!--                                <label class="form-control-placeholder" for="purity">Purity</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="weight" name="weight" class="form-control" required>-->
+<!--                                <label class="form-control-placeholder" for="weight">Weight</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="stnWeight" name="stnWeight" class="form-control">-->
+<!--                                <label class="form-control-placeholder" for="stnWeight">Stone Weight</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="vaWeight" name="vaWeight" class="form-control">-->
+<!--                                <label class="form-control-placeholder" for="vaWeight">VA Weight</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="netWeight" name="netWeight" class="form-control">-->
+<!--                                <label class="form-control-placeholder" for="netWeight">Gross Weight</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="makingCharge" name="makingCharge" class="form-control">-->
+<!--                                <label class="form-control-placeholder" for="makingCharge">Making Charge</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="text" id="stnType" name="stnType" class="form-control">-->
+<!--                                <label class="form-control-placeholder" for="stnType">Stone Type</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="stnCostPerCt" name="stnCostPerCt" class="form-control">-->
+<!--                                <label class="form-control-placeholder" for="stnCostPerCt">Stone Cost/Ct</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="pcs" name="pcs" class="form-control">-->
+<!--                                <label class="form-control-placeholder" for="pcs">No. of Pcs</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="text" id="huid" name="huid" class="form-control">-->
+<!--                                <label class="form-control-placeholder" for="huid">HUID</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="row">-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="rate" name="rate" class="form-control" required>-->
+<!--                                <label class="form-control-placeholder" for="rate">Rate</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col mb-2">-->
+<!--                            <div class="form-group">-->
+<!--                                <input type="number" id="itemTotal" name="itemTotal" class="form-control" required>-->
+<!--                                <label class="form-control-placeholder" for="itemTotal">Item Total</label>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+
+<!--                </div>-->
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                    <button type="button" class="btn btn-primary addItem">Add Item</button>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/sale.js}"></script>
+</th:block>
+</html>

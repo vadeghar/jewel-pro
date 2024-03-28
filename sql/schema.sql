@@ -161,4 +161,48 @@ weight decimal(19,3),
 purchase_id bigint,
 primary key (id));
 
-alter table purchase_item add constraint FK1mncc5yaore1sibgpj3jc4a7u foreign key (purchase_id) references purchase (id)
+alter table purchase_item add constraint FK1mncc5yaore1sibgpj3jc4a7u foreign key (purchase_id) references purchase (id);
+
+
+create table sale (
+id bigint not null auto_increment,
+c_gst_amount decimal(19,2),
+customer_name varchar(50),
+description varchar(255),
+invoice_no varchar(50),
+is_gst_sale varchar(5),
+last_updated_ts datetime,
+mc_amount decimal(19,2),
+payment_mode varchar(15),
+s_gst_amount decimal(19,2),
+sale_date date,
+sale_type varchar(50),
+total_sale_amount decimal(19,2),
+primary key (id)
+);
+
+
+
+create table sale_item (
+id bigint not null auto_increment,
+code varchar(50),
+huid varchar(10),
+item_total decimal(19,2),
+ making_charge decimal(19,2),
+ mc_amount decimal(19,2),
+ metal_type varchar(15),
+ name varchar(50),
+ net_weight decimal(19,3),
+ pcs integer not null,
+ purchase_item_id bigint,
+ purity varchar(10),
+ rate decimal(19,2),
+ stn_cost_per_ct decimal(19,2),
+ stn_type varchar(10),
+ stn_weight decimal(19,3),
+ va_weight decimal(19,3),
+ weight decimal(19,3),
+ sale_id bigint,
+ primary key (id));
+
+alter table sale_item add constraint FKar9qqr4n69xw1shum20oflleo foreign key (sale_id) references sale (id);

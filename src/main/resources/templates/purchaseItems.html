@@ -15,7 +15,7 @@
             <a class="backToPurchase" th:attr="data-id=${purchase.id}" href="/purchase" title="Back to Purchases"><i class="fa-solid fa-arrow-left"></i></a>
         </div>
         <div class="card-body">
-            <div class="row">
+            <div class="row" th:if="${(param.success != null) || (errorResponse != null && errorResponse.hasErrors())}">
                 <div class="col">
                     <div class="p-5">
                         <div th:if="${param.success}">
@@ -23,7 +23,6 @@
                                 Purchase saved successfully.
                             </div>
                         </div>
-
                         <div th:if="${errorResponse != null && errorResponse.hasErrors()}">
                             <ul>
                                 <div class="alert alert-danger">
@@ -34,6 +33,13 @@
                     </div>
                 </div>
             </div>
+            <div class="py-3 d-flex justify-content-between align-items-center">
+                <label class="m-0 font-weight-bold text-primary">Purchase Weight: </label>
+                <div class="m-0 font-weight-bold bg-primary text-white" th:text="${purchase.grossWeight}" id="purchaseWeight"></div>
+                <label class="m-0 font-weight-bold text-primary">   Purchase Items Weight: </label>
+                <div class="m-0 font-weight-bold text-primary" id="itemsWeight"></div>
+            </div>
+
             <div class="row">
                 <div class="col">
                     <form th:action="@{/purchase/items/saveItems}" th:object="${purchase}" method="post" id="purchaseForm">
@@ -60,7 +66,7 @@
                                     <input type="hidden" name="purchaseItems[0].id" class="form-control">
                                     <input type="text" name="purchaseItems[0].name" class="form-control"></td>
                                 <td><input type="text" name="purchaseItems[0].code" class="form-control"></td>
-                                <td><input type="text" name="purchaseItems[0].weight" class="form-control"></td>
+                                <td><input type="text" name="purchaseItems[0].weight" class="form-control item-weight"></td>
                                 <td><input type="text" name="purchaseItems[0].vaWeight" class="form-control"></td>
                                 <td><input type="text" name="purchaseItems[0].makingCharge" class="form-control"></td>
                                 <td><input type="text" name="purchaseItems[0].stnWeight" class="form-control"></td>
@@ -75,7 +81,7 @@
                                     <input type="hidden" th:field="*{purchaseItems[__${itemStat.index}__].id}" class="form-control">
                                     <input type="text" th:field="*{purchaseItems[__${itemStat.index}__].name}" class="form-control"></td>
                                 <td><input type="text" th:field="*{purchaseItems[__${itemStat.index}__].code}" class="form-control"></td>
-                                <td><input type="text" th:field="*{purchaseItems[__${itemStat.index}__].weight}" class="form-control"></td>
+                                <td><input type="text" th:field="*{purchaseItems[__${itemStat.index}__].weight}" class="form-control item-weight"></td>
                                 <td><input type="text" th:field="*{purchaseItems[__${itemStat.index}__].vaWeight}" class="form-control"></td>
                                 <td><input type="text" th:field="*{purchaseItems[__${itemStat.index}__].makingCharge}" class="form-control"></td>
                                 <td><input type="text" th:field="*{purchaseItems[__${itemStat.index}__].stnWeight}" class="form-control"></td>
@@ -89,7 +95,7 @@
                         </table>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-2 mb-sm-0 text-right">
-                                <button class="btn btn-primary btn-user" type="submit">Save Items</button>
+                                <button class="btn btn-primary btn-user" type="submit" id="saveItems">Save Items</button>
                             </div>
                             <div class="col-sm-6 mb-2 mb-sm-0">
                                 <button class="btn btn-primary btn-user" type="button" id="addRow">Add</button>

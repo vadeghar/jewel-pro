@@ -1,6 +1,8 @@
 package com.billing.controller.rest;
 
+import com.billing.entity.PurchaseItem;
 import com.billing.entity.Supplier;
+import com.billing.service.PurchaseItemService;
 import com.billing.service.SupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -19,9 +21,11 @@ public class CommonController {
 
     @Autowired
     private SupplierService supplierService;
+    @Autowired
+    private PurchaseItemService purchaseItemService;
 
     @GetMapping("/suppliers")
-    public List<String> autocomplete(@RequestParam String term) {
+    public List<String> suppliers(@RequestParam String term) {
         List<Supplier> supplierList = supplierService.getSuppliersNameLike(term);
         if (!CollectionUtils.isEmpty(supplierList)) {
             return supplierList.stream()
@@ -29,6 +33,15 @@ public class CommonController {
                     .collect(Collectors.toList());
         }
 
+        return List.of();
+    }
+
+    @GetMapping("/items")
+    public List<PurchaseItem> items(@RequestParam String term) {
+        List<PurchaseItem> purchaseItemList = purchaseItemService.findPurchaseItemByCodeOrName(term);
+        if (!CollectionUtils.isEmpty(purchaseItemList)) {
+            return purchaseItemList;
+        }
         return List.of();
     }
 }

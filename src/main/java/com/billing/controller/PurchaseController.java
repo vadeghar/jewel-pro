@@ -98,10 +98,7 @@ public class PurchaseController {
                         .forEach(pi -> pi.setPurchase(dbPurchase));
         dbPurchase.setPurchaseItems(purchase.getPurchaseItems());
         purchaseService.save(dbPurchase);
-//        Purchase dbPurchase = purchaseService.getById(purchase.getId());
-//        System.out.println("DB Purchase: "+dbPurchase);
-//        model.addAttribute("purchase", dbPurchase);
-        return "redirect:/purchase?success";
+        return items(purchase, result, model);
     }
 
 }

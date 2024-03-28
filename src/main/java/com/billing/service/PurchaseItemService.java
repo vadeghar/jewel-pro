@@ -66,5 +66,9 @@ public class PurchaseItemService {
         return errorResponse;
     }
 
+    public List<PurchaseItem> findPurchaseItemByCodeOrName(String nameOrCode) {
+        return purchaseItemRepository.findByNameOrCode(nameOrCode);
+    }
+
 
 }
