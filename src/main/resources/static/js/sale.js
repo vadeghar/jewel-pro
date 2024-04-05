@@ -52,7 +52,7 @@ $(document).on('focus', '.code', function() {
     });
 });
 
-$(document).on('input', '.rate, .vaWeight, .makingCharge', function() {
+$(document).on('input', '.saleItemCls', function() {
     var $inputElement = $(this); // Get the current input element
     var inputId = $inputElement.attr('id'); // Get the id attribute
     var inputName = $inputElement.attr('name'); // Get the name attribute
@@ -61,6 +61,18 @@ $(document).on('input', '.rate, .vaWeight, .makingCharge', function() {
     var index = inputName.substring(startIndex, endIndex);
     calcItemTotal(index);
 });
+
+$(document).on('input', '.exchangeItemCls', function() {
+    var $inputElement = $(this); // Get the current input element
+    var inputId = $inputElement.attr('id'); // Get the id attribute
+    var inputName = $inputElement.attr('name'); // Get the name attribute
+    var startIndex = inputName.indexOf('[') + 1;
+    var endIndex = inputName.indexOf(']');
+    var index = inputName.substring(startIndex, endIndex);
+    calcExchangeItemTotal(index);
+});
+
+
 
 $(document).ready(function(){
 
@@ -84,11 +96,11 @@ $('.enableGst').change(function() {
                  '<input type="hidden" name="saleItemList[' + rowCount + '].id" id="saleItemList[' + rowCount + '].id" class="form-control">' +
              '</td>' +
              '<td><input type="text" name="saleItemList[' + rowCount + '].name" id="saleItemList[' + rowCount + '].name" class="form-control"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].weight" id="saleItemList[' + rowCount + '].weight" class="form-control item-weight"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].vaWeight" id="saleItemList[' + rowCount + '].vaWeight" class="form-control vaWeight"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].makingCharge" id="saleItemList[' + rowCount + '].makingCharge" class="form-control makingCharge"></td>' +
+             '<td><input type="text" name="saleItemList[' + rowCount + '].weight" id="saleItemList[' + rowCount + '].weight" class="form-control saleItemCls"></td>' +
+             '<td><input type="text" name="saleItemList[' + rowCount + '].vaWeight" id="saleItemList[' + rowCount + '].vaWeight" class="form-control saleItemCls"></td>' +
+             '<td><input type="text" name="saleItemList[' + rowCount + '].makingCharge" id="saleItemList[' + rowCount + '].makingCharge" class="form-control saleItemCls"></td>' +
              '<td><input type="text" name="saleItemList[' + rowCount + '].netWeight" id="saleItemList[' + rowCount + '].netWeight" class="form-control"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].rate" id="saleItemList[' + rowCount + '].rate" class="form-control rate"></td>' +
+             '<td><input type="text" name="saleItemList[' + rowCount + '].rate" id="saleItemList[' + rowCount + '].rate" class="form-control saleItemCls"></td>' +
              '<td><input type="text" name="saleItemList[' + rowCount + '].itemTotal" id="saleItemList[' + rowCount + '].itemTotal" class="form-control"></td>' +
              '<td><button type="button" class="btn btn-danger removeRow">Remove</button></td>' +
          '</tr>';
@@ -100,10 +112,47 @@ $('.enableGst').change(function() {
         var rowCount = $('#saleItemsTable tbody tr').length;
         if(rowCount > 1) {
             $(this).closest("tr").remove();
+            calcMainTotals();
         } else {
             alert("At least 1 Item to be added to do a sale.")
         }
      });
+
+     $("#addNewExchangeItem").click(function() {
+        var rowCount = $('#exchangeItemsTable tbody tr').length;
+        var newRow = '<tr>' +
+                          '<td><input type="text" name="exchangedItems[' + rowCount + '].desc" id="exchangedItems[' + rowCount + '].desc" class="form-control"></td>' +
+                          '<td>'+
+                              '<input type="text" name="exchangedItems[' + rowCount + '].weight" id="exchangedItems[' + rowCount + '].weight" class="form-control exchangeItemCls">' +
+                              '<input type="hidden" name="exchangedItems[' + rowCount + '].id" id="exchangedItems[' + rowCount + '].id" class="form-control">' +
+                          '</td>' +
+                          '<td><input type="text" name="exchangedItems[' + rowCount + '].meltPercentage" id="exchangedItems[' + rowCount + '].meltPercentage" class="form-control exchangeItemCls"></td>' +
+                          '<td><input type="text" name="exchangedItems[' + rowCount + '].wastageInGms" id="exchangedItems[' + rowCount + '].wastageInGms" class="form-control"></td>' +
+                          '<td><input type="text" name="exchangedItems[' + rowCount + '].netWeight" id="exchangedItems[' + rowCount + '].netWeight" class="form-control"></td>' +
+                          '<td><input type="text" name="exchangedItems[' + rowCount + '].rate" id="exchangedItems[' + rowCount + '].rate" class="form-control exchangeItemCls"></td>' +
+                          '<td><input type="text" name="exchangedItems[' + rowCount + '].exchangeValue" id="exchangedItems[' + rowCount + '].exchangeValue" class="form-control"></td>' +
+                          '<td><button type="button" class="btn btn-danger removeExchangeRow">Remove</button></td>' +
+                      '</tr>';
+        $("#exchangeItemsTable tbody").append(newRow);
+     });
+     $("#exchangeItemsTable").on("click", ".removeExchangeRow", function() {
+        var rowCount = $('#exchangeItemsTable tbody tr').length;
+        if(rowCount > 1) {
+            $(this).closest("tr").remove();
+            calcMainTotals();
+        } else {
+            alert("At least 1 Item to be added to do a sale.")
+        }
+    });
+    $('#discount').on('input', function() {
+        calcMainTotals();
+    });
+
+    $('#paidAmount').on('input', function() {
+        calcMainTotals();
+    });
+
+
 
 $('#saleDate').val(getCurrentDate()).attr('disabled', true);
 });
@@ -129,7 +178,74 @@ function calcItemTotal(index) {
     var grossWeight = weight + vaWeight;
     var itemTotal = (grossWeight * rate) + makingCharge;
     $('#saleItemList\\[' + index + '\\]\\.itemTotal').val(itemTotal.toFixed(2));
+    calcMainTotals();
+}
 
+function calcExchangeItemTotal(index) {
+    var weight = parseFloat($('#exchangedItems\\[' + index + '\\]\\.weight').val());
+    var meltPercentage = parseFloat($('#exchangedItems\\[' + index + '\\]\\.meltPercentage').val());
+    var wastageInGms = parseFloat($('#exchangedItems\\[' + index + '\\]\\.wastageInGms').val());
+    var netWeight = parseFloat($('#exchangedItems\\[' + index + '\\]\\.netWeight').val());
+    var rate = parseFloat($('#exchangedItems\\[' + index + '\\]\\.rate').val());
+    var exchangeValue = parseFloat($('#exchangedItems\\[' + index + '\\]\\.exchangeValue').val());
+
+    if (weight != '') {
+        if (meltPercentage != '') {
+            wastageInGms = weight - (weight * (meltPercentage / 100));
+            netWeight = weight - wastageInGms;
+            $('#exchangedItems\\[' + index + '\\]\\.wastageInGms').val(wastageInGms.toFixed(3));
+            $('#exchangedItems\\[' + index + '\\]\\.netWeight').val(netWeight.toFixed(3));
+            if (rate != null) {
+                exchangeValue = netWeight * rate;
+                $('#exchangedItems\\[' + index + '\\]\\.exchangeValue').val(exchangeValue.toFixed(2));
+                calcMainTotals();
+            } else {
+                $('#exchangedItems\\[' + index + '\\]\\.exchangeValue').val(0.00);
+            }
+        }
+    }
+
+}
+
+function calcMainTotals() {
+    calcItemTotalAmount();
+    calcTotalExchangeAmount();
+    calcBalAmount();
+}
+
+function calcTotalExchangeAmount() {
+    var totalExchangeValue = 0;
+    // Iterate over each row in the table body
+    $("#exchangeItemsTable tbody tr").each(function() {
+        // Get the exchange value from the current row and add it to the total
+        $(this).find("input[name*='exchangedItems'][name$='.exchangeValue']").each(function() {
+            var exchangeValue = parseFloat($(this).val());
+            if (!isNaN(exchangeValue)) {
+                totalExchangeValue += exchangeValue;
+            }
+        });
+    });
+    $("#totalExchangeAmount").val(totalExchangeValue.toFixed(2));
+    $("#totalExchangeAmountLbl").text(totalExchangeValue.toFixed(2));
+    calcTotals();
+}
+
+function calcItemTotalAmount() {
+    var itemTotalValue = 0;
+    // Iterate over each row in the table body
+    $("#saleItemsTable tbody tr").each(function() {
+        // Get the exchange value from the current row and add it to the total
+        $(this).find("input[name*='saleItemList'][name$='.itemTotal']").each(function() {
+            var itemValue = parseFloat($(this).val());
+            if (!isNaN(itemValue)) {
+                itemTotalValue += itemValue;
+            }
+        });
+    });
+    // Display the total exchange value
+    $("#totalSaleAmountLbl").text(itemTotalValue.toFixed(2));
+    $("#totalSaleAmount").val(itemTotalValue.toFixed(2));
+    calcTotals();
 }
 
 function getCurrentDate() {
@@ -139,6 +255,48 @@ function getCurrentDate() {
     const day = String(now.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
+
+
+function calcTotals() {
+    var totalSaleAmount = $('#totalSaleAmount').val() != '' ? parseFloat($('#totalSaleAmount').val()) : 0.00;
+    var totalExchangeAmount = $('#totalExchangeAmount').val() != '' ? parseFloat($('#totalExchangeAmount').val()) : 0.00;
+    var discount = $('#discount').val() != '' ? parseFloat($('#discount').val()) : 0.00;
+    var cGstAmount = $('#cGstAmount').val() != '' ? parseFloat($('#cGstAmount').val()) : 0.00;
+    var sGstAmount = $('#sGstAmount').val() != '' ? parseFloat($('#sGstAmount').val()) : 0.00;
+
+    var grandTotalSaleAmountLbl = ((totalSaleAmount - totalExchangeAmount) - discount) + (cGstAmount + sGstAmount);
+    if(grandTotalSaleAmountLbl > 0) {
+        $('#grandTotalSaleAmount').val(grandTotalSaleAmountLbl.toFixed(2));
+        $('#grandTotalSaleAmountLbl').text(grandTotalSaleAmountLbl.toFixed(2));
+    }
+}
+
+function calcBalAmount() {
+    var grandTotalSaleAmount = $('#grandTotalSaleAmount').val();
+    var balAmount = $('#balAmount').val();
+    var paidAmount = $('#paidAmount').val();
+    var balAmount = grandTotalSaleAmount - paidAmount;
+    $('#balAmount').val(balAmount.toFixed(2));
+    $('#balAmountLbl').text(balAmount.toFixed(2));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //
 //// Function to add item to the itemList
 //function addItemToList() {

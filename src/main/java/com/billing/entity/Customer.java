@@ -3,6 +3,7 @@ package com.billing.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,8 +18,13 @@ public class Customer {
     private Long id;
     private String firstName;
     private String lastName;
+    private String name;
     private String email;
     private String phone;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private List<Sale> sales;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;

@@ -206,3 +206,18 @@ item_total decimal(19,2),
  primary key (id));
 
 alter table sale_item add constraint FKar9qqr4n69xw1shum20oflleo foreign key (sale_id) references sale (id);
+
+create table exchange_item (
+id bigint not null auto_increment,
+`desc` varchar(255),
+exchange_value decimal(19,2),
+melt_percentage decimal(19,2),
+net_weight decimal(19,3),
+rate decimal(19,2),
+source varchar(255),
+source_id bigint,
+wastage_in_gms decimal(19,3),
+weight decimal(19,3),
+sale_id bigint,
+primary key (id));
+alter table exchange_item add constraint FK7p8uuw8stlx3ohla03y5ggc37 foreign key (sale_id) references sale (id)

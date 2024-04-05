@@ -1,5 +1,6 @@
 package com.billing.controller;
 
+import com.billing.dto.SaleDTO;
 import com.billing.entity.Purchase;
 import com.billing.entity.Sale;
 import com.billing.service.SaleService;
@@ -30,8 +31,7 @@ public class SaleController {
         if (httpHeaders.containsKey("X-Application-Name")) {
             System.out.println("Found X-Application-Name in header");
         }
-        Sale sale1 = new Sale();
-        sale.setIsGstSale("NO");
+        SaleDTO sale1 = new SaleDTO();
         model.addAttribute("sale", sale1);
         return "sale";
     }
@@ -51,9 +51,11 @@ public class SaleController {
     }
 
     @PostMapping("/save")
-    public String saveSale(@ModelAttribute("sale") Sale sale) {
-        saleService.saveSale(sale);
-        return "redirect:/sales/list";
+    public String saveSale(@ModelAttribute("sale") SaleDTO sale) {
+
+        System.out.println("SaleDTO: "+sale);
+
+        return "sale";
     }
 
     // Other CRUD operations for Sale entity
