@@ -51,10 +51,10 @@ public class SaleController {
     }
 
     @PostMapping("/save")
-    public String saveSale(@ModelAttribute("sale") SaleDTO sale) {
-
+    public String saveSale(@ModelAttribute("sale") SaleDTO sale, Model model) {
         System.out.println("SaleDTO: "+sale);
-
+        SaleDTO saleDTO = saleService.saveSale(sale);
+        model.addAttribute("sale", saleDTO);
         return "sale";
     }
 

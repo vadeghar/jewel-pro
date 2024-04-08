@@ -128,10 +128,16 @@
                                             <input type="text" class="form-control form-control-user" id="customerName"
                                                    name="customerName"
                                                    placeholder="Customer"
-                                                   th:field="*{customerName}">
+                                                   th:field="*{customer.name}">
                                         </div>
                                         <div class="col-sm-3 mb-2 mb-sm-0">
-                                            <input type="number" class="form-control form-control-user" id="invoiceNo"
+                                            <input type="text" class="form-control form-control-user" id="phone"
+                                                   name="phone"
+                                                   placeholder="Phone Number"
+                                                   th:field="*{customer.phone}">
+                                        </div>
+                                        <div class="col-sm-3 mb-2 mb-sm-0">
+                                            <input type="text" class="form-control form-control-user" id="invoiceNo"
                                                    placeholder="Invoice Number"
                                                    name="invoiceNo"
                                                    th:field="*{invoiceNo}">
@@ -173,6 +179,7 @@
                                                             <td>
                                                                 <input type="text" name="saleItemList[0].code" id="saleItemList[0].code" class="form-control code">
                                                                 <input type="hidden" name="saleItemList[0].id" id="saleItemList[0].id" class="form-control">
+                                                                <input type="hidden" name="saleItemList[0].purchaseItem.id" id="saleItemList[0].purchaseItem.id">
                                                             </td>
                                                             <td><input type="text" name="saleItemList[0].name" id="saleItemList[0].name" class="form-control"></td>
                                                             <td><input type="text" name="saleItemList[0].weight" id="saleItemList[0].weight" class="form-control saleItemCls"></td>
@@ -189,6 +196,7 @@
                                                         <tr th:each="item, itemStat : ${sale.saleItemList}">
                                                             <td>
                                                                 <input type="hidden" th:id="'saleItemList[' + ${itemStat.index} + '].id'" th:field="*{saleItemList[__${itemStat.index}__].id}" class="form-control">
+                                                                <input type="hidden" th:id="'saleItemList[' + ${itemStat.index} + '].purchaseItem.id'" th:field="*{saleItemList[__${itemStat.index}__].purchaseItem.id}">
                                                                 <input type="text" th:id="'saleItemList[' + ${itemStat.index} + '].code'" th:field="*{saleItemList[__${itemStat.index}__].code}" class="form-control">
                                                             </td>
                                                             <td><input type="text" th:id="'saleItemList[' + ${itemStat.index} + '].name'" th:field="*{saleItemList[__${itemStat.index}__].name}" class="form-control"></td>
@@ -230,7 +238,7 @@
                                                             </thead>
                                                             <tbody>
                                                             <tr th:if="${sale.exchangedItems == null or #lists.isEmpty(sale.exchangedItems)}">
-                                                                <td><input type="text" name="exchangedItems[0].desc" id="exchangedItems[0].desc" class="form-control"></td>
+                                                                <td><input type="text" name="exchangedItems[0].itemDesc" id="exchangedItems[0].itemDesc" class="form-control"></td>
                                                                 <td>
                                                                     <input type="text" name="exchangedItems[0].weight" id="exchangedItems[0].weight" class="form-control exchangeItemCls">
                                                                     <input type="hidden" name="exchangedItems[0].id" id="exchangedItems[0].id" class="form-control">
@@ -243,7 +251,7 @@
                                                                 <td><button type="button" class="btn btn-danger removeExchangeRow">Remove</button></td>
                                                             </tr>
                                                             <tr th:each="item, itemStat : ${sale.exchangedItems}">
-                                                                <td><input type="text" th:id="'exchangedItems[' + ${itemStat.index} + '].desc'" th:field="*{exchangedItems[__${itemStat.index}__].desc}" class="form-control"></td>
+                                                                <td><input type="text" th:id="'exchangedItems[' + ${itemStat.index} + '].itemDesc'" th:field="*{exchangedItems[__${itemStat.index}__].itemDesc}" class="form-control"></td>
                                                                 <td>
                                                                     <input type="hidden" th:id="'exchangedItems[' + ${itemStat.index} + '].id'" th:field="*{exchangedItems[__${itemStat.index}__].id}" class="form-control">
                                                                     <input type="text" th:id="'exchangedItems[' + ${itemStat.index} + '].weight'" th:field="*{exchangedItems[__${itemStat.index}__].weight}" class="form-control exchangeItemCls"></td>
@@ -337,7 +345,7 @@
                                         <div class="col-sm-3 mb-2 mb-sm-0"></div>
                                         <div class="col-sm-3 mb-2 mb-sm-0 text-right">Grand Total:</div>
                                         <div class="col-sm-3 mb-2 mb-sm-0">
-                                            <span th:text="${sale.totalSaleAmount}" id="grandTotalSaleAmountLbl"/>
+                                            <span th:text="${sale.grandTotalSaleAmount}" id="grandTotalSaleAmountLbl"/>
                                             <input class="form-control form-control-user"
                                                    id="grandTotalSaleAmount"
                                                    name="grandTotalSaleAmount"

@@ -1,6 +1,9 @@
 package com.billing.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,6 +18,9 @@ public class SaleItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "purchase_item_id", referencedColumnName = "id")
+    private PurchaseItem purchaseItem;
     private String name;
     private String code;
     private String metalType;
@@ -28,11 +34,11 @@ public class SaleItem {
     private BigDecimal stnCostPerCt;
     private int pcs;
     private String huid;
-    private Long purchaseItemId;
     private BigDecimal rate;
     private BigDecimal itemTotal;
-    @ToString.Exclude
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sale_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sale_id", nullable = false, referencedColumnName = "id")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private Sale sale;
 }

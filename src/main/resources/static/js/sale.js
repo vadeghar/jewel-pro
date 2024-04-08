@@ -36,7 +36,7 @@ $(document).on('focus', '.code', function() {
             // Use the id or name as needed
             console.log('Input ID:', inputId);
             console.log('Input Name:', inputName);
-            $('#saleItemList\\[' + index + '\\]\\.id').val(ui.item.item.id);
+            $('#saleItemList\\[' + index + '\\]\\.purchaseItem\\.id').val(ui.item.item.id);
             $('#saleItemList\\[' + index + '\\]\\.code').val(ui.item.item.code);
             $('#saleItemList\\[' + index + '\\]\\.name').val(ui.item.item.name);
             $('#saleItemList\\[' + index + '\\]\\.weight').val(ui.item.item.weight != null ? parseFloat(ui.item.item.weight).toFixed(3) : 0.000);
@@ -94,6 +94,7 @@ $('.enableGst').change(function() {
              '<td>' +
                  '<input type="text" name="saleItemList[' + rowCount + '].code" id="saleItemList[' + rowCount + '].code" class="form-control code">' +
                  '<input type="hidden" name="saleItemList[' + rowCount + '].id" id="saleItemList[' + rowCount + '].id" class="form-control">' +
+                 '<input type="hidden" name="saleItemList[' + rowCount + '].purchaseItem.id" id="saleItemList[' + rowCount + '].purchaseItem.id">'+
              '</td>' +
              '<td><input type="text" name="saleItemList[' + rowCount + '].name" id="saleItemList[' + rowCount + '].name" class="form-control"></td>' +
              '<td><input type="text" name="saleItemList[' + rowCount + '].weight" id="saleItemList[' + rowCount + '].weight" class="form-control saleItemCls"></td>' +
@@ -121,7 +122,7 @@ $('.enableGst').change(function() {
      $("#addNewExchangeItem").click(function() {
         var rowCount = $('#exchangeItemsTable tbody tr').length;
         var newRow = '<tr>' +
-                          '<td><input type="text" name="exchangedItems[' + rowCount + '].desc" id="exchangedItems[' + rowCount + '].desc" class="form-control"></td>' +
+                          '<td><input type="text" name="exchangedItems[' + rowCount + '].itemDesc" id="exchangedItems[' + rowCount + '].itemDesc" class="form-control"></td>' +
                           '<td>'+
                               '<input type="text" name="exchangedItems[' + rowCount + '].weight" id="exchangedItems[' + rowCount + '].weight" class="form-control exchangeItemCls">' +
                               '<input type="hidden" name="exchangedItems[' + rowCount + '].id" id="exchangedItems[' + rowCount + '].id" class="form-control">' +

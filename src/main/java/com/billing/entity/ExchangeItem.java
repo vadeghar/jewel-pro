@@ -1,5 +1,6 @@
 package com.billing.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,13 +21,16 @@ public class ExchangeItem {
     private BigDecimal meltPercentage;
     private BigDecimal wastageInGms;
     private BigDecimal netWeight;
-    private String desc;
+    private String itemDesc;
     private String source; // PURCHASE/ SALE
     private Long sourceId;
     private BigDecimal rate;
     private BigDecimal exchangeValue;
-    @ToString.Exclude
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sale_id")
+//    @ToString.Exclude
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "sale_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sale_id", nullable = false, referencedColumnName = "id")
+    @JsonIgnore
     private Sale sale;
 }

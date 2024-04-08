@@ -8,6 +8,7 @@ import com.billing.entity.StoneMaster;
 import com.billing.exception.EstimationException;
 import com.billing.service.StoneMasterService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,11 +16,27 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 public class BillingUtils {
+    private static final AtomicInteger counter = new AtomicInteger(0);
+    private static final String PREFIX = "INV";
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
+
+    public static String generateInvoiceNumber() {
+        String invoiceNo = StringUtils.EMPTY;
+        LocalDateTime now = LocalDateTime.now();
+        String timestamp = now.format(formatter);
+        int sequenceNumber = counter.getAndIncrement();
+        invoiceNo = PREFIX + timestamp + String.format("%04d", sequenceNumber);
+        log.info("New invoice number: {}", invoiceNo);
+        return invoiceNo;
+    }
 
 
 //    public void estimationCalc(Estimation estimation) {
