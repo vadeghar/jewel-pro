@@ -10,4 +10,6 @@ import java.util.List;
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query("SELECT s FROM Supplier s WHERE LOWER(s.name) LIKE LOWER(CONCAT('%', :value, '%'))")
     List<Supplier> findByNameContainingIgnoreCase(@Param("value") String value);
+
+    Supplier findByName(String name);
 }

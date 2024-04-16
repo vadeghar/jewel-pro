@@ -32,13 +32,12 @@ public class PurchaseController {
     public String get(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
                       BindingResult result,
                       Model model) {
-        if (httpHeaders.containsKey("X-Application-Name")) {
-            System.out.println("Found X-Application-Name in header");
-        }
-        List<Purchase> purchaseList = purchaseService.getAll();
-        model.addAttribute("purchaseList", purchaseList);
-        model.addAttribute("purchase", new Purchase());
-        return "purchase";
+        return "views/purchaseList";
+    }
+
+    @GetMapping("add-purchase")
+    public String addPurchase(Model model) {
+        return "views/purchase";
     }
 
     @PostMapping

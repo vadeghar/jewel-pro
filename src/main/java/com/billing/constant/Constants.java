@@ -11,4 +11,6 @@ public class Constants {
 
     public static Double C_GST = 1.5;
     public static Double S_GST = 1.5;
+
+    public static final String ANONYMOUS = "Anonymous";
 }

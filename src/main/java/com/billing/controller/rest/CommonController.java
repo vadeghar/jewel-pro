@@ -1,15 +1,16 @@
 package com.billing.controller.rest;
 
+import com.billing.dto.PurchaseDTO;
 import com.billing.entity.PurchaseItem;
 import com.billing.entity.Supplier;
 import com.billing.service.PurchaseItemService;
+import com.billing.service.PurchaseService;
 import com.billing.service.SupplierService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,12 +18,16 @@ import java.util.stream.Stream;
 
 @RequestMapping("/api/v1")
 @RestController
+@Slf4j
 public class CommonController {
 
     @Autowired
     private SupplierService supplierService;
     @Autowired
     private PurchaseItemService purchaseItemService;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     @GetMapping("/suppliers")
     public List<String> suppliers(@RequestParam String term) {
@@ -36,6 +41,11 @@ public class CommonController {
         return List.of();
     }
 
+    @GetMapping("/supplier/autocomplete")
+    public List<Supplier> suppliersAutocomplete(@RequestParam String term) {
+        return supplierService.getSuppliersNameLike(term);
+    }
+
     @GetMapping("/items")
     public List<PurchaseItem> items(@RequestParam String term) {
         List<PurchaseItem> purchaseItemList = purchaseItemService.findPurchaseItemByCodeOrName(term);
@@ -43,5 +53,19 @@ public class CommonController {
             return purchaseItemList;
         }
         return List.of();
+    }
+
+    @GetMapping("/purchase")
+    public List<PurchaseDTO> getAllPurchase() {
+
+        return List.of();
+    }
+
+    @PostMapping("/purchase/save")
+    public ResponseEntity<String> save(@RequestBody PurchaseDTO purchaseDTO) {
+        log.info("CommonController >> save >> RequestBody: {}", purchaseDTO);
+        purchaseService.savePurchase(purchaseDTO);
+        log.info("<< CommonController << save");
+        return ResponseEntity.ok("Success");
     }
 }

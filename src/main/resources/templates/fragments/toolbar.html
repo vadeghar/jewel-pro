@@ -25,8 +25,8 @@
         </div>
     </form>
     <div>
-        <h6 class="m-0 font-weight-bold text-primary pr-4" th:text="'SILVER: ' + ${currentSilverRate}" ></h6>
-        <h6 class="m-0 font-weight-bold text-primary pr-4" th:text="'GOLD: ' + ${currentGoldRate}" ></h6>
+        <span class="m-0 font-weight-bold text-primary pr-4">Silver: <h6 id="currentSilverRate" style="display: inline"  th:text="${currentSilverRate}"></h6></span>
+        <span class="m-0 font-weight-bold text-primary pr-4">Gold: <h6 id="currentGoldRate" style="display: inline" th:text="${currentGoldRate}"></h6></span>
     </div>
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">

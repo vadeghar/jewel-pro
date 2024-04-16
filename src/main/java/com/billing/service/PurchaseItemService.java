@@ -67,7 +67,7 @@ public class PurchaseItemService {
     }
 
     public List<PurchaseItem> findPurchaseItemByCodeOrName(String nameOrCode) {
-        return purchaseItemRepository.findByNameOrCode(nameOrCode);
+        return null; //purchaseItemRepository.findByNameOrCode(nameOrCode);
     }
 
 

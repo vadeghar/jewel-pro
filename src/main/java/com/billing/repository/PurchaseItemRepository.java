@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PurchaseItemRepository extends JpaRepository<PurchaseItem, Long> {
 
-    @Query("SELECT pi FROM PurchaseItem pi WHERE LOWER(pi.name) LIKE LOWER(CONCAT('%', :nameOrCode, '%')) OR LOWER(pi.code) LIKE LOWER(CONCAT('%', :nameOrCode, '%'))")
-    List<PurchaseItem> findByNameOrCode(@Param("nameOrCode") String nameOrCode);
+//    @Query("SELECT pi FROM PurchaseItem pi WHERE LOWER(pi.name) LIKE LOWER(CONCAT('%', :nameOrCode, '%')) OR LOWER(pi.code) LIKE LOWER(CONCAT('%', :nameOrCode, '%'))")
+//    List<PurchaseItem> findByNameOrCode(@Param("nameOrCode") String nameOrCode);
 
 }

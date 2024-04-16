@@ -23,8 +23,8 @@ public class GlobalControllerAdvice {
     public void globalAttributes(Model model) {
         BigDecimal goldRate = metalRateService.getRate(Metal.GOLD);
         BigDecimal silverRate = metalRateService.getRate(Metal.SILVER);
-        model.addAttribute("currentGoldRate", goldRate.toPlainString());
-        model.addAttribute("currentSilverRate", silverRate.toPlainString());
+        model.addAttribute("currentGoldRate", goldRate != null ? goldRate.toPlainString() : "0.00");
+        model.addAttribute("currentSilverRate", silverRate!= null ? silverRate.toPlainString() : "0.00");
     }
 }
 
