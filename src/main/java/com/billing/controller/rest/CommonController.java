@@ -57,15 +57,15 @@ public class CommonController {
 
     @GetMapping("/purchase")
     public List<PurchaseDTO> getAllPurchase() {
-
-        return List.of();
+        List<PurchaseDTO> purchaseDTOList = purchaseService.getAllPurchases();
+        return purchaseDTOList;
     }
 
     @PostMapping("/purchase/save")
-    public ResponseEntity<String> save(@RequestBody PurchaseDTO purchaseDTO) {
+    public ResponseEntity<PurchaseDTO> save(@RequestBody PurchaseDTO purchaseDTO) {
         log.info("CommonController >> save >> RequestBody: {}", purchaseDTO);
-        purchaseService.savePurchase(purchaseDTO);
+        Long id = purchaseService.savePurchase(purchaseDTO);
         log.info("<< CommonController << save");
-        return ResponseEntity.ok("Success");
+        return ResponseEntity.ok(PurchaseDTO.builder().id(id).build());
     }
 }

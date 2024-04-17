@@ -12,6 +12,7 @@ import com.billing.repository.SupplierRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.billing.constant.ErrorCode.DATA_ERROR_ESTIMATION;
 
@@ -79,7 +81,7 @@ public class PurchaseService {
     }
 
 
-    public void savePurchase(PurchaseDTO purchaseDTO) {
+    public Long savePurchase(PurchaseDTO purchaseDTO) {
         log.debug("PurchaseService >> savePurchase >>");
         Purchase purchase = null;
         if (purchaseDTO.getId() != null && purchaseDTO.getId() > 0) {
@@ -110,7 +112,20 @@ public class PurchaseService {
         purchase.setBalAmount(purchaseDTO.getBalAmount());
         purchase.setDescription(purchaseDTO.getDescription());
 
-        purchaseRepository.save(purchase);
+        Purchase dbPurchase = purchaseRepository.save(purchase);
         log.debug("<< PurchaseService << savePurchase");
+        return dbPurchase.getId();
+    }
+
+    public List<PurchaseDTO> getAllPurchases() {
+        List<Purchase> purchaseList = purchaseRepository.findAll(Sort.by(Sort.Order.desc("id")));
+        List<PurchaseDTO> purchaseDTOList = purchaseList.stream().map(p -> toDto(p)).collect(Collectors.toList());
+        return purchaseDTOList;
+    }
+
+    private PurchaseDTO toDto(Purchase entity) {
+        PurchaseDTO dto = PurchaseDTO.builder().build();
+        dto.toDto(entity);
+        return dto;
     }
 }

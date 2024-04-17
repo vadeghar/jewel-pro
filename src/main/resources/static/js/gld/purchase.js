@@ -1,8 +1,8 @@
 var baseUrl = 'http://localhost:8080/api/v1';
 var _purchaseContext = '/purchase'
+var url = baseUrl + _purchaseContext;
 
 $(document).ready(function() {
-    var url = baseUrl + _purchaseContext;
 
     $('#metalType').on('change', function(){
         var selectedValue = $(this).val();
@@ -136,6 +136,10 @@ function setDefaultsOnPageLoad() {
     var today = new Date().toISOString().split('T')[0];
     // Set the value of the input element to today's date
     $('#purchaseDate').val(today);
+    var purchaseId = $('#id').val();
+    if(purchaseId) {
+        $('#savePurchase').text('Update')
+    }
 }
 
 function validateForm() {
@@ -150,41 +154,13 @@ function savePurchase() {
     });
     var jsonData = JSON.stringify(formObject);
     console.log(jsonData);
-    simpleCall(baseUrl+_purchaseContext+'/save', 'post', '', '', jsonData, savePurchaseCallback)
-
+    simpleCall(url+'/save', 'post', '', '', jsonData, savePurchaseCallback)
 }
 
 function savePurchaseCallback(response) {
     console.log(response);
-}
-
-function simpleCall(url, method, title, tabId, requestData, responseCallback) {
-//	var $content = $(tabId).find('.ibox-content:first');
-	doSignAndSend({
-		url: url,
-		type: method,
-		contentType: 'application/json',
-		data: requestData,
-		beforeSend: function() {
-            $("#spinner-div").show();
-		},
-		success: function(data, textStatus, jqXHR) {
-		    $("#spinner-div").hide();
-			responseCallback(data);
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			responseCallback(null);
-//			handleGlobalError(jqXHR, textStatus, errorThrown);
-		},
-		complete: function() {
-//			window.setTimeout(function() {
-//				$content.toggleClass('sk-loading');
-//			}, 10000);
-		}
-	});
-}
-
-
-function doSignAndSend(settings) {
-	$.ajax(settings);
+    $('#id').val(response.id);
+    $('#savePurchase').text('Update');
+    $('#addPurchaseItems').attr('data-id', response.id);
+    $('#addPurchaseItems').removeClass('d-none');
 }

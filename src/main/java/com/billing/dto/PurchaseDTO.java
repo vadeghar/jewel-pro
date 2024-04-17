@@ -1,6 +1,8 @@
 package com.billing.dto;
 
+import com.billing.entity.Purchase;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
@@ -13,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PurchaseDTO {
 
     private Long id;
@@ -47,18 +50,35 @@ public class PurchaseDTO {
     private String createdBy;
 
     private List<PurchaseItemDTO> purchaseItems;
-//    public PurchaseDTO(String jsonString) {
-//        // You can use a JSON library like Jackson to deserialize the JSON string into this object
-//        // For simplicity, let's assume you have a Jackson ObjectMapper instance called objectMapper
-//        try {
-//            System.out.println("Inside constructor: "+jsonString);
-//            PurchaseDTO purchaseDTO = new ObjectMapper().readValue(jsonString, PurchaseDTO.class);
-//            System.out.println("PurchaseDTO: "+purchaseDTO);
-//            // Copy the fields from the deserialized purchaseDTO to this object
-//            // Example: this.purchaseType = purchaseDTO.getPurchaseType();
-//        } catch (IOException e) {
-//            e.printStackTrace(); // Handle the exception appropriately
-//        }
-//    }
+
+    public void toDto(Purchase entity) {
+        this.setId(entity.getId());
+        this.setPurchaseType(entity.getPurchaseType());
+        this.setPurchaseBillNo(entity.getPurchaseBillNo());
+        this.setPurchaseDate(entity.getPurchaseDate());
+        this.setMetalType(entity.getMetalType());
+        this.setTotalGrossWeight(entity.getTotalGrossWeight());
+        this.setActualPurity(entity.getActualPurity());
+        this.setPurchasePurity(entity.getPurchasePurity());
+        this.setTotalNetWeight(entity.getTotalNetWeight());
+        this.setPurchaseAmount(entity.getPurchaseAmount());
+        this.setRate(entity.getPurchaseRate());
+        this.setTotalPcs(entity.getTotalPcs());
+        this.setTotalStnWeight(entity.getTotalStnWeight());
+        this.setPaymentMode(entity.getPaymentMode());
+        this.setPaidAmount(entity.getPaidAmount());
+        this.setBalAmount(entity.getBalAmount());
+        this.setTotalMcAmount(entity.getTotalMcAmount());
+        this.setPurchaseRate(entity.getPurchaseRate());
+        this.setIsGstPurchase(entity.getIsGstPurchase());
+        this.setGstNo(entity.getGstNo());
+        this.setTotalCgstAmount(entity.getTotalCgstAmount());
+        this.setTotalSgstAmount(entity.getTotalSGstAmount());
+        this.setTotalPurchaseAmount(entity.getTotalPurchaseAmount());
+        this.setDescription(entity.getDescription());
+        this.setSupplierName(entity.getSupplier().getName());
+        this.setSupplierId(entity.getSupplier().getId());
+        this.setCreatedBy(entity.getCreatedBy());
+    }
 
 }
