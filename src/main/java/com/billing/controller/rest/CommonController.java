@@ -1,6 +1,7 @@
 package com.billing.controller.rest;
 
 import com.billing.dto.PurchaseDTO;
+import com.billing.dto.PurchaseItemDTO;
 import com.billing.entity.PurchaseItem;
 import com.billing.entity.Supplier;
 import com.billing.service.PurchaseItemService;
@@ -8,6 +9,7 @@ import com.billing.service.PurchaseService;
 import com.billing.service.SupplierService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -56,9 +58,13 @@ public class CommonController {
     }
 
     @GetMapping("/purchase")
-    public List<PurchaseDTO> getAllPurchase() {
+    public ResponseEntity<?> getAllPurchase(@RequestParam(required = false) Long id) {
+        if (id != null && id > 0) {
+            PurchaseDTO purchaseDTO = purchaseService.getByPurchaseId(id);
+            return ResponseEntity.ok().body(purchaseDTO);
+        }
         List<PurchaseDTO> purchaseDTOList = purchaseService.getAllPurchases();
-        return purchaseDTOList;
+        return ResponseEntity.ok().body(purchaseDTOList);
     }
 
     @PostMapping("/purchase/save")
@@ -67,5 +73,13 @@ public class CommonController {
         Long id = purchaseService.savePurchase(purchaseDTO);
         log.info("<< CommonController << save");
         return ResponseEntity.ok(PurchaseDTO.builder().id(id).build());
+    }
+
+    @PostMapping("/purchase/{purchaseId}/items")
+    public ResponseEntity<String> addPurchaseItems(@PathVariable("purchaseId") Long purchaseId, @RequestBody List<PurchaseItemDTO> purchaseItems) {
+        log.info("CommonController >> addPurchaseItems >> purchaseId: {} >> items >> {}", purchaseId, purchaseItems);
+
+        log.info("CommonController << addPurchaseItems << purchaseId: {}", purchaseId);
+        return new ResponseEntity<>("Purchase items added successfully", HttpStatus.OK);
     }
 }

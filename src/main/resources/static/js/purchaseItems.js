@@ -41,6 +41,8 @@ $(document).ready(function() {
         });
     }
 
+
+
     function checkWeightAndToggleAddButton() {
         console.log('totalPurchaseItemsWeight: '+totalPurchaseItemsWeight);
         console.log('mainPurchaseWeight: '+mainPurchaseWeight);

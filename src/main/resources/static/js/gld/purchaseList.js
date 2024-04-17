@@ -4,6 +4,22 @@ var url = baseUrl + _purchaseContext;
 
 $(document).ready(function() {
     loadAllPurchases();
+    $(document).on('click', '.addPurchaseItems', function() {
+        var id = $(this).data('id');
+        var form = $('<form></form>', {
+            'method': 'POST',
+            'action': 'purchase/purchase-items'
+        });
+        var idInput = $('<input>', {
+            'type': 'hidden',
+            'name': 'id',
+            'value': id
+        });
+        form.append(idInput);
+        $('body').append(form);
+        form.submit();
+    });
+
 });
 
 function loadAllPurchases() {
@@ -25,7 +41,7 @@ function loadPurchaseDataTable(response) {
               render: function (data, type, row) {
                   return '<button type="button" class="btn btn-sm btn-danger" data-id="' + data + '"><i class="fas fa-trash"></i> Delete</button> ' +
                       '<button type="button" class="btn btn-sm btn-primary" data-id="' + data + '"><i class="fas fa-edit"></i> Edit</button> ' +
-                      '<button type="button" class="btn btn-sm btn-success" data-id="' + data + '"><i class="fas fa-plus"></i> Add Items</button>';
+                      '<button type="button" class="btn btn-sm btn-success addPurchaseItems" data-id="' + data + '"><i class="fas fa-plus"></i> Add Items</button>';
               }
             }
         ],

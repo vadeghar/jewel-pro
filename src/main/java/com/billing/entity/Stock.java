@@ -49,4 +49,5 @@ public class Stock {
     @CreatedDate
     private LocalDateTime createdDate;
     private String createdBy;
+    private Integer pcs;
 }

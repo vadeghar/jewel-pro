@@ -2,6 +2,7 @@ package com.billing.controller;
 
 import com.billing.constant.Metal;
 import com.billing.dto.ErrorResponse;
+import com.billing.dto.PurchaseDTO;
 import com.billing.entity.Estimation;
 import com.billing.entity.Purchase;
 import com.billing.entity.PurchaseItem;
@@ -9,6 +10,7 @@ import com.billing.service.MetalRateService;
 import com.billing.service.PurchaseItemService;
 import com.billing.service.PurchaseService;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +40,12 @@ public class PurchaseController {
     @GetMapping("add-purchase")
     public String addPurchase(Model model) {
         return "views/purchase";
+    }
+
+    @PostMapping(value = "/purchase-items")
+    public String purchaseItems(@ModelAttribute PurchaseDTO purchaseDTO, Model model) {
+        model.addAttribute("purchaseId", purchaseDTO.getId());
+        return "views/purchase-items";
     }
 
     @PostMapping

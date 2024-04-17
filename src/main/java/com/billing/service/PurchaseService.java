@@ -123,9 +123,15 @@ public class PurchaseService {
         return purchaseDTOList;
     }
 
+    public PurchaseDTO getByPurchaseId(Long id) {
+        Purchase purchase = purchaseRepository.getReferenceById(id);
+        return toDto(purchase);
+    }
+
     private PurchaseDTO toDto(Purchase entity) {
         PurchaseDTO dto = PurchaseDTO.builder().build();
         dto.toDto(entity);
         return dto;
     }
+
 }

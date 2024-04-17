@@ -35,7 +35,7 @@ public class PurchaseItem {
     private BigDecimal sGstAmount = BigDecimal.ZERO;
     @Column(precision = 20, scale = 2)
     private BigDecimal itemAmount;
-    private Integer pcs;
+
 
 
     @ManyToOne(fetch = FetchType.LAZY)
