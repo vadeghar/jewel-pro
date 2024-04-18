@@ -1,13 +1,14 @@
 package com.billing.service;
 
 import com.billing.constant.Constants;
+import com.billing.dto.*;
 import com.billing.dto.Error;
-import com.billing.dto.ErrorResponse;
-import com.billing.dto.EstimationList;
-import com.billing.dto.PurchaseDTO;
 import com.billing.entity.Purchase;
+import com.billing.entity.PurchaseItem;
+import com.billing.entity.Stock;
 import com.billing.print.EstimationPrinter2;
 import com.billing.repository.PurchaseRepository;
+import com.billing.repository.StockRepository;
 import com.billing.repository.SupplierRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,9 +31,11 @@ import static com.billing.constant.ErrorCode.DATA_ERROR_ESTIMATION;
 public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final SupplierRepository supplierRepository;
-    public PurchaseService(PurchaseRepository purchaseRepository, SupplierRepository supplierRepository) {
+    private final StockRepository stockRepository;
+    public PurchaseService(PurchaseRepository purchaseRepository, SupplierRepository supplierRepository, StockRepository stockRepository) {
         this.purchaseRepository = purchaseRepository;
         this.supplierRepository = supplierRepository;
+        this.stockRepository = stockRepository;
     }
 
     public Purchase save(Purchase purchase) {
@@ -128,10 +131,43 @@ public class PurchaseService {
         return toDto(purchase);
     }
 
+    public List<PurchaseItemDTO> savePurchaseItems(Long purchaseId, List<PurchaseItemDTO> purchaseItems) {
+        if(purchaseId == null || purchaseId == 0) {
+            throw new EntityNotFoundException("Invalid purchaseId.");
+        }
+        Purchase purchase = purchaseRepository.getReferenceById(purchaseId);
+        List<PurchaseItem> purhcaseItemList = purchaseItems.stream()
+                .map(pi -> toEntity(pi))
+                .collect(Collectors.toList());
+        purchase.setPurchaseItems(purhcaseItemList);
+
+        purchase.getPurchaseItems().stream()
+                        .forEach(purchaseItem -> {
+                            purchaseItem.setPurchase(purchase);
+                            purchaseItem.getStock().setPurchaseItem(purchaseItem);
+                        });
+
+        purchaseRepository.save(purchase);
+
+
+        return null;
+    }
+
+    private PurchaseItem toEntity(PurchaseItemDTO pi) {
+        PurchaseItem purchaseItem = pi.toEntity();
+//        Stock stock = purchaseItem.getStock();
+//        purchaseItem.setStock(stock);
+//        stock = stockRepository.save(stock);
+//
+//        purchaseItem.getStock().setPurchaseItem(purchaseItem);
+        return purchaseItem;
+    }
+
     private PurchaseDTO toDto(Purchase entity) {
         PurchaseDTO dto = PurchaseDTO.builder().build();
         dto.toDto(entity);
         return dto;
     }
+
 
 }

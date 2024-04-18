@@ -76,10 +76,10 @@ public class CommonController {
     }
 
     @PostMapping("/purchase/{purchaseId}/items")
-    public ResponseEntity<String> addPurchaseItems(@PathVariable("purchaseId") Long purchaseId, @RequestBody List<PurchaseItemDTO> purchaseItems) {
+    public ResponseEntity<?> addPurchaseItems(@PathVariable("purchaseId") Long purchaseId, @RequestBody List<PurchaseItemDTO> purchaseItems) {
         log.info("CommonController >> addPurchaseItems >> purchaseId: {} >> items >> {}", purchaseId, purchaseItems);
-
+        List<PurchaseItemDTO> purchaseItemDTOS = purchaseService.savePurchaseItems(purchaseId, purchaseItems);
         log.info("CommonController << addPurchaseItems << purchaseId: {}", purchaseId);
-        return new ResponseEntity<>("Purchase items added successfully", HttpStatus.OK);
+        return new ResponseEntity<>(purchaseItemDTOS, HttpStatus.OK);
     }
 }

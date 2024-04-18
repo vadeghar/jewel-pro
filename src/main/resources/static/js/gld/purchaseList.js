@@ -31,7 +31,7 @@ function loadPurchaseDataTable(response) {
     $('#saleItemsTable').DataTable({
         data: response,
         columns: [
-            {data: 'id'},
+            {data: 'metalType'},
             {data: 'supplierName'},
             {data: 'purchaseDate'},
             {data: 'totalNetWeight'},
@@ -49,6 +49,7 @@ function loadPurchaseDataTable(response) {
         "columnDefs": [{
                 "targets": 'no-sort', // Target the columns with the class 'no-sort'
                 "orderable": false,   // Disable sorting for these columns
-            }]
+            }],
+        order: [[2, 'desc']]
     });
 }
