@@ -15,6 +15,9 @@ public class ItemType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 20)
     private String itemType;
+    @Column(length = 200)
+    private String description;
 
 }
