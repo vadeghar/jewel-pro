@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.billing.constant.ErrorCode.DATA_ERROR_ITEM;
+
 @Service
 @Slf4j
 public class ItemMasterService {
@@ -53,7 +55,7 @@ public class ItemMasterService {
     public ErrorResponse validateItemMaster(ItemMaster itemMaster) {
         log.debug("Validating itemMaster {}", itemMaster);
         List<Error> errors = new ArrayList<>();
-        ErrorResponse errorResponse = new ErrorResponse(errors, LocalDateTime.now());
+        ErrorResponse errorResponse = new ErrorResponse(errors, LocalDateTime.now(), DATA_ERROR_ITEM.getCode());
         if (itemMaster.getItemMetal() == null) {
             errorResponse.getErrors().add(new Error("Select item metal.", "Error"));
         }

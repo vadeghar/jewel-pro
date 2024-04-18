@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Estimation</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Supplier</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3"></div>
+        <div class="card-body">
+            <div style="padding-left: 100px; padding-right: 100px;">
+                <div class="row">
+                    <div class="col">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Add new Supplier!</h1>
+                            </div>
+                            <div th:if="${param.success}">
+                                <div class="alert alert-info">
+                                    Supplier successfully saved in application.
+                                </div>
+                            </div>
+
+                            <div th:if="${errorResponse != null && errorResponse.hasErrors()}">
+                                <ul>
+                                    has errors
+                                    <div class="alert alert-danger">
+                                        <li th:each="error : ${errorResponse.errors}" th:text="${error.description}"></li>
+                                    </div>
+                                </ul>
+                            </div>
+                            <form class="user" method="post"
+                                  id="supplierForm"
+                                  role="form"
+                                  th:action="@{/supplier/save}"
+                                  th:object="${supplier}">
+
+                                <div class="form-group row">
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="name"
+                                               name="name"
+                                               placeholder="Enter supplier name"
+                                               th:field="*{name}">
+                                        <p th:errors = "*{name}" class="text-danger"
+                                           th:if="${#fields.hasErrors('name')}"></p>
+                                    </div>
+                                    <div class="col-sm-3 mb-2 mb-sm-0">
+                                        <input type="hidden" class="form-control form-control-user" id="id" name="id" th:field="*{id}">
+                                        <input type="text" class="form-control form-control-user" id="location"
+                                               placeholder="Location" name="location" th:field="*{location}">
+                                        <p th:errors = "*{location}" class="text-danger"
+                                           th:if="${#fields.hasErrors('location')}"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-primary btn-user btn-block" type="submit">Save</button>
+                                    </div>
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-danger btn-user btn-block" type="button" id="cancelBtn">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Item list</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Location</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    <tr th:each = "supplier : ${supplierList}">
+                        <td th:text = "${supplier.name}"></td>
+                        <td th:text = "${supplier.location}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

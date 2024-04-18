@@ -6,7 +6,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -23,6 +23,8 @@
 
     <!-- Custom styles for this page -->
     <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -35,7 +37,6 @@
                 <div layout:fragment="content"></div>
             </div>
             <!-- End of Main Content -->
-
             <div th:replace="fragments/footer :: footer"></div>
         </div>
     </div>
@@ -67,8 +68,21 @@
         </div>
     </div>
 
+<!--    <div class="d-flex justify-content-center">-->
+<!--        <div class="spinner-grow" role="status">-->
+<!--            <span class="sr-only">Loading...</span>-->
+<!--        </div>-->
+<!--    </div>-->
+    <div id="spinner-div" class="pt-5">
+        <div class="spinner-grow text-primary" role="status">
+        </div>
+    </div>
+
+
     <!-- Bootstrap core JavaScript-->
     <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
     <!-- Core plugin JavaScript-->
@@ -80,9 +94,11 @@
     <!-- Page level plugins -->
     <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
     <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script th:src="@{/js/demo/datatables-demo.js}"></script>
+    <script th:src="@{/js/common/app.js}"></script>
     <th:block layout:fragment="script"></th:block>
 </body>
 </html>

@@ -1,9 +1,12 @@
 package com.billing.service;
 
-import com.billing.constant.Metal;
 import com.billing.dto.Error;
 import com.billing.dto.ErrorResponse;
+import com.billing.dto.EstimationList;
 import com.billing.entity.Estimation;
+import com.billing.print.EstimationPrinter;
+import com.billing.print.EstimationPrinter2;
+import com.billing.print.POSPrinter2;
 import com.billing.repository.EstimationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +17,10 @@ import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.billing.constant.ErrorCode.DATA_ERROR_ESTIMATION;
 
 @Service
 @Slf4j
@@ -54,7 +60,7 @@ public class EstimationService {
     public ErrorResponse validateEstimation(Estimation estimation) {
         log.debug("Validating estimation {}", estimation);
         List<Error> errors = new ArrayList<>();
-        ErrorResponse errorResponse = new ErrorResponse(errors, LocalDateTime.now());
+        ErrorResponse errorResponse = new ErrorResponse(errors, LocalDateTime.now(), DATA_ERROR_ESTIMATION.getCode());
         if(estimation.getRate() == null ||  estimation.getRate() == BigDecimal.ZERO) {
             errorResponse.getErrors().add(new Error("Rate not available.", "Error"));
         }
@@ -97,5 +103,19 @@ public class EstimationService {
 
         log.debug("Exiting validate estimation, Found errors: {}", errorResponse.getErrors().size());
         return errorResponse;
+    }
+
+    public void print(Estimation estimation) {
+        EstimationList estimationList = new EstimationList();
+        estimationList.setEstimationList(Arrays.asList(estimation));
+        EstimationPrinter2 estimationPrinter = new EstimationPrinter2();
+        estimationPrinter.setEstimationList(estimationList);
+        estimationPrinter.initPrint();
+
+//        POSPrinter2 posPrinter2 = new POSPrinter2();
+//        EstimationList estimationList = new EstimationList();
+//        estimationList.setEstimationList(Arrays.asList(estimation));
+//        posPrinter2.setEstimationList(estimationList);
+//        posPrinter2.print(estimationList);
     }
 }

@@ -16,6 +16,7 @@ import java.util.List;
 public class ErrorResponse {
     private List<Error> errors;
     private LocalDateTime timestamp;
+    private String errorCode;
 
     public boolean hasErrors() {
         log.debug("Inside hasErrors method {}.", this.errors);

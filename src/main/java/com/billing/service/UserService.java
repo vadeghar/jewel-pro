@@ -44,7 +44,8 @@ public class UserService {
         if (role == null) {
             role = checkRoleExist();
         }
-        user.setRoles(Arrays.asList(role));
+        //TODO: change this to UserRoles
+        //user.setRoles(Arrays.asList(role));
         userRepository.save(user);
     }
 
