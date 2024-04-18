@@ -34,7 +34,7 @@ public class PurchaseController {
     public String get(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
                       BindingResult result,
                       Model model) {
-        return "views/purchaseList";
+        return "views/purchase/purchase-list";
     }
 
     @GetMapping("add-purchase")
@@ -45,7 +45,7 @@ public class PurchaseController {
     @PostMapping(value = "/purchase-items")
     public String purchaseItems(@ModelAttribute PurchaseDTO purchaseDTO, Model model) {
         model.addAttribute("purchaseId", purchaseDTO.getId());
-        return "views/purchase-items";
+        return "views/purchase/purchase-items";
     }
 
     @PostMapping

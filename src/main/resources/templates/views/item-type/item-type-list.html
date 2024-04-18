@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: Item Type List ::</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Item Type List</h6>
+            <a class="btn btn-primary" type="button" th:href="@{/itemtype/new}"><i class="fa-solid fa-plus"></i>New Item Type</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered" id="itemTypeDataTable">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Purchase Type</th>
+                            <th style="width: 280px;" class="no-sort">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/item-type/item-type-list.js}"></script>
+</th:block>
+</html>
