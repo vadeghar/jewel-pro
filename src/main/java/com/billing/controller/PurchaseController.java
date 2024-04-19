@@ -39,7 +39,13 @@ public class PurchaseController {
 
     @GetMapping("add-purchase")
     public String addPurchase(Model model) {
-        return "views/purchase";
+        return "views/purchase/purchase";
+    }
+
+    @PostMapping("edit-purchase")
+    public String editPurchase(@ModelAttribute PurchaseDTO purchaseDTO, Model model) {
+        model.addAttribute("purchaseId", purchaseDTO.getId());
+        return "views/purchase/purchase";
     }
 
     @PostMapping(value = "/purchase-items")
@@ -48,21 +54,21 @@ public class PurchaseController {
         return "views/purchase/purchase-items";
     }
 
-    @PostMapping
-    public String edit(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
-                      BindingResult result,
-                      Model model) {
-        if (httpHeaders.containsKey("X-Application-Name")) {
-            System.out.println("Found X-Application-Name in header");
-        }
-        if (purchase.getId() == null) {
-            throw new RuntimeException("purchase id missing.");
-        }
-        List<Purchase> purchaseList = purchaseService.getAll();
-        model.addAttribute("purchaseList", purchaseList);
-        model.addAttribute("purchase", purchaseService.getById(purchase.getId()));
-        return "purchase";
-    }
+//    @PostMapping
+//    public String edit(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
+//                      BindingResult result,
+//                      Model model) {
+//        if (httpHeaders.containsKey("X-Application-Name")) {
+//            System.out.println("Found X-Application-Name in header");
+//        }
+//        if (purchase.getId() == null) {
+//            throw new RuntimeException("purchase id missing.");
+//        }
+//        List<Purchase> purchaseList = purchaseService.getAll();
+//        model.addAttribute("purchaseList", purchaseList);
+//        model.addAttribute("purchase", purchaseService.getById(purchase.getId()));
+//        return "purchase";
+//    }
 
     @PostMapping("/save")
     public String registration(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,

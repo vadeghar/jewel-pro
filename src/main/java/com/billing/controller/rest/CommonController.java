@@ -75,11 +75,19 @@ public class CommonController {
         return ResponseEntity.ok(PurchaseDTO.builder().id(id).build());
     }
 
+    @DeleteMapping("/purchase/{id}")
+    public ResponseEntity<?> markPurchaseAsDeleted(@PathVariable("id") Long id) {
+        log.info("CommonController >> deleteItemType >> purchaseId: {} >>", id);
+        purchaseService.softDelete(id);
+        log.info("CommonController << deleteItemType << purchaseId: {}", id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @PostMapping("/purchase/{purchaseId}/items")
-    public ResponseEntity<?> addPurchaseItems(@PathVariable("purchaseId") Long purchaseId, @RequestBody List<PurchaseItemDTO> purchaseItems) {
+    public ResponseEntity<?> savePurchaseItems(@PathVariable("purchaseId") Long purchaseId, @RequestBody List<PurchaseItemDTO> purchaseItems) {
         log.info("CommonController >> addPurchaseItems >> purchaseId: {} >> items >> {}", purchaseId, purchaseItems);
-        List<PurchaseItemDTO> purchaseItemDTOS = purchaseService.savePurchaseItems(purchaseId, purchaseItems);
+        PurchaseDTO purchaseDTO = purchaseService.savePurchaseItems(purchaseId, purchaseItems);
         log.info("CommonController << addPurchaseItems << purchaseId: {}", purchaseId);
-        return new ResponseEntity<>(purchaseItemDTOS, HttpStatus.OK);
+        return new ResponseEntity<>(purchaseDTO, HttpStatus.OK);
     }
 }
