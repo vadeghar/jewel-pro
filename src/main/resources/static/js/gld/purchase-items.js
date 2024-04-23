@@ -29,12 +29,13 @@ function getPurchaseCallback(jsonResponse) {
 }
 
 function renderRows(purchaseItems) {
-        var html = '';
-        purchaseItems.forEach(function(item, index) {
-            html += generateRowHTML(item, index);
-        });
-        $('#purchaseItemsTBody').html(html);
-    }
+    var html = '';
+    purchaseItems.forEach(function(item, index) {
+        html += generateRowHTML(item, index);
+    });
+    $('#purchaseItemsTBody').html(html);
+    adjustPurchaseItemHeadingAttrs()
+}
 
 
 // Function to generate HTML for a single row

@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: New Purchase ::</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">New Purchase</h6>
+            <a class="backToPurchaseList" th:href="@{/purchase}" title="Back to Purchases"><i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+        <form id="purchaseForm" action="#">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input type="hidden" id="id" name="id" th:value="${purchaseId}">
+                            <label for="purchaseType">Purchase Type</label>
+                            <select class="form-control" id="purchaseType" name="purchaseType" required>
+                                <option value="PURCHASE">Purchase</option>
+                                <option value="PURCHASE_RETURN">Purchase Return</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="purchaseDate">Purchase Date</label>
+                            <input type="date" class="form-control" id="purchaseDate" name="purchaseDate" required>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="metalType">Metal Type</label>
+                            <select class="form-control" id="metalType" name="metalType" required>
+                                <option value="GOLD">Gold</option>
+                                <option value="SILVER">Silver</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="supplierName">Supplier Name</label>
+                            <input type="text" class="form-control" id="supplierName" name="supplierName" required placeholder="Supplier">
+                            <input type="hidden" id="supplierId" name="supplierId">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="totalGrossWeight">Total Gross Weight</label>
+                            <input type="number" class="form-control" id="totalGrossWeight" name="totalGrossWeight" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="totalStnWeight">Total Stone Weight</label>
+                            <input type="number" class="form-control" id="totalStnWeight" name="totalStnWeight">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="purchasePurity">Actual Purity</label>
+                            <input type="text" class="form-control" id="actualPurity" name="actualPurity">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="purchasePurity">Purchase Purity</label>
+                            <input type="text" class="form-control" id="purchasePurity" name="purchasePurity" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="totalPcs">Total No. of Pcs</label>
+                            <input type="number" class="form-control" id="totalPcs" name="totalPcs" required>
+                        </div>
+                    </div>
+                </div>
+                    <!-- Repeat the row structure for other attributes -->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="rate">Rate</label>
+                            <input type="number" class="form-control" id="rate" name="rate" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="purchaseBillNo">Purchase Bill Ref #</label>
+                            <input type="number" class="form-control" id="purchaseBillNo" name="purchaseBillNo" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="metalType">GST Purchase?</label>
+                        <select class="form-control" id="isGstPurchase" name="isGstPurchase" required>
+                            <option value="NO">No</option>
+                            <option value="YES">Yes</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 gstAttrs">
+                        <div class="form-group">
+                            <label for="gstNo">GST No.</label>
+                            <input type="number" class="form-control" id="gstNo" name="gstNo">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="text-right"><label for="rate">Total Net Weight</label></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class=""><label id="totalNetWeightLbl"></label></div>
+                            <input type="hidden" class="form-control" id="totalNetWeight" name="totalNetWeight">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="text-right"><label for="rate">Purchase Amount</label></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class=""><label id="purchaseAmountLbl"></label></div>
+                            <input type="hidden" class="form-control" id="purchaseAmount" name="purchaseAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="row gstAttrs mb-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="text-right"><label for="rate">CGST</label></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class=""><label id="totalCgstAmountLbl"></label></div>
+                            <input type="hidden" class="form-control" id="totalCgstAmount" name="totalCgstAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="row gstAttrs  mb-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="text-right"><label for="rate">SGST</label></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class=""><label id="totalSgstAmountLbl"></label></div>
+                            <input type="hidden" class="form-control" id="totalSgstAmount" name="totalSgstAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3">
+                        <div class="text-right"><label for="rate">Total Purchase Amount</label></div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <div class=""><label id="totalPurchaseAmountLbl"></label></div>
+                            <input type="hidden" class="form-control" id="totalPurchaseAmount" name="totalPurchaseAmount">
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right">Payment Mode:</div>
+                    <div class="col-md-3">
+                        <select class="form-control" id="paymentMode" name="paymentMode">
+                            <option value="CASH">Cash</option>
+                            <option value="ONLINE">Online</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right">Paid Amount:</div>
+                    <div class="col-md-3">
+                        <input class="form-control"
+                               id="paidAmount"
+                               name="paidAmount">
+                    </div>
+                </div>
+                <hr/>
+                <div class="row mb-2">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right">Balance Amount:</div>
+                    <div class="col-md-3">
+                        <div class=""><label id="balAmountLbl"></label></div>
+                        <input class="form-control"
+                               id="balAmount"
+                               name="balAmount"
+                               type="hidden">
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="description">Notes:</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right">
+                        <button type="button" id="savePurchase" class="btn btn-primary">Save</button>
+                        <button type="button" id="addPurchaseItems" class="btn btn-success d-none addPurchaseItems" data-id="">Items</button>
+                    </div>
+                    <div class="col-md-3">
+                        <a class="btn btn-danger" th:href="@{/purchase}" title="Back to Purchases">Cancel</a>
+                        <div class="col-md-3"></div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/purchase.js}"></script>
+</th:block>
+</html>

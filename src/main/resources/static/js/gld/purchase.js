@@ -23,13 +23,7 @@ $(document).ready(function() {
     });
 
     $('#paidAmount').on('input', function(){
-        var balAmount = 0;
-        var totalPurchaseAmount = $('#totalPurchaseAmount').val();
-        if(totalPurchaseAmount) {
-            balAmount = parseFloat(totalPurchaseAmount) - parseFloat($(this).val());
-            $('#balAmount').val(parseFloat(balAmount).toFixed(2));
-            $('#balAmountLbl').text(parseFloat(balAmount).toFixed(2));
-        }
+        setPaymentDetails();
     });
 
     $('#savePurchase').on('click', function(e){
@@ -40,6 +34,16 @@ $(document).ready(function() {
 
 setDefaultsOnPageLoad();
 });
+
+function setPaymentDetails() {
+    var balAmount = 0;
+    var totalPurchaseAmount = $('#totalPurchaseAmount').val();
+    if(totalPurchaseAmount) {
+        balAmount = parseFloat(totalPurchaseAmount) - parseFloat($('#paidAmount').val());
+        $('#balAmount').val(parseFloat(balAmount).toFixed(2));
+        $('#balAmountLbl').text(parseFloat(balAmount).toFixed(2));
+    }
+}
 
 var supplierList = [];
 
@@ -127,7 +131,7 @@ function calcTotalPurchaseAmount() {
             $('#totalCgstAmountLbl').text(parseFloat(totalCgstAmount).toFixed(2));
             $('#totalSgstAmountLbl').text(parseFloat(totalSgstAmount).toFixed(2));
         }
-
+        setPaymentDetails();
     }
 
 }
