@@ -6,23 +6,18 @@ import com.billing.dto.Error;
 import com.billing.entity.Purchase;
 import com.billing.entity.PurchaseItem;
 import com.billing.entity.Stock;
-import com.billing.print.EstimationPrinter2;
 import com.billing.repository.PurchaseItemRepository;
 import com.billing.repository.PurchaseRepository;
 import com.billing.repository.StockRepository;
 import com.billing.repository.SupplierRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityNotFoundException;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -145,54 +140,49 @@ public class PurchaseService {
 
 
     public PurchaseDTO savePurchaseItems(Long purchaseId, List<PurchaseItemDTO> purchaseItems) {
-//        if(purchaseId == null || purchaseId == 0) {
-//            throw new EntityNotFoundException("Invalid purchaseId.");
-//        }
-//        Purchase purchase = purchaseRepository.getReferenceById(purchaseId);
-//
-//        purchase.getPurchaseItems().clear();
-//        for (PurchaseItemDTO purchaseItemDTO : purchaseItems) {
-//            PurchaseItem purchaseItem = purchaseItemDTO.toEntity();
-//            if (purchaseItem.getId() != null) {
-//                PurchaseItem existingPurchaseItem = purchaseItemRepository.findById(purchaseItem.getId())
-//                        .orElseThrow(() -> new EntityNotFoundException("PurchaseItem not found"));
-//                existingPurchaseItem.fromDto(purchaseItemDTO); // Update PurchaseItem fields
-//                purchaseItem = existingPurchaseItem;
-//            }
-//            purchaseItem.setPurchase(purchase);
-//
-//            Stock stock = purchaseItem.getStock();
-//            if (stock != null && stock.getId() != null) {
-//                Stock existingStock = stockRepository.findById(stock.getId())
-//                        .orElseThrow(() -> new EntityNotFoundException("Stock not found"));
-//                existingStock.fromDto(purchaseItemDTO);
-//                purchaseItem.setStock(existingStock);
-//
-//            }
-//            purchase.getPurchaseItems().add(purchaseItem);
-//        }
-//
-//        Purchase savedPurchase = purchaseRepository.save(purchase);
-//        return savedPurchase.toDTO();
-
-
         if(purchaseId == null || purchaseId == 0) {
             throw new EntityNotFoundException("Invalid purchaseId.");
         }
         Purchase purchase = purchaseRepository.getReferenceById(purchaseId);
-        List<PurchaseItem> purhcaseItemList = purchaseItems.stream()
-                .map(pi -> toEntity(pi))
+        List<PurchaseItem> existingPurchaseItems = purchase.getPurchaseItems();
+
+        List<PurchaseItem> missingItems = existingPurchaseItems.stream()
+                .filter(existingItem -> purchaseItems.stream()
+                        .noneMatch(purchaseItem -> purchaseItem.getId() == existingItem.getId()))
                 .collect(Collectors.toList());
-        purchase.setPurchaseItems(purhcaseItemList);
+        List<PurchaseItem> dbPurchaseItemList = new ArrayList<>();
+        purchaseItems.stream().forEach(piDto -> {
+            if (piDto.getId() == null) {
+                PurchaseItem purchaseItem = new PurchaseItem();
+                purchaseItem.setPurchase(purchase);
+                Stock stock = new Stock();
+                stock = stock.fromDto(piDto);
+                stock.setPurchaseItem(purchaseItem);
+                purchaseItem.setStock(stock);
+                dbPurchaseItemList.add(purchaseItem);
+            } else {
+                PurchaseItem purchaseItem = existingPurchaseItems.stream()
+                        .filter(pi -> pi.getId().equals(piDto.getId()))
+                        .findFirst()
+                        .orElse(new PurchaseItem());
+                purchaseItem.setPurchase(purchase);
+                Stock stock = purchaseItem.getStock();
+                stock = stock.fromDto(piDto);
+                stock.setPurchaseItem(purchaseItem);
+                purchaseItem.setStock(stock);
+                dbPurchaseItemList.add(purchaseItem);
+            }
+        });
+        if (!CollectionUtils.isEmpty(missingItems)) {
+            missingItems.stream().forEach(purchaseItem -> {
+                purchase.getPurchaseItems().remove(purchaseItem);
+            });
+            purchaseItemRepository.deleteAll(missingItems);
+        }
+        purchase.setPurchaseItems(dbPurchaseItemList);
+        Purchase savedPurchase = purchaseRepository.save(purchase);
+        return toDto(savedPurchase);
 
-        purchase.getPurchaseItems().stream()
-                        .forEach(purchaseItem -> {
-                            purchaseItem.setPurchase(purchase);
-                            purchaseItem.getStock().setPurchaseItem(purchaseItem);
-                        });
-
-        Purchase dbPurchase = purchaseRepository.save(purchase);
-        return toDto(dbPurchase);
     }
 
 
@@ -202,10 +192,14 @@ public class PurchaseService {
         purchaseRepository.save(purchase);
     }
 
-    private PurchaseItem toEntity(PurchaseItemDTO pi) {
-        PurchaseItem purchaseItem = pi.toEntity();
+    private PurchaseItem toEntity(PurchaseItemDTO pi, Purchase purchase) {
+        PurchaseItem purchaseItem = purchaseItemRepository.findById(pi.getId())
+                .orElseThrow(() -> new EntityNotFoundException("PurhcaseItem entity not found with id: "+pi.getId()));
+        purchaseItem.setPurchase(purchase);
         if (pi.getStockId() != null && pi.getStockId() > 0) {
-            purchaseItem.setStock(stockRepository.getReferenceById(pi.getStockId()));
+            Stock stock = stockRepository.getReferenceById(pi.getStockId());
+            stock.fromDto(pi);
+            purchaseItem.setStock(stock);
         }
         return purchaseItem;
     }
@@ -213,7 +207,6 @@ public class PurchaseService {
     private PurchaseDTO toDto(Purchase entity) {
         PurchaseDTO dto = PurchaseDTO.builder().build();
         dto.toDto(entity);
-//        entity.toDTO();
         return dto;
     }
     private PurchaseItemDTO toItemDto(PurchaseItem pi) {

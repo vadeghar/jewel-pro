@@ -57,7 +57,7 @@ public class PurchaseItemDTO {
 //        this.sGstAmount = BigDecimal.ZERO = ;
 //        this.itemAmount = ;
         this.createdBy = purchaseItem.getCreatedBy();
-
+        if (null == purchaseItem.getStock()) return;
         // Stock attributes
         this.name = purchaseItem.getStock().getName();
         this.code = purchaseItem.getStock().getCode();

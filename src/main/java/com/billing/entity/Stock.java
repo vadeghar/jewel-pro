@@ -1,6 +1,7 @@
 package com.billing.entity;
 
 //import com.billing.dto.PurchaseItemDTO;
+import com.billing.dto.PurchaseItemDTO;
 import com.billing.enums.StockStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -61,21 +62,22 @@ public class Stock {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_type_id")
     private ItemType itemType;
-//
-//    public void fromDto(PurchaseItemDTO dto) {
-////        this.getStock().setId(dto.getStockId());
-//        this.setActive(dto.isActive());
-//        this.setCode(dto.getCode());
-//        this.setPcs(dto.getPcs());
-//        this.setHuid(dto.getHuid());
-//        this.setSaleMC(dto.getSaleMC());
-//        this.setName(dto.getName());
-//        this.setWeight(dto.getWeight());
-//        this.setStnWeight(dto.getStnWeight());
-//        this.setVaWeight(dto.getVaWeight());
-//        this.setStnCostPerCt(dto.getSaleStnCostPerCt());
-//        this.setStnType(dto.getStnType());
-//        this.setPurity(dto.getPurity());
-//        this.setStockStatus(dto.getStockStatus());
-//    }
+
+    public Stock fromDto(PurchaseItemDTO dto) {
+//        this.getStock().setId(dto.getStockId());
+        this.setActive(dto.isActive());
+        this.setCode(dto.getCode());
+        this.setPcs(dto.getPcs());
+        this.setHuid(dto.getHuid());
+        this.setSaleMC(dto.getSaleMC());
+        this.setName(dto.getName());
+        this.setWeight(dto.getWeight());
+        this.setStnWeight(dto.getStnWeight());
+        this.setVaWeight(dto.getVaWeight());
+        this.setStnCostPerCt(dto.getSaleStnCostPerCt());
+        this.setStnType(dto.getStnType());
+        this.setPurity(dto.getPurity());
+        this.setStockStatus(dto.getStockStatus());
+        return this;
+    }
 }
