@@ -38,24 +38,27 @@ public class PurchaseService {
     }
 
     public Purchase save(Purchase purchase) {
-        log.debug("Saving Item {}", purchase);
+        log.debug("PurchaseService >> save {} >>", purchase);
         return purchaseRepository.save(purchase);
     }
 
     public List<Purchase> getAll() {
+        log.debug("PurchaseService >> getAll >>");
         return purchaseRepository.findAll();
     }
 
     public Purchase getById(Long id) {
+        log.debug("PurchaseService >> getById >>");
         return purchaseRepository.findById(id).get();
     }
 
     public Purchase update(Long id, Purchase purchase) {
-        log.debug("Saving Item id {} with data {}", id, purchase);
+        log.debug("PurchaseService >> update >> purchase: {} >> {} >>", id, purchase);
         Purchase estimationDb = purchaseRepository.getReferenceById(id);
         if (estimationDb != null) {
             BeanUtils.copyProperties(purchase, estimationDb);
             log.debug("Saving to db item {}", estimationDb);
+            log.debug("PurchaseService << update << purchase <<");
             return purchaseRepository.save(estimationDb);
         } else {
             new EntityNotFoundException("Purchase not found with id "+id);
@@ -64,21 +67,19 @@ public class PurchaseService {
     }
 
     public void delete(Long id) {
-        log.debug("Deleting item id {}", id);
+        log.debug("PurchaseService >> delete >> id: {} >>", id);
         purchaseRepository.deleteById(id);
     }
 
     public ErrorResponse validatePurchase(Purchase purchase) {
-        log.debug("Validating purchase {}", purchase);
+        log.debug("PurchaseService >> validatePurchase >> purchase: {} >>", purchase);
         List<Error> errors = new ArrayList<>();
         ErrorResponse errorResponse = new ErrorResponse(errors, LocalDateTime.now(), DATA_ERROR_ESTIMATION.getCode());
         //TODO:
 //        if(purchase.getRate() == null ||  purchase.getRate() == BigDecimal.ZERO) {
 //            errorResponse.getErrors().add(new Error("Rate not available.", "Error"));
 //        }
-        
-
-        log.debug("Exiting validate purchase, Found errors: {}", errorResponse.getErrors().size());
+        log.debug("PurchaseService << validatePurchase << purchase << errors: {} <<", errorResponse.getErrors().size());
         return errorResponse;
     }
 
@@ -115,17 +116,20 @@ public class PurchaseService {
         purchase.setDescription(purchaseDTO.getDescription());
 
         Purchase dbPurchase = purchaseRepository.save(purchase);
-        log.debug("<< PurchaseService << savePurchase");
+        log.debug("<< PurchaseService << savePurchase <<");
         return dbPurchase.getId();
     }
 
     public List<PurchaseDTO> getAllPurchases() {
+        log.debug("PurchaseService >> getAllPurchases");
         List<Purchase> purchaseList = purchaseRepository.findAllByActivePurchase("YES");
         List<PurchaseDTO> purchaseDTOList = purchaseList.stream().map(p -> toDto(p)).collect(Collectors.toList());
+        log.debug("PurchaseService << getAllPurchases <<");
         return purchaseDTOList;
     }
 
     public PurchaseDTO getByPurchaseId(Long id) {
+        log.debug("PurchaseService >> getByPurchaseId >> id: {}", id);
         Purchase purchase = purchaseRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Purchase not found"));
         PurchaseDTO purchaseDTO = toDto(purchase);
@@ -135,11 +139,13 @@ public class PurchaseService {
                     .collect(Collectors.toList());
             purchaseDTO.setPurchaseItems(purchaseItemDTOS);
         }
+        log.debug("PurchaseService << getByPurchaseId <<");
         return purchaseDTO;
     }
 
 
     public PurchaseDTO savePurchaseItems(Long purchaseId, List<PurchaseItemDTO> purchaseItems) {
+        log.debug("PurchaseService >> savePurchaseItems >> purchaseId: {}, item count: {}", purchaseId, purchaseItems.size());
         if(purchaseId == null || purchaseId == 0) {
             throw new EntityNotFoundException("Invalid purchaseId.");
         }
@@ -181,18 +187,22 @@ public class PurchaseService {
         }
         purchase.setPurchaseItems(dbPurchaseItemList);
         Purchase savedPurchase = purchaseRepository.save(purchase);
+        log.debug("PurchaseService << savePurchaseItems <<");
         return toDto(savedPurchase);
 
     }
 
 
     public void softDelete(Long id) {
+        log.debug("PurchaseService >> softDelete >> id: {}", id);
         Purchase purchase = purchaseRepository.getReferenceById(id);
         purchase.setActivePurchase("NO");
         purchaseRepository.save(purchase);
+        log.debug("PurchaseService << softDelete <<");
     }
 
     private PurchaseItem toEntity(PurchaseItemDTO pi, Purchase purchase) {
+        log.debug("PurchaseService >> toEntity >>");
         PurchaseItem purchaseItem = purchaseItemRepository.findById(pi.getId())
                 .orElseThrow(() -> new EntityNotFoundException("PurhcaseItem entity not found with id: "+pi.getId()));
         purchaseItem.setPurchase(purchase);
@@ -201,19 +211,22 @@ public class PurchaseService {
             stock.fromDto(pi);
             purchaseItem.setStock(stock);
         }
+        log.debug("PurchaseService << toEntity <<");
         return purchaseItem;
     }
 
     private PurchaseDTO toDto(Purchase entity) {
+        log.debug("PurchaseService >> toDto >>");
         PurchaseDTO dto = PurchaseDTO.builder().build();
         dto.toDto(entity);
+        log.debug("PurchaseService << toDto <<");
         return dto;
     }
     private PurchaseItemDTO toItemDto(PurchaseItem pi) {
+        log.debug("PurchaseService >> toItemDto >>");
         PurchaseItemDTO purchaseItemDTO = PurchaseItemDTO.builder().build();
         purchaseItemDTO.toDto(pi);
+        log.debug("PurchaseService << toItemDto <<");
         return purchaseItemDTO;
     }
-
-
 }
