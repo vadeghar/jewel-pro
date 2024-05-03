@@ -32,6 +32,7 @@ public class SpringSecurity {
                         authorize.antMatchers("/register/**",
                                 "/register",
                                 "/login",
+                                "/api/v1/**",
                                 "/css/**",
                                 "/js/**",
                                 "/vendor/**").permitAll()

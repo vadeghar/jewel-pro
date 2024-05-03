@@ -11335,3 +11335,19 @@ body.sidebar-toggled footer.sticky-footer {
     border-bottom: 1px solid;
     border-radius: 0;
 }
+
+.form-control-small {
+    display: block;
+    width: 100%;
+    height: calc(1.0em + 0.75rem + 2px);
+    padding: 0.15rem 0.15rem;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 0.5;
+    color: #6e707e;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #d1d3e2;
+    border-radius: 0.35rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}

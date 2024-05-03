@@ -23,6 +23,7 @@ import java.util.List;
 @Entity
 @Table(name="PURCHASE")
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(exclude = {"purchaseItems"})
 public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

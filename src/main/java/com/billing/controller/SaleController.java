@@ -1,7 +1,6 @@
 package com.billing.controller;
 
 import com.billing.dto.SaleDTO;
-import com.billing.entity.Purchase;
 import com.billing.entity.Sale;
 import com.billing.service.SaleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +27,17 @@ public class SaleController {
     public String get(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("sale") Sale sale,
                       BindingResult result,
                       Model model) {
-        if (httpHeaders.containsKey("X-Application-Name")) {
-            System.out.println("Found X-Application-Name in header");
-        }
-        SaleDTO sale1 = new SaleDTO();
-        model.addAttribute("sale", sale1);
-        return "sale";
+//        if (httpHeaders.containsKey("X-Application-Name")) {
+//            System.out.println("Found X-Application-Name in header");
+//        }
+//        SaleDTO sale1 = new SaleDTO();
+//        model.addAttribute("sale", sale1);
+        return "views/sale/sale";
     }
 
     @GetMapping("/list")
     public String getAllSales(Model model) {
-        List<Sale> sales = saleService.getAllSales();
+        List<Sale> sales = saleService.getAllSales2();
         model.addAttribute("sales", sales);
         return "sale/list"; // Assuming you have a Thymeleaf template named "list.html" in "sale" folder
     }
@@ -53,8 +52,8 @@ public class SaleController {
     @PostMapping("/save")
     public String saveSale(@ModelAttribute("sale") SaleDTO sale, Model model) {
         System.out.println("SaleDTO: "+sale);
-        SaleDTO saleDTO = saleService.saveSale(sale);
-        model.addAttribute("sale", saleDTO);
+//        SaleDTO saleDTO = saleService.saveSale3(sale);
+        model.addAttribute("sale", new SaleDTO());
         return "sale";
     }
 

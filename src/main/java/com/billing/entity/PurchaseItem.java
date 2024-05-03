@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "purchase_item")
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(exclude = {"stock"})
 public class PurchaseItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

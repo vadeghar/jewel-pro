@@ -3,6 +3,7 @@ package com.billing.entity;
 import com.billing.dto.SaleDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,20 +13,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 @Entity
 @Table(name="sale")
+@EqualsAndHashCode(exclude = {"customer"})
 public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String saleType = "SALE"; // Sale / Sale Return
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id")
     private Customer customer;
     private String invoiceNo;
@@ -47,16 +49,16 @@ public class Sale {
     private String description;
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sale", cascade = CascadeType.ALL)
-    private Set<SaleItem> saleItemList = new HashSet<>();
+    private List<SaleItem> saleItemList = new ArrayList<>();
 //    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sale", cascade = CascadeType.ALL)
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<ExchangeItem> exchangeItemList = new HashSet<>();
+    private List<ExchangeItem> exchangeItemList = new ArrayList<>();
 
     public SaleDTO toDTO() {
         return SaleDTO.builder()
             .id(this.id)
             .saleType(this.saleType)
-            .customer(this.customer)
+//            .customer(this.customerId)
             .invoiceNo(this.invoiceNo)
             .saleDate(this.saleDate)
             .lastUpdatedTs(this.lastUpdatedTs)
@@ -70,8 +72,8 @@ public class Sale {
             .paymentMode(this.paymentMode)
             .paidAmount(this.paidAmount)
             .balAmount(this.balAmount)
-            .saleItemList(new ArrayList<>(this.saleItemList))
-            .exchangedItems(new ArrayList<>(this.exchangeItemList))
+//            .saleItemList(!CollectionUtils.isEmpty(this.saleItemList) ? this.saleItemList.stream().map(saleItem -> saleItem.toDto(saleItem)).collect(Collectors.toList()) : new ArrayList<>())
+//            .exchangedItems(!CollectionUtils.isEmpty(this.exchangeItemList) ? this.exchangeItemList.stream().map(exchangeItem -> exchangeItem.toDto()).collect(Collectors.toList()) : new ArrayList<>())
             .description(this.description)
             .build();
     }

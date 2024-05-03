@@ -3,11 +3,11 @@ $(document).on('focus', '.code', function() {
     $(this).autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: 'http://localhost:8080/api/v1/items',
+                url: 'http://localhost:8080/api/v1/stock',
                 method: 'GET',
                 dataType: 'json',
                 data: {
-                    term: request.term
+                    code: request.term
                 },
                 success: function(data) {
                     // Manipulate data to extract only item codes
@@ -27,26 +27,28 @@ $(document).on('focus', '.code', function() {
             var $inputElement = $(this); // Get the current input element
             var inputId = $inputElement.attr('id'); // Get the id attribute
             var inputName = $inputElement.attr('name'); // Get the name attribute
-            var startIndex = inputName.indexOf('[') + 1;
-            var endIndex = inputName.indexOf(']');
-            var index = inputName.substring(startIndex, endIndex);
+            var startIndex = inputId.indexOf('[') + 1;
+            var endIndex = inputId.indexOf(']');
+            var index = inputId.substring(startIndex, endIndex);
 
             console.log('Index:', index);
 
             // Use the id or name as needed
             console.log('Input ID:', inputId);
             console.log('Input Name:', inputName);
-            $('#saleItemList\\[' + index + '\\]\\.purchaseItem\\.id').val(ui.item.item.id);
+            $('#saleItemList\\[' + index + '\\]\\.stockId').val(ui.item.item.id);
             $('#saleItemList\\[' + index + '\\]\\.code').val(ui.item.item.code);
             $('#saleItemList\\[' + index + '\\]\\.name').val(ui.item.item.name);
-            $('#saleItemList\\[' + index + '\\]\\.weight').val(ui.item.item.weight != null ? parseFloat(ui.item.item.weight).toFixed(3) : 0.000);
-            $('#saleItemList\\[' + index + '\\]\\.vaWeight').val(ui.item.item.vaWeight != null ? parseFloat(ui.item.item.vaWeight).toFixed(3) : 0.000);
-            $('#saleItemList\\[' + index + '\\]\\.makingCharge').val(ui.item.item.makingCharge != null ? parseFloat(ui.item.item.makingCharge).toFixed(2) : 0.000);
-            $('#saleItemList\\[' + index + '\\]\\.stnWeight').val(ui.item.item.stnWeight != null ? parseFloat(ui.item.item.stnWeight).toFixed(3) : 0.000);
-            $('#saleItemList\\[' + index + '\\]\\.stnType').val(ui.item.item.stnType);
-            $('#saleItemList\\[' + index + '\\]\\.stnCostPerCt').val(ui.item.item.stnCostPerCt);
-            $('#saleItemList\\[' + index + '\\]\\.netWeight').val(calcNetWeight(ui.item.item));
-            $('#saleItemList\\[' + index + '\\]\\.rate').val(ui.item.item.rate);
+            $('#saleItemList\\[' + index + '\\]\\.weight').val(ui.item.item.weight != null ? parseFloat(ui.item.item.weight).toFixed(3) : parseFloat(0).toFixed(3));
+            $('#saleItemList\\[' + index + '\\]\\.vaWeight').val(ui.item.item.vaWeight != null ? parseFloat(ui.item.item.vaWeight).toFixed(3) : parseFloat(0).toFixed(3));
+            $('#saleItemList\\[' + index + '\\]\\.stnWeight').val(ui.item.item.stnWeight != null ? parseFloat(ui.item.item.stnWeight).toFixed(3) : parseFloat(0).toFixed(3));
+             $('#saleItemList\\[' + index + '\\]\\.netWeight').val(calcNetWeight(ui.item.item));
+            $('#saleItemList\\[' + index + '\\]\\.makingCharge').val(ui.item.item.saleMC != null ? parseFloat(ui.item.item.saleMC).toFixed(2) : parseFloat(0).toFixed(3));
+//
+//            $('#saleItemList\\[' + index + '\\]\\.stnType').val(ui.item.item.stnType);
+//            $('#saleItemList\\[' + index + '\\]\\.stnCostPerCt').val(ui.item.item.stnCostPerCt);
+
+//            $('#saleItemList\\[' + index + '\\]\\.rate').val(ui.item.item.rate);
 
         }
     });
@@ -56,9 +58,9 @@ $(document).on('input', '.saleItemCls', function() {
     var $inputElement = $(this); // Get the current input element
     var inputId = $inputElement.attr('id'); // Get the id attribute
     var inputName = $inputElement.attr('name'); // Get the name attribute
-    var startIndex = inputName.indexOf('[') + 1;
-    var endIndex = inputName.indexOf(']');
-    var index = inputName.substring(startIndex, endIndex);
+    var startIndex = inputId.indexOf('[') + 1;
+    var endIndex = inputId.indexOf(']');
+    var index = inputId.substring(startIndex, endIndex);
     calcItemTotal(index);
 });
 
@@ -66,9 +68,9 @@ $(document).on('input', '.exchangeItemCls', function() {
     var $inputElement = $(this); // Get the current input element
     var inputId = $inputElement.attr('id'); // Get the id attribute
     var inputName = $inputElement.attr('name'); // Get the name attribute
-    var startIndex = inputName.indexOf('[') + 1;
-    var endIndex = inputName.indexOf(']');
-    var index = inputName.substring(startIndex, endIndex);
+    var startIndex = inputId.indexOf('[') + 1;
+    var endIndex = inputId.indexOf(']');
+    var index = inputId.substring(startIndex, endIndex);
     calcExchangeItemTotal(index);
 });
 
@@ -88,23 +90,25 @@ $('.enableGst').change(function() {
 });
 
      // Add row function
-     $("#addNewItem").click(function() {
+     $("#addSaleItem").click(function() {
          var rowCount = $('#saleItemsTable tbody tr').length;
-         var newRow = '<tr>' +
-             '<td>' +
-                 '<input type="text" name="saleItemList[' + rowCount + '].code" id="saleItemList[' + rowCount + '].code" class="form-control code">' +
-                 '<input type="hidden" name="saleItemList[' + rowCount + '].id" id="saleItemList[' + rowCount + '].id" class="form-control">' +
-                 '<input type="hidden" name="saleItemList[' + rowCount + '].purchaseItem.id" id="saleItemList[' + rowCount + '].purchaseItem.id">'+
-             '</td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].name" id="saleItemList[' + rowCount + '].name" class="form-control"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].weight" id="saleItemList[' + rowCount + '].weight" class="form-control saleItemCls"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].vaWeight" id="saleItemList[' + rowCount + '].vaWeight" class="form-control saleItemCls"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].makingCharge" id="saleItemList[' + rowCount + '].makingCharge" class="form-control saleItemCls"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].netWeight" id="saleItemList[' + rowCount + '].netWeight" class="form-control"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].rate" id="saleItemList[' + rowCount + '].rate" class="form-control saleItemCls"></td>' +
-             '<td><input type="text" name="saleItemList[' + rowCount + '].itemTotal" id="saleItemList[' + rowCount + '].itemTotal" class="form-control"></td>' +
-             '<td><button type="button" class="btn btn-danger removeRow">Remove</button></td>' +
-         '</tr>';
+
+         var newRow = '<tr>'+
+                           '<td>'+
+                               '<input type="text" name="code" id="saleItemList['+rowCount+'].code" class="form-control code table-input">'+
+                               '<input type="hidden" name="id" id="saleItemList['+rowCount+'].id" class="form-control">'+
+                               '<input type="hidden" name="stockId" id="saleItemList['+rowCount+'].stockId">'+
+                           '</td>'+
+                           '<td><input type="text" name="name" id="saleItemList['+rowCount+'].name" class="form-control table-input"></td>'+
+                           '<td><input type="text" name="weight" id="saleItemList['+rowCount+'].weight" class="form-control saleItemCls table-input"></td>'+
+                           '<td><input type="text" name="vaWeight" id="saleItemList['+rowCount+'].vaWeight" class="form-control saleItemCls table-input"></td>'+
+                           '<td><input type="text" name="stnWeight" id="saleItemList['+rowCount+'].stnWeight" class="form-control table-input"></td>'+
+                           '<td><input type="text" name="netWeight" id="saleItemList['+rowCount+'].netWeight" class="form-control table-input"></td>'+
+                           '<td><input type="text" name="makingCharge" id="saleItemList['+rowCount+'].makingCharge" class="form-control saleItemCls table-input"></td>'+
+                           '<td><input type="text" name="rate" id="saleItemList['+rowCount+'].rate" class="form-control saleItemCls table-input"></td>'+
+                           '<td><input type="text" name="itemTotal" id="saleItemList['+rowCount+'].itemTotal" class="form-control table-input"></td>'+
+                           '<td><button type="button" class="btn btn-danger removeRow"><i class="fas fa-trash"></i></button></td>'+
+                       '</tr>';
          $("#saleItemsTable tbody").append(newRow);
      });
 
@@ -119,20 +123,20 @@ $('.enableGst').change(function() {
         }
      });
 
-     $("#addNewExchangeItem").click(function() {
+     $("#addExchangeItem").click(function() {
         var rowCount = $('#exchangeItemsTable tbody tr').length;
         var newRow = '<tr>' +
-                          '<td><input type="text" name="exchangedItems[' + rowCount + '].itemDesc" id="exchangedItems[' + rowCount + '].itemDesc" class="form-control"></td>' +
+                          '<td><input type="text" name="itemDesc" id="exchangedItems[' + rowCount + '].itemDesc" class="form-control table-input"></td>' +
                           '<td>'+
-                              '<input type="text" name="exchangedItems[' + rowCount + '].weight" id="exchangedItems[' + rowCount + '].weight" class="form-control exchangeItemCls">' +
-                              '<input type="hidden" name="exchangedItems[' + rowCount + '].id" id="exchangedItems[' + rowCount + '].id" class="form-control">' +
+                              '<input type="text" name="weight" id="exchangedItems[' + rowCount + '].weight" class="form-control exchangeItemCls table-input">' +
+                              '<input type="hidden" name="id" id="exchangedItems[' + rowCount + '].id" class="form-control table-input">' +
                           '</td>' +
-                          '<td><input type="text" name="exchangedItems[' + rowCount + '].meltPercentage" id="exchangedItems[' + rowCount + '].meltPercentage" class="form-control exchangeItemCls"></td>' +
-                          '<td><input type="text" name="exchangedItems[' + rowCount + '].wastageInGms" id="exchangedItems[' + rowCount + '].wastageInGms" class="form-control"></td>' +
-                          '<td><input type="text" name="exchangedItems[' + rowCount + '].netWeight" id="exchangedItems[' + rowCount + '].netWeight" class="form-control"></td>' +
-                          '<td><input type="text" name="exchangedItems[' + rowCount + '].rate" id="exchangedItems[' + rowCount + '].rate" class="form-control exchangeItemCls"></td>' +
-                          '<td><input type="text" name="exchangedItems[' + rowCount + '].exchangeValue" id="exchangedItems[' + rowCount + '].exchangeValue" class="form-control"></td>' +
-                          '<td><button type="button" class="btn btn-danger removeExchangeRow">Remove</button></td>' +
+                          '<td><input type="text" name="meltPercentage" id="exchangedItems[' + rowCount + '].meltPercentage" class="form-control exchangeItemCls table-input"></td>' +
+                          '<td><input type="text" name="wastageInGms" id="exchangedItems[' + rowCount + '].wastageInGms" class="form-control table-input"></td>' +
+                          '<td><input type="text" name="netWeight" id="exchangedItems[' + rowCount + '].netWeight" class="form-control table-input"></td>' +
+                          '<td><input type="text" name="rate" id="exchangedItems[' + rowCount + '].rate" class="form-control exchangeItemCls table-input"></td>' +
+                          '<td><input type="text" name="exchangeValue" id="exchangedItems[' + rowCount + '].exchangeValue" class="form-control table-input"></td>' +
+                          '<td><button type="button" class="btn btn-danger removeExchangeRow"><i class="fas fa-trash"></i></button></td>' +
                       '</tr>';
         $("#exchangeItemsTable tbody").append(newRow);
      });
@@ -171,7 +175,7 @@ function calcItemTotal(index) {
 
     var weight = parseFloat($('#saleItemList\\[' + index + '\\]\\.weight').val());
     var vaWeight = parseFloat($('#saleItemList\\[' + index + '\\]\\.vaWeight').val());
-//    var stnWeight = parseFloat($('#saleItemList\\[' + index + '\\]\\.stnWeight').val());
+    var stnWeight = parseFloat($('#saleItemList\\[' + index + '\\]\\.stnWeight').val());
     var makingCharge = parseFloat($('#saleItemList\\[' + index + '\\]\\.makingCharge').val());
     var rate = parseFloat($('#saleItemList\\[' + index + '\\]\\.rate').val());
     console.log('index:'+index+', weight: '+weight+', vaWeight:'+vaWeight+', makingCharge:'+makingCharge+', rate:'+rate);
