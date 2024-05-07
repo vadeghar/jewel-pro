@@ -1,20 +1,12 @@
 package com.billing.dto;
 
 import com.billing.entity.Customer;
-import com.billing.entity.ExchangeItem;
-import com.billing.entity.Sale;
-import com.billing.entity.SaleItem;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -31,8 +23,8 @@ public class SaleDTO {
     private LocalDate saleDate;
     private LocalDateTime lastUpdatedTs;
     private String isGstSale;
-    private BigDecimal cGstAmount;
-    private BigDecimal sGstAmount;
+    private BigDecimal cgstAmount;
+    private BigDecimal sgstAmount;
     private BigDecimal totalSaleAmount;
     private BigDecimal totalExchangeAmount;
     private BigDecimal discount;

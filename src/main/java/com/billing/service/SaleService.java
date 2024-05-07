@@ -5,18 +5,15 @@ import com.billing.dto.SaleDTO;
 import com.billing.dto.SaleItemDTO;
 import com.billing.entity.*;
 import com.billing.enums.SaleType;
-import com.billing.enums.StockStatus;
 import com.billing.repository.*;
-import com.billing.utils.BillingUtils;
-import com.billing.utils.SaleUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,14 +24,16 @@ public class SaleService {
     private final CustomerRepository customerRepository;
     private final SaleItemRepository saleItemRepository;
     private final ExchangeItemRepository exchangeItemRepository;
+    private final PurchaseItemRepository purchaseItemRepository;
     private final StockRepository stockRepository;
 
     @Autowired
-    public SaleService(SaleRepository saleRepository, CustomerRepository customerRepository, SaleItemRepository saleItemRepository, ExchangeItemRepository exchangeItemRepository, StockRepository stockRepository) {
+    public SaleService(SaleRepository saleRepository, CustomerRepository customerRepository, SaleItemRepository saleItemRepository, ExchangeItemRepository exchangeItemRepository, PurchaseItemRepository purchaseItemRepository, StockRepository stockRepository) {
         this.saleRepository = saleRepository;
         this.customerRepository = customerRepository;
         this.saleItemRepository = saleItemRepository;
         this.exchangeItemRepository = exchangeItemRepository;
+        this.purchaseItemRepository = purchaseItemRepository;
         this.stockRepository = stockRepository;
     }
 
@@ -45,12 +44,25 @@ public class SaleService {
         Customer customer = convertToCustomerEntity(saleDTO);
         customer = customerRepository.save(customer);
         sale.setCustomer(customer);
+        if (StringUtils.isBlank(sale.getInvoiceNo())) {
+            sale.setInvoiceNo(generateInvoiceNumber());
+        }
         Sale savedSale = saleRepository.save(sale);
+
         // Save sale items
         List<SaleItemDTO> saleItemDTOList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(saleDTO.getSaleItemList())) {
             for (SaleItemDTO saleItemDTO : saleDTO.getSaleItemList()) {
                 SaleItem saleItem = convertToEntity(saleItemDTO);
+                PurchaseItem purchaseItem = purchaseItemRepository.findByStockId(saleItemDTO.getStockId()).orElseThrow(() -> new EntityNotFoundException("Stock not found with ID: "+saleItemDTO.getStockId()));
+                Stock stock = purchaseItem.getStock();
+                //huid, pcs, purity, stn_type,
+                saleItem.setHuid(stock.getHuid());
+                saleItem.setPcs(stock.getPcs());
+                saleItem.setPurity(stock.getPurity());
+                saleItem.setStnType(stock.getStnType());
+                saleItem.setStnWeight(stock.getStnWeight());
+                saleItem.setMetalType(purchaseItem.getPurchase().getMetalType());
                 saleItem.setSale(savedSale);
                 SaleItem savedSaleItem = saleItemRepository.save(saleItem);
                 saleItemDTOList.add(convertToDTO(savedSaleItem));
@@ -62,6 +74,8 @@ public class SaleService {
         if (!CollectionUtils.isEmpty(saleDTO.getExchangeItemList())) {
             for (ExchangeItemDTO exchangeItemDTO : saleDTO.getExchangeItemList()) {
                 ExchangeItem exchangeItem = convertToEntity(exchangeItemDTO);
+                exchangeItem.setSource("SALE");
+                exchangeItem.setSourceId(savedSale.getId());
                 exchangeItem.setSale(savedSale);
                 ExchangeItem savedExchangeItem = exchangeItemRepository.save(exchangeItem);
                 exchangeItemDTOList.add(convertToDTO(savedExchangeItem));
@@ -71,6 +85,14 @@ public class SaleService {
         savedSaleDTO.setSaleItemList(saleItemDTOList);
         savedSaleDTO.setExchangeItemList(exchangeItemDTOList);
         return savedSaleDTO;
+    }
+
+    private String generateInvoiceNumber() {
+        Long maxId = saleRepository.findMaxId();
+        int year = LocalDate.now().getYear() % 100; // Last two digits of the year
+        int month = LocalDate.now().getMonthValue(); // Current month
+        int prefix = 1000 % (year+month);
+        return  String.format("%02d%05d", prefix, maxId);
     }
 
     public List<SaleDTO> getAllSales() {
@@ -158,10 +180,10 @@ public class SaleService {
         sale.setCustomer(saleDTO.getCustomer());
         sale.setInvoiceNo(saleDTO.getInvoiceNo());
         sale.setSaleDate(saleDTO.getSaleDate());
-        sale.setLastUpdatedTs(saleDTO.getLastUpdatedTs());
+//        sale.setLastUpdatedTs(saleDTO.getLastUpdatedTs());
         sale.setIsGstSale(saleDTO.getIsGstSale());
-        sale.setCGstAmount(saleDTO.getCGstAmount());
-        sale.setSGstAmount(saleDTO.getSGstAmount());
+        sale.setCGstAmount(saleDTO.getCgstAmount());
+        sale.setSGstAmount(saleDTO.getSgstAmount());
         sale.setTotalSaleAmount(saleDTO.getTotalSaleAmount());
         sale.setTotalExchangeAmount(saleDTO.getTotalExchangeAmount());
         sale.setDiscount(saleDTO.getDiscount());
@@ -196,8 +218,8 @@ public class SaleService {
         saleDTO.setSaleDate(sale.getSaleDate());
         saleDTO.setLastUpdatedTs(sale.getLastUpdatedTs());
         saleDTO.setIsGstSale(sale.getIsGstSale());
-        saleDTO.setCGstAmount(sale.getCGstAmount());
-        saleDTO.setSGstAmount(sale.getSGstAmount());
+        saleDTO.setCgstAmount(sale.getCGstAmount());
+        saleDTO.setSgstAmount(sale.getSGstAmount());
         saleDTO.setTotalSaleAmount(sale.getTotalSaleAmount());
         saleDTO.setTotalExchangeAmount(sale.getTotalExchangeAmount());
         saleDTO.setDiscount(sale.getDiscount());

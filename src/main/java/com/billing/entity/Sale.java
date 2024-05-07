@@ -3,17 +3,17 @@ package com.billing.entity;
 import com.billing.dto.SaleDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.util.CollectionUtils;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Builder
 @Entity
 @Table(name="sale")
+@EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(exclude = {"customer"})
 public class Sale {
     @Id
@@ -33,7 +34,12 @@ public class Sale {
     private String invoiceNo;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate saleDate;
-    private LocalDateTime lastUpdatedTs = LocalDateTime.now();
+    @LastModifiedDate
+    private LocalDateTime lastUpdatedTs;
+    @CreatedDate
+    private LocalDateTime createdDate;
+    @CreatedBy
+    private String createdBy;
 
     private String isGstSale;
     private BigDecimal cGstAmount;
@@ -63,8 +69,8 @@ public class Sale {
             .saleDate(this.saleDate)
             .lastUpdatedTs(this.lastUpdatedTs)
             .isGstSale(this.isGstSale)
-            .cGstAmount(this.cGstAmount)
-            .sGstAmount(this.sGstAmount)
+            .cgstAmount(this.cGstAmount)
+            .sgstAmount(this.sGstAmount)
             .totalSaleAmount(this.totalSaleAmount)
             .totalExchangeAmount(this.totalExchangeAmount)
             .discount(this.discount)

@@ -1,3 +1,7 @@
+var baseUrl = 'http://localhost:8080/api/v1';
+var _saleContext = '/sale'
+var url = baseUrl + _saleContext;
+
 var itemList = [];
 $(document).on('focus', '.code', function() {
     $(this).autocomplete({
@@ -30,9 +34,6 @@ $(document).on('focus', '.code', function() {
             var startIndex = inputId.indexOf('[') + 1;
             var endIndex = inputId.indexOf(']');
             var index = inputId.substring(startIndex, endIndex);
-
-            console.log('Index:', index);
-
             // Use the id or name as needed
             console.log('Input ID:', inputId);
             console.log('Input Name:', inputName);
@@ -44,11 +45,6 @@ $(document).on('focus', '.code', function() {
             $('#saleItemList\\[' + index + '\\]\\.stnWeight').val(ui.item.item.stnWeight != null ? parseFloat(ui.item.item.stnWeight).toFixed(3) : parseFloat(0).toFixed(3));
              $('#saleItemList\\[' + index + '\\]\\.netWeight').val(calcNetWeight(ui.item.item));
             $('#saleItemList\\[' + index + '\\]\\.makingCharge').val(ui.item.item.saleMC != null ? parseFloat(ui.item.item.saleMC).toFixed(2) : parseFloat(0).toFixed(3));
-//
-//            $('#saleItemList\\[' + index + '\\]\\.stnType').val(ui.item.item.stnType);
-//            $('#saleItemList\\[' + index + '\\]\\.stnCostPerCt').val(ui.item.item.stnCostPerCt);
-
-//            $('#saleItemList\\[' + index + '\\]\\.rate').val(ui.item.item.rate);
 
         }
     });
@@ -77,16 +73,21 @@ $(document).on('input', '.exchangeItemCls', function() {
 
 
 $(document).ready(function(){
-
-$('.enableGst').change(function() {
+$('.gstBlock').addClass('d-none');
+$('#isGstSale').change(function() {
     // Check if "NO" option is selected
     if ($(this).val() === 'NO') {
         // Hide the div element
-        $('#gstBlock').addClass('d-none'); // Replace '.div-to-hide' with the appropriate selector for your div
+        $('.gstBlock').addClass('d-none'); // Replace '.div-to-hide' with the appropriate selector for your div
+        $('#cgstAmount').val(0);
+        $('#cgstAmountLbl').text('');
+        $('#sgstAmount').val(0)
+        $('#sgstAmountLbl').text('')
     } else {
         // Show the div element
-        $('#gstBlock').removeClass('d-none'); // Replace '.div-to-hide' with the appropriate selector for your div
+        $('.gstBlock').removeClass('d-none'); // Replace '.div-to-hide' with the appropriate selector for your div
     }
+    calcMainTotals();
 });
 
      // Add row function
@@ -223,7 +224,7 @@ function calcTotalExchangeAmount() {
     // Iterate over each row in the table body
     $("#exchangeItemsTable tbody tr").each(function() {
         // Get the exchange value from the current row and add it to the total
-        $(this).find("input[name*='exchangedItems'][name$='.exchangeValue']").each(function() {
+        $(this).find("input[id*='exchangedItems'][id$='.exchangeValue']").each(function() {
             var exchangeValue = parseFloat($(this).val());
             if (!isNaN(exchangeValue)) {
                 totalExchangeValue += exchangeValue;
@@ -240,7 +241,7 @@ function calcItemTotalAmount() {
     // Iterate over each row in the table body
     $("#saleItemsTable tbody tr").each(function() {
         // Get the exchange value from the current row and add it to the total
-        $(this).find("input[name*='saleItemList'][name$='.itemTotal']").each(function() {
+        $(this).find("input[id*='saleItemList'][id$='.itemTotal']").each(function() {
             var itemValue = parseFloat($(this).val());
             if (!isNaN(itemValue)) {
                 itemTotalValue += itemValue;
@@ -248,8 +249,17 @@ function calcItemTotalAmount() {
         });
     });
     // Display the total exchange value
+    itemTotalValue = Math.round(itemTotalValue);
     $("#totalSaleAmountLbl").text(itemTotalValue.toFixed(2));
     $("#totalSaleAmount").val(itemTotalValue.toFixed(2));
+
+    if ($('#isGstSale').val() === 'YES') {
+        var gst = Math.round((itemTotalValue * 1.5) / 100);
+        $('#cgstAmount').val(gst.toFixed(2));
+        $('#cgstAmountLbl').text(gst.toFixed(2));
+        $('#sgstAmount').val(gst.toFixed(2));
+        $('#sgstAmountLbl').text(gst.toFixed(2));
+    }
     calcTotals();
 }
 
@@ -266,13 +276,14 @@ function calcTotals() {
     var totalSaleAmount = $('#totalSaleAmount').val() != '' ? parseFloat($('#totalSaleAmount').val()) : 0.00;
     var totalExchangeAmount = $('#totalExchangeAmount').val() != '' ? parseFloat($('#totalExchangeAmount').val()) : 0.00;
     var discount = $('#discount').val() != '' ? parseFloat($('#discount').val()) : 0.00;
-    var cGstAmount = $('#cGstAmount').val() != '' ? parseFloat($('#cGstAmount').val()) : 0.00;
-    var sGstAmount = $('#sGstAmount').val() != '' ? parseFloat($('#sGstAmount').val()) : 0.00;
+    var cGstAmount = $('#cgstAmount').val() != '' ? parseFloat($('#cgstAmount').val()) : 0.00;
+    var sGstAmount = $('#sgstAmount').val() != '' ? parseFloat($('#sgstAmount').val()) : 0.00;
 
     var grandTotalSaleAmountLbl = ((totalSaleAmount - totalExchangeAmount) - discount) + (cGstAmount + sGstAmount);
     if(grandTotalSaleAmountLbl > 0) {
         $('#grandTotalSaleAmount').val(grandTotalSaleAmountLbl.toFixed(2));
         $('#grandTotalSaleAmountLbl').text(grandTotalSaleAmountLbl.toFixed(2));
+
     }
 }
 
@@ -285,73 +296,117 @@ function calcBalAmount() {
     $('#balAmountLbl').text(balAmount.toFixed(2));
 }
 
+$('#saveSale').on('click', function(){
+    submit();
+});
+
+function submit() {
+    var saleDTO = {};
+    var customer = {};
+    customer.name = $('#name').val();
+    customer.phone = $('#phone').val();
+    customer.address = $('#address').val();
+    customer.id = $('#customerId').val();
+
+    var saleId = $('#id').val();
+    var saleItemList = [];
+    var exchangeItemList = [];
+    $('#saleItemsTBody tr').each(function() {
+        var jsonData = formToJson(this);
+        saleItemList.push(jsonData);
+    });
+    $('#exchangeItemsTBody tr').each(function() {
+        var jsonData = formToJson(this);
+        exchangeItemList.push(jsonData);
+    });
+//    saleDTO.id = saleId;
+//    saleDTO.saleDate = $('#saleDate').val();
+    saleDTO.customer = customer;
+    saleDTO.saleItemList = saleItemList
+    saleDTO.exchangeItemList = exchangeItemList;
+
+    $('.saleDto input').each(function() {
+        if (!$(this).closest('#saleItemsTable, #exchangeItemsTable').length) {
+            // Get the name and value of each input element
+            var name = $(this).attr('name');
+            var value = $(this).val();
+
+            // If the name and value are not empty, add them to the jsonData object
+            if (name !== undefined && name !== '' && value !== undefined && value !== '') {
+                saleDTO[name] = value;
+            }
+        }
+    });
+    $('.saleDto select').each(function() {
+        if (!$(this).closest('#saleItemsTable, #exchangeItemsTable').length) {
+            // Get the name and value of each input element
+            var name = $(this).attr('name');
+            var value = $(this).val();
+
+            // If the name and value are not empty, add them to the jsonData object
+            if (name !== undefined && name !== '' && value !== undefined && value !== '') {
+                saleDTO[name] = value;
+            }
+        }
+    });
+
+    $('.saleDto textarea').each(function() {
+        if (!$(this).closest('#saleItemsTable, #exchangeItemsTable').length) {
+            // Get the name and value of each input element
+            var name = $(this).attr('name');
+            var value = $(this).val();
+
+            // If the name and value are not empty, add them to the jsonData object
+            if (name !== undefined && name !== '' && value !== undefined && value !== '') {
+                saleDTO[name] = value;
+            }
+        }
+    });
+    simpleCall(url, 'post', '', '', JSON.stringify(saleDTO, null, 2), saveSaleCallback)
+}
+
+function formToJson(form) {
+    var formData = {};
+    $(form).find(':input').each(function() {
+        if(this.name) {
+            formData[this.name] = $(this).val();
+        }
+    });
+    return formData;
+}
+
+function saveSaleCallback(response) {
+
+}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//// Function to add item to the itemList
-//function addItemToList() {
-//    // Get input values from modal
-//    var newItem = {
-//        code: $('#code').val(),
-//        metalType: $('input[name="metalType"]:checked').val(),
-//        name: $('#name').val(),
-//        purity: $('#purity').val(),
-//        weight: $('#weight').val(),
-//        stnWeight: $('#stnWeight').val(),
-//        vaWeight: $('#vaWeight').val(),
-//        netWeight: $('#netWeight').val(),
-//        makingCharge: $('#makingCharge').val(),
-//        stnType: $('#stnType').val(),
-//        stnCostPerCt: $('#stnCostPerCt').val(),
-//        pcs: $('#pcs').val(),
-//        huid: $('#huid').val(),
-//        rate: $('#rate').val(),
-//        itemTotal: $('#itemTotal').val()
-//    };
-//
-//    // Add new item to the itemList
-//    itemList.push(newItem);
-//
-//    // Clear modal inputs
-//    $('#itemModal input').val('');
-//
-//    // Add item to table
-//    addItemToTable(newItem);
-//}
-//
-//// Function to add item to the table
-//function addItemToTable(item) {
-//    var tableRow = '<tr>';
-//    tableRow += '<td>' + item.code + '</td>';
-//    tableRow += '<td>' + item.metalType + '</td>';
-//    tableRow += '<td>' + item.name + '</td>';
-//    tableRow += '<td>' + item.weight + '</td>';
-//    tableRow += '<td>' + item.vaWeight + '</td>';
-//    tableRow += '<td>' + item.netWeight + '</td>';
-//    tableRow += '<td>' + item.makingCharge + '</td>';
-//    tableRow += '<td>' + item.rate + '</td>';
-//    tableRow += '<td>' + item.itemTotal + '</td>';
-//    tableRow += '</tr>';
-//
-//    $('#itemTable tbody').append(tableRow);
-//}
-//
-//// Event listener for "Add Item" button click
-//$('#itemModal').on('click', '.addItem', function() {
-//    addItemToList();
-//});
+$('#name').autocomplete({
+    source: function(request, response) {
+        $.ajax({
+            url: 'http://localhost:8080/api/v1/customer',
+            method: 'GET',
+            dataType: 'json',
+            data: {
+                name: request.term
+            },
+            success: function(data) {
+                // Manipulate data to extract only item codes
+                var itemCodes = $.map(data, function(item) {
+                    return {
+                        label: item.name +' - '+item.phone,
+                        value: item.name,
+                        item: item
+                    };
+                });
+                response(itemCodes);
+            }
+        });
+    },
+    minLength: 3,
+    select: function(event, ui) {
+        $('#name').val(ui.item.item.name);
+        $('#customerId').val(ui.item.item.id);
+        $('#phone').val(ui.item.item.phone);
+        $('#address').val(ui.item.item.address);
+    }
+});

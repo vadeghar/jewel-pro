@@ -25,11 +25,6 @@ public class StockService {
 
     public List<StockDTO> getStockByCode(String code) {
         List<StockDTO> stockDTOList = new ArrayList<>();
-//        Stock queryStock = new Stock();
-//        queryStock.setCode(code);
-//        ExampleMatcher matcher = ExampleMatcher.matching()
-//                .withMatcher("code", matcher1 -> matcher1.contains().ignoreCase());
-//        Example<Stock> example = Example.of(queryStock, matcher);
         log.debug("StockService >> getStockByCode >> code: {}", code);
         List<Stock> stockList = stockRepository.findAllByCodeLike(code);
         log.debug("List size received: {}", stockList.size());

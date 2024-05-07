@@ -23,13 +23,14 @@ public class Customer implements Serializable {
     private String name;
     private String email;
     private String phone;
+    private String address;
 
-    @ToString.Exclude
-    @JsonIgnore
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Sale> sales;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
+//    @ToString.Exclude
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+//    private List<Sale> sales;
+//    @OneToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "address_id", referencedColumnName = "id")
+//    private Address address;
 }
 

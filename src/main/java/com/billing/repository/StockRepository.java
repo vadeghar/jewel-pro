@@ -8,6 +8,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface StockRepository extends JpaRepository<Stock, Long> {
-    @Query("SELECT s FROM Stock s WHERE s.code LIKE %:code%")
+    @Query("SELECT s FROM Stock s JOIN PurchaseItem pi on pi.stock.id = s.id WHERE s.code LIKE %:code%")
     List<Stock> findAllByCodeLike(@Param("code") String code);
 }

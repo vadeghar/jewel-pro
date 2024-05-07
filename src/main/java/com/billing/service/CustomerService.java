@@ -45,7 +45,9 @@ public class CustomerService {
     public void deleteCustomer(Long id) {
         customerRepository.deleteById(id);
     }
-
+    public List<Customer> findCustomerByNameLike(String name) {
+        return customerRepository.findAllByNameLike(name);
+    }
     public ErrorResponse validateCustomer(Customer customer) {
         log.debug("Validating customer {}", customer);
         List<Error> errors = new ArrayList<>();
@@ -62,13 +64,14 @@ public class CustomerService {
         }
 
         // Check if customer has a city
-        if (customer.getAddress() == null || customer.getAddress().getCity() == null || customer.getAddress().getCity().isEmpty()) {
-            errorResponse.getErrors().add(new Error("City is required.", "Error"));
-        }
+//        if (customer.getAddress() == null || customer.getAddress().getCity() == null || customer.getAddress().getCity().isEmpty()) {
+//            errorResponse.getErrors().add(new Error("City is required.", "Error"));
+//        }
 
         log.debug("Exiting validate customer, Found errors: {}", errorResponse.getErrors().size());
         return errorResponse;
     }
+
 
 }
 
