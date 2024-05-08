@@ -1,8 +1,8 @@
 var baseUrl = 'http://localhost:8080/api/v1';
 var _saleContext = '/sale'
 var url = baseUrl + _saleContext;
-
 var itemList = [];
+
 $(document).on('focus', '.code', function() {
     $(this).autocomplete({
         source: function(request, response) {
@@ -70,10 +70,14 @@ $(document).on('input', '.exchangeItemCls', function() {
     calcExchangeItemTotal(index);
 });
 
-
-
 $(document).ready(function(){
+
+if ($('#id').val() != null && $('#id').val() != '') {
+    simpleCall(url+'/'+$('#id').val(), 'get', '', '', null, loadSaleCallback);
+}
+
 $('.gstBlock').addClass('d-none');
+$('#invoiceNoLbl').addClass('d-none');
 $('#isGstSale').change(function() {
     // Check if "NO" option is selected
     if ($(this).val() === 'NO') {
@@ -90,73 +94,72 @@ $('#isGstSale').change(function() {
     calcMainTotals();
 });
 
-     // Add row function
-     $("#addSaleItem").click(function() {
-         var rowCount = $('#saleItemsTable tbody tr').length;
+ // Add row function
+ $("#addSaleItem").click(function() {
+     var rowCount = $('#saleItemsTable tbody tr').length;
+     var newRow = '<tr>'+
+                       '<td>'+
+                           '<input type="text" name="code" id="saleItemList['+rowCount+'].code" class="form-control code table-input">'+
+                           '<input type="hidden" name="id" id="saleItemList['+rowCount+'].id" class="form-control">'+
+                           '<input type="hidden" name="stockId" id="saleItemList['+rowCount+'].stockId">'+
+                       '</td>'+
+                       '<td><input type="text" name="name" id="saleItemList['+rowCount+'].name" class="form-control table-input"></td>'+
+                       '<td><input type="text" name="weight" id="saleItemList['+rowCount+'].weight" class="form-control saleItemCls table-input"></td>'+
+                       '<td><input type="text" name="vaWeight" id="saleItemList['+rowCount+'].vaWeight" class="form-control saleItemCls table-input"></td>'+
+                       '<td><input type="text" name="stnWeight" id="saleItemList['+rowCount+'].stnWeight" class="form-control table-input"></td>'+
+                       '<td><input type="text" name="netWeight" id="saleItemList['+rowCount+'].netWeight" class="form-control table-input"></td>'+
+                       '<td><input type="text" name="makingCharge" id="saleItemList['+rowCount+'].makingCharge" class="form-control saleItemCls table-input"></td>'+
+                       '<td><input type="text" name="rate" id="saleItemList['+rowCount+'].rate" class="form-control saleItemCls table-input"></td>'+
+                       '<td><input type="text" name="itemTotal" id="saleItemList['+rowCount+'].itemTotal" class="form-control table-input"></td>'+
+                       '<td><button type="button" class="btn btn-danger removeRow"><i class="fas fa-trash"></i></button></td>'+
+                   '</tr>';
+     $("#saleItemsTable tbody").append(newRow);
+ });
 
-         var newRow = '<tr>'+
-                           '<td>'+
-                               '<input type="text" name="code" id="saleItemList['+rowCount+'].code" class="form-control code table-input">'+
-                               '<input type="hidden" name="id" id="saleItemList['+rowCount+'].id" class="form-control">'+
-                               '<input type="hidden" name="stockId" id="saleItemList['+rowCount+'].stockId">'+
-                           '</td>'+
-                           '<td><input type="text" name="name" id="saleItemList['+rowCount+'].name" class="form-control table-input"></td>'+
-                           '<td><input type="text" name="weight" id="saleItemList['+rowCount+'].weight" class="form-control saleItemCls table-input"></td>'+
-                           '<td><input type="text" name="vaWeight" id="saleItemList['+rowCount+'].vaWeight" class="form-control saleItemCls table-input"></td>'+
-                           '<td><input type="text" name="stnWeight" id="saleItemList['+rowCount+'].stnWeight" class="form-control table-input"></td>'+
-                           '<td><input type="text" name="netWeight" id="saleItemList['+rowCount+'].netWeight" class="form-control table-input"></td>'+
-                           '<td><input type="text" name="makingCharge" id="saleItemList['+rowCount+'].makingCharge" class="form-control saleItemCls table-input"></td>'+
-                           '<td><input type="text" name="rate" id="saleItemList['+rowCount+'].rate" class="form-control saleItemCls table-input"></td>'+
-                           '<td><input type="text" name="itemTotal" id="saleItemList['+rowCount+'].itemTotal" class="form-control table-input"></td>'+
-                           '<td><button type="button" class="btn btn-danger removeRow"><i class="fas fa-trash"></i></button></td>'+
-                       '</tr>';
-         $("#saleItemsTable tbody").append(newRow);
-     });
-
-     // Remove row
-     $("#saleItemsTable").on("click", ".removeRow", function() {
-        var rowCount = $('#saleItemsTable tbody tr').length;
-        if(rowCount > 1) {
-            $(this).closest("tr").remove();
-            calcMainTotals();
-        } else {
-            alert("At least 1 Item to be added to do a sale.")
-        }
-     });
-
-     $("#addExchangeItem").click(function() {
-        var rowCount = $('#exchangeItemsTable tbody tr').length;
-        var newRow = '<tr>' +
-                          '<td><input type="text" name="itemDesc" id="exchangedItems[' + rowCount + '].itemDesc" class="form-control table-input"></td>' +
-                          '<td>'+
-                              '<input type="text" name="weight" id="exchangedItems[' + rowCount + '].weight" class="form-control exchangeItemCls table-input">' +
-                              '<input type="hidden" name="id" id="exchangedItems[' + rowCount + '].id" class="form-control table-input">' +
-                          '</td>' +
-                          '<td><input type="text" name="meltPercentage" id="exchangedItems[' + rowCount + '].meltPercentage" class="form-control exchangeItemCls table-input"></td>' +
-                          '<td><input type="text" name="wastageInGms" id="exchangedItems[' + rowCount + '].wastageInGms" class="form-control table-input"></td>' +
-                          '<td><input type="text" name="netWeight" id="exchangedItems[' + rowCount + '].netWeight" class="form-control table-input"></td>' +
-                          '<td><input type="text" name="rate" id="exchangedItems[' + rowCount + '].rate" class="form-control exchangeItemCls table-input"></td>' +
-                          '<td><input type="text" name="exchangeValue" id="exchangedItems[' + rowCount + '].exchangeValue" class="form-control table-input"></td>' +
-                          '<td><button type="button" class="btn btn-danger removeExchangeRow"><i class="fas fa-trash"></i></button></td>' +
-                      '</tr>';
-        $("#exchangeItemsTable tbody").append(newRow);
-     });
-     $("#exchangeItemsTable").on("click", ".removeExchangeRow", function() {
-        var rowCount = $('#exchangeItemsTable tbody tr').length;
-        if(rowCount > 1) {
-            $(this).closest("tr").remove();
-            calcMainTotals();
-        } else {
-            alert("At least 1 Item to be added to do a sale.")
-        }
-    });
-    $('#discount').on('input', function() {
+ // Remove row
+ $("#saleItemsTable").on("click", ".removeRow", function() {
+    var rowCount = $('#saleItemsTable tbody tr').length;
+    if(rowCount > 1) {
+        $(this).closest("tr").remove();
         calcMainTotals();
-    });
+    } else {
+        alert("At least 1 Item to be added to do a sale.")
+    }
+ });
 
-    $('#paidAmount').on('input', function() {
+ $("#addExchangeItem").click(function() {
+    var rowCount = $('#exchangeItemsTable tbody tr').length;
+    var newRow = '<tr>' +
+                      '<td><input type="text" name="itemDesc" id="exchangedItems[' + rowCount + '].itemDesc" class="form-control table-input"></td>' +
+                      '<td>'+
+                          '<input type="text" name="weight" id="exchangedItems[' + rowCount + '].weight" class="form-control exchangeItemCls table-input">' +
+                          '<input type="hidden" name="id" id="exchangedItems[' + rowCount + '].id" class="form-control table-input">' +
+                      '</td>' +
+                      '<td><input type="text" name="meltPercentage" id="exchangedItems[' + rowCount + '].meltPercentage" class="form-control exchangeItemCls table-input"></td>' +
+                      '<td><input type="text" name="wastageInGms" id="exchangedItems[' + rowCount + '].wastageInGms" class="form-control table-input"></td>' +
+                      '<td><input type="text" name="netWeight" id="exchangedItems[' + rowCount + '].netWeight" class="form-control table-input"></td>' +
+                      '<td><input type="text" name="rate" id="exchangedItems[' + rowCount + '].rate" class="form-control exchangeItemCls table-input"></td>' +
+                      '<td><input type="text" name="exchangeValue" id="exchangedItems[' + rowCount + '].exchangeValue" class="form-control table-input"></td>' +
+                      '<td><button type="button" class="btn btn-danger removeExchangeRow"><i class="fas fa-trash"></i></button></td>' +
+                  '</tr>';
+    $("#exchangeItemsTable tbody").append(newRow);
+ });
+ $("#exchangeItemsTable").on("click", ".removeExchangeRow", function() {
+    var rowCount = $('#exchangeItemsTable tbody tr').length;
+    if(rowCount > 1) {
+        $(this).closest("tr").remove();
         calcMainTotals();
-    });
+    } else {
+        alert("At least 1 Item to be added to do a sale.")
+    }
+});
+$('#discount').on('input', function() {
+    calcMainTotals();
+});
+
+$('#paidAmount').on('input', function() {
+    calcMainTotals();
+});
 
 
 
@@ -319,7 +322,7 @@ function submit() {
         var jsonData = formToJson(this);
         exchangeItemList.push(jsonData);
     });
-//    saleDTO.id = saleId;
+    saleDTO.id = saleId;
 //    saleDTO.saleDate = $('#saleDate').val();
     saleDTO.customer = customer;
     saleDTO.saleItemList = saleItemList
@@ -376,7 +379,7 @@ function formToJson(form) {
 }
 
 function saveSaleCallback(response) {
-
+    $(window).attr('location','http://localhost:8080/sale/view?id='+response.id)
 }
 
 
@@ -410,3 +413,87 @@ $('#name').autocomplete({
         $('#address').val(ui.item.item.address);
     }
 });
+
+function loadSaleCallback(response) {
+    if (response != null && response != '') {
+        $('#invoiceNo').val(response.invoiceNo);
+        $('#invoiceNoLbl').text('Invoice No. '+response.invoiceNo);
+        $('#invoiceNoLbl').removeClass('d-none');
+        $('#saleDate').val(response.saleDate);
+        $('#saleType').val(response.saleType);
+        $('#isGstSale').val(response.isGstSale);
+
+        $('#name').val(response.customer.name);
+        $('#phone').val(response.customer.phone);
+        $('#address').val(response.customer.address);
+        $('#customerId').val(response.customer.id);
+
+        var saleItemList = response.saleItemList;
+        $('#saleItemsTable tbody').empty();
+        // Iterate over each item in saleItemList
+        $.each(saleItemList, function(index, saleItem) {
+            // Append a new row to the table body for each item
+            $('#saleItemsTable tbody').append(
+            '<tr>' +
+                 '<td>' +
+                     '<input type="text" name="code" id="saleItemList['+index+'].code" value="' + saleItem.code + '" class="form-control code table-input">' +
+                     '<input type="hidden" name="id" id="saleItemList['+index+'].id" value="' + saleItem.id + '" class="form-control">' +
+                     '<input type="hidden" name="stockId" id="saleItemList['+index+'].stockId "value="' + saleItem.stockId + '" >' +
+                 '</td>' +
+                 '<td><input type="text" name="name" id="saleItemList['+index+'].name"value="' + saleItem.name + '"  class="form-control table-input"></td>' +
+                 '<td><input type="text" name="weight" id="saleItemList['+index+'].weight" value="' + toWt(saleItem.weight) + '"  class="form-control saleItemCls table-input"></td>' +
+                 '<td><input type="text" name="vaWeight" id="saleItemList['+index+'].vaWeight" value="' + toWt(saleItem.vaWeight) + '"  class="form-control saleItemCls table-input"></td>' +
+                 '<td><input type="text" name="stnWeight" id="saleItemList['+index+'].stnWeight" value="' + toWt(saleItem.stnWeight) + '" class="form-control table-input"></td>' +
+                 '<td><input type="text" name="netWeight" id="saleItemList['+index+'].netWeight" value="' + toWt(saleItem.netWeight) + '" class="form-control table-input"></td>' +
+                 '<td><input type="text" name="makingCharge" id="saleItemList['+index+'].makingCharge" value="' + toCurrency(saleItem.makingCharge) + '" class="form-control saleItemCls table-input"></td>' +
+                 '<td><input type="text" name="rate" id="saleItemList['+index+'].rate" value="' + toCurrency(saleItem.rate) + '" class="form-control saleItemCls table-input"></td>' +
+                 '<td><input type="text" name="itemTotal" id="saleItemList['+index+'].itemTotal" value="' + toCurrency(saleItem.itemTotal) + '" class="form-control table-input" readonly></td>' +
+                 '<td><button type="button" class="btn btn-danger removeRow"><i class="fas fa-trash"></i></button></td>' +
+             '</tr>');
+        });
+
+        var exchangeItemList = response.exchangeItemList;
+        $('#exchangeItemsTable tbody').empty();
+        $.each(exchangeItemList, function(index, exchangeItem) {
+            $('#exchangeItemsTable tbody').append(
+            '<tr>' +
+                '<td><input type="text" name="itemDesc" id="exchangedItems['+index+'].itemDesc" value="' + exchangeItem.itemDesc + '" class="form-control table-input"></td>' +
+                '<td>' +
+                    '<input type="text" name="weight" id="exchangedItems['+index+'].weight" value="' + toWt(exchangeItem.weight) + '" class="form-control exchangeItemCls table-input">' +
+                    '<input type="hidden" name="id" id="exchangedItems['+index+'].id" value="' + exchangeItem.id + '" class="form-control table-input">' +
+                '</td>' +
+                '<td><input type="text" name="meltPercentage" id="exchangedItems['+index+'].meltPercentage" value="' + exchangeItem.meltPercentage + '" class="form-control exchangeItemCls table-input"></td>' +
+                '<td><input type="text" name="wastageInGms" id="exchangedItems['+index+'].wastageInGms" value="' + toWt(exchangeItem.wastageInGms) + '" class="form-control table-input" readonly></td>' +
+                '<td><input type="text" name="netWeight" id="exchangedItems['+index+'].netWeight" value="' + toWt(exchangeItem.netWeight) + '" class="form-control table-input" readonly></td>' +
+                '<td><input type="text" name="rate" id="exchangedItems['+index+'].rate" value="' + toCurrency(exchangeItem.rate) + '" class="form-control exchangeItemCls table-input"></td>' +
+                '<td><input type="text" name="exchangeValue" id="exchangedItems['+index+'].exchangeValue" value="' + toCurrency(exchangeItem.exchangeValue) + '" class="form-control table-input" readonly></td>' +
+                '<td><button type="button" class="btn btn-danger removeExchangeRow"><i class="fas fa-trash"></i></button></td>' +
+            '</tr>');
+        });
+
+        $('#totalSaleAmount').val(toCurrency(response.totalSaleAmount));
+        $('#totalSaleAmountLbl').text(toCurrency(response.totalSaleAmount));
+        $('#totalExchangeAmount').val(toCurrency(response.totalExchangeAmount));
+        $('#totalExchangeAmountLbl').text(toCurrency(response.totalExchangeAmount));
+        $('#discount').val(toCurrency(response.discount))
+        $('#grandTotalSaleAmount').val(toCurrency(response.grandTotalSaleAmount));
+        $('#grandTotalSaleAmountLbl').text(toCurrency(response.grandTotalSaleAmount));
+        $('#paymentMode').val(response.paymentMode);
+        $('#paidAmount').val(toCurrency(response.paidAmount));
+        $('#balAmount').val(toCurrency(response.balAmount));
+        $('#balAmountLbl').text(toCurrency(response.balAmount));
+        $('#saleType').val(response.saleType);
+
+
+        $('#description').val(response.description);
+        if (response.isGstSale == 'YES') {
+            $('#gstBlock').removeClass('d-none')
+            $('#cgstAmount').val(toCurrency(response.cgstAmount));
+            $('#sgstAmount').val(toCurrency(response.sgstAmount));
+            $('#cgstAmountLbl').text(toCurrency(response.cgstAmount));
+            $('#sgstAmountLbl').text(toCurrency(response.sgstAmount));
+        } else {
+            $('#gstBlock').addClass('d-none')
+        }
+    }
+}

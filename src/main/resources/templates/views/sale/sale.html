@@ -11,9 +11,15 @@
     <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
             <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Sale</h6>
-            <input type="hidden" id="id" name="id">
+            <input type="hidden" id="id" name="id" th:value="${saleId}">
         </div>
         <div class="card-body saleDto">
+            <div class="row">
+                <div class="col text-center">
+                    <h6 class="font-weight-bold text-primary" id="invoiceNoLbl"></h6>
+                    <input type="hidden" class="form-control" id="invoiceNo" name="invoiceNo">
+                </div>
+            </div>
             <div class="row">
                 <div class="col-md-4 mt-2">
                     <label class="font-weight-bold mb-0">Date:</label>
@@ -124,17 +130,19 @@
                                 </tr>
                                 </thead>
                                 <tbody id="exchangeItemsTBody">
-                                <td><input type="text" name="itemDesc" id="exchangedItems[0].itemDesc" class="form-control table-input"></td>
-                                <td>
-                                    <input type="text" name="weight" id="exchangedItems[0].weight" class="form-control exchangeItemCls table-input">
-                                    <input type="hidden" name="id" id="exchangedItems[0].id" class="form-control table-input">
-                                </td>
-                                <td><input type="text" name="meltPercentage" id="exchangedItems[0].meltPercentage" class="form-control exchangeItemCls table-input"></td>
-                                <td><input type="text" name="wastageInGms" id="exchangedItems[0].wastageInGms" class="form-control table-input" readonly></td>
-                                <td><input type="text" name="netWeight" id="exchangedItems[0].netWeight" class="form-control table-input" readonly></td>
-                                <td><input type="text" name="rate" id="exchangedItems[0].rate" class="form-control exchangeItemCls table-input"></td>
-                                <td><input type="text" name="exchangeValue" id="exchangedItems[0].exchangeValue" class="form-control table-input" readonly></td>
-                                <td><button type="button" class="btn btn-danger removeExchangeRow"><i class="fas fa-trash"></i></button></td>
+                                <tr>
+                                    <td><input type="text" name="itemDesc" id="exchangedItems[0].itemDesc" class="form-control table-input"></td>
+                                    <td>
+                                        <input type="text" name="weight" id="exchangedItems[0].weight" class="form-control exchangeItemCls table-input">
+                                        <input type="hidden" name="id" id="exchangedItems[0].id" class="form-control table-input">
+                                    </td>
+                                    <td><input type="text" name="meltPercentage" id="exchangedItems[0].meltPercentage" class="form-control exchangeItemCls table-input"></td>
+                                    <td><input type="text" name="wastageInGms" id="exchangedItems[0].wastageInGms" class="form-control table-input" readonly></td>
+                                    <td><input type="text" name="netWeight" id="exchangedItems[0].netWeight" class="form-control table-input" readonly></td>
+                                    <td><input type="text" name="rate" id="exchangedItems[0].rate" class="form-control exchangeItemCls table-input"></td>
+                                    <td><input type="text" name="exchangeValue" id="exchangedItems[0].exchangeValue" class="form-control table-input" readonly></td>
+                                    <td><button type="button" class="btn btn-danger removeExchangeRow"><i class="fas fa-trash"></i></button></td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>

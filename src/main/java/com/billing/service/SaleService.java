@@ -5,6 +5,7 @@ import com.billing.dto.SaleDTO;
 import com.billing.dto.SaleItemDTO;
 import com.billing.entity.*;
 import com.billing.enums.SaleType;
+import com.billing.enums.StockStatus;
 import com.billing.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -64,6 +65,8 @@ public class SaleService {
                 saleItem.setStnWeight(stock.getStnWeight());
                 saleItem.setMetalType(purchaseItem.getPurchase().getMetalType());
                 saleItem.setSale(savedSale);
+                stock.setStockStatus(StockStatus.OUT_OF_STOCK);
+                stockRepository.save(stock);
                 SaleItem savedSaleItem = saleItemRepository.save(saleItem);
                 saleItemDTOList.add(convertToDTO(savedSaleItem));
             }

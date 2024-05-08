@@ -63,3 +63,20 @@ function createDynamicModal(id, title, content, btnText, btnAction) {
 
     });
   }
+
+
+function toCurrency(val) {
+    if(val == null || val == '') {
+        return '0.00'
+    } else {
+        return parseFloat(val).toFixed(2);
+    }
+}
+
+function toWt(val) {
+    if(val == null || val == '') {
+        return '0.000'
+    } else {
+        return parseFloat(val).toFixed(3);
+    }
+}

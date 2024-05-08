@@ -24,16 +24,18 @@ public class SaleController {
     }
 
     @GetMapping
-    public String get(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("sale") Sale sale,
-                      BindingResult result,
-                      Model model) {
-//        if (httpHeaders.containsKey("X-Application-Name")) {
-//            System.out.println("Found X-Application-Name in header");
-//        }
-//        SaleDTO sale1 = new SaleDTO();
-//        model.addAttribute("sale", sale1);
+    public String get(Model model, @RequestParam(required = false) Long id) {
+        model.addAttribute("saleId", id);
         return "views/sale/sale";
     }
+
+    @GetMapping("/view")
+    public String view(@RequestParam Long id, Model model) {
+        model.addAttribute("saleId", id);
+        return "views/sale/sale-view";
+    }
+
+
 
     @GetMapping("/list")
     public String getAllSales(Model model) {

@@ -3,6 +3,7 @@ package com.billing.service;
 import com.billing.dto.ExchangeItemDTO;
 import com.billing.dto.StockDTO;
 import com.billing.entity.Stock;
+import com.billing.enums.StockStatus;
 import com.billing.repository.StockRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
@@ -26,7 +27,7 @@ public class StockService {
     public List<StockDTO> getStockByCode(String code) {
         List<StockDTO> stockDTOList = new ArrayList<>();
         log.debug("StockService >> getStockByCode >> code: {}", code);
-        List<Stock> stockList = stockRepository.findAllByCodeLike(code);
+        List<Stock> stockList = stockRepository.findAllByCodeLike(code, StockStatus.IN_STOCK);
         log.debug("List size received: {}", stockList.size());
         if (!CollectionUtils.isEmpty(stockList)) {
             for (Stock stock : stockList) {
