@@ -24,7 +24,21 @@
     <!-- Custom styles for this page -->
     <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <style>
+        .fade-out {
+          animation: fadeOut 1s forwards;
+        }
 
+        @keyframes fadeOut {
+          from {
+            opacity: 1;
+          }
+          to {
+            opacity: 0;
+            display: none;
+          }
+        }
+    </style>
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -34,6 +48,7 @@
             <!-- Main Content -->
             <div id="content">
                 <div th:replace="fragments/toolbar :: toolbar"></div>
+                <div id="alert" style="width: 98%; margin-left: 10px;"></div>
                 <div layout:fragment="content"></div>
             </div>
             <!-- End of Main Content -->

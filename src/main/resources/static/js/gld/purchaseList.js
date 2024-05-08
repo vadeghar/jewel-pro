@@ -20,14 +20,53 @@ $(document).ready(function() {
         form.submit();
     });
 
+    $(document).on('click', '.editPurchase', function() {
+        var id = $(this).data('id');
+        var form = $('<form></form>', {
+            'method': 'POST',
+            'action': '/purchase/edit-purchase'
+        });
+        var idInput = $('<input>', {
+            'type': 'hidden',
+            'name': 'id',
+            'value': id
+        });
+        form.append(idInput);
+        $('body').append(form);
+        form.submit();
+    });
+
+    $(document).on('click', '.deletePurchase', function() {
+        var id = $(this).data('id');
+        createDynamicModal(id, "Delete Purchase.", "Are you sure want to delete?", "Yes", deletePurchase);
+//        var form = $('<form></form>', {
+//            'method': 'POST',
+//            'action': 'purchase/edit-purchase'
+//        });
+//        var idInput = $('<input>', {
+//            'type': 'hidden',
+//            'name': 'id',
+//            'value': id
+//        });
+//        form.append(idInput);
+//        $('body').append(form);
+//        form.submit();
+    });
+
+
+
 });
+
+function deletePurchase(purchaseId) {
+    simpleCall(url+'/'+purchaseId, 'delete', '', '', '', loadAllPurchases)
+}
 
 function loadAllPurchases() {
     simpleCall(url, 'get', '', '', '', loadPurchaseDataTable)
 }
 
 function loadPurchaseDataTable(response) {
-    console.log(response);
+    $('#saleItemsTable').DataTable().destroy();
     $('#saleItemsTable').DataTable({
         data: response,
         columns: [
@@ -39,8 +78,8 @@ function loadPurchaseDataTable(response) {
             {
               data: 'id',
               render: function (data, type, row) {
-                  return '<button type="button" class="btn btn-sm btn-danger" data-id="' + data + '"><i class="fas fa-trash"></i> Delete</button> ' +
-                      '<button type="button" class="btn btn-sm btn-primary" data-id="' + data + '"><i class="fas fa-edit"></i> Edit</button> ' +
+                  return '<button type="button" class="btn btn-sm btn-danger deletePurchase" data-id="' + data + '"><i class="fas fa-trash"></i> Delete</button> ' +
+                      '<button type="button" class="btn btn-sm btn-primary editPurchase" data-id="' + data + '"><i class="fas fa-edit"></i> Edit</button> ' +
                       '<button type="button" class="btn btn-sm btn-success addPurchaseItems" data-id="' + data + '"><i class="fas fa-plus"></i> Add Items</button>';
               }
             }

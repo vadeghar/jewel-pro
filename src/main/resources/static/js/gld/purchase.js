@@ -23,13 +23,7 @@ $(document).ready(function() {
     });
 
     $('#paidAmount').on('input', function(){
-        var balAmount = 0;
-        var totalPurchaseAmount = $('#totalPurchaseAmount').val();
-        if(totalPurchaseAmount) {
-            balAmount = parseFloat(totalPurchaseAmount) - parseFloat($(this).val());
-            $('#balAmount').val(parseFloat(balAmount).toFixed(2));
-            $('#balAmountLbl').text(parseFloat(balAmount).toFixed(2));
-        }
+        setPaymentDetails();
     });
 
     $('#savePurchase').on('click', function(e){
@@ -40,6 +34,16 @@ $(document).ready(function() {
 
 setDefaultsOnPageLoad();
 });
+
+function setPaymentDetails() {
+    var balAmount = 0;
+    var totalPurchaseAmount = $('#totalPurchaseAmount').val();
+    if(totalPurchaseAmount) {
+        balAmount = parseFloat(totalPurchaseAmount) - parseFloat($('#paidAmount').val());
+        $('#balAmount').val(parseFloat(balAmount).toFixed(2));
+        $('#balAmountLbl').text(parseFloat(balAmount).toFixed(2));
+    }
+}
 
 var supplierList = [];
 
@@ -127,7 +131,7 @@ function calcTotalPurchaseAmount() {
             $('#totalCgstAmountLbl').text(parseFloat(totalCgstAmount).toFixed(2));
             $('#totalSgstAmountLbl').text(parseFloat(totalSgstAmount).toFixed(2));
         }
-
+        setPaymentDetails();
     }
 
 }
@@ -138,9 +142,42 @@ function setDefaultsOnPageLoad() {
     $('#purchaseDate').val(today);
     var purchaseId = $('#id').val();
     if(purchaseId) {
+        simpleCall(url+'?id='+purchaseId, 'get', '', '', '', loadPurchase);
         $('#savePurchase').text('Update')
     }
 }
+
+function loadPurchase(response) {
+    var formData = $("#purchaseForm").serializeArray();
+    var formObject = {};
+    var textAttrs = ['totalPurchaseAmount', 'totalNetWeight', 'purchaseAmount', 'balAmount']
+    $.each(formData, function(index, field) {
+        if (textAttrs.indexOf(field.name) !== -1) {
+//            alert('[#'+field.name+'Lbl]');
+            $('#'+field.name+'Lbl').text(response[field.name]);
+        }
+        $('[name="'+field.name+'"]').val(response[field.name]);
+        $('#addPurchaseItems').attr('data-id', response.id);
+        $('#addPurchaseItems').removeClass('d-none');
+//        formObject[field.name] = response[field.name];
+    });
+}
+
+$(document).on('click', '.addPurchaseItems', function() {
+        var id = $(this).data('id');
+        var form = $('<form></form>', {
+            'method': 'POST',
+            'action': '/purchase/purchase-items'
+        });
+        var idInput = $('<input>', {
+            'type': 'hidden',
+            'name': 'id',
+            'value': id
+        });
+        form.append(idInput);
+        $('body').append(form);
+        form.submit();
+    });
 
 function validateForm() {
 

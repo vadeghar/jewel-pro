@@ -43,6 +43,39 @@ public class PurchaseItemDTO {
     private boolean active;
     private Long itemTypeId;
     private Long stockId;
+    private StockStatus stockStatus;
+
+
+    public void toDto(PurchaseItem purchaseItem) {
+        this.id = purchaseItem.getId();
+//        this.purchaseMC = purchaseItem.;
+//        this.actualPurity = ;
+//        this.purchasePurity = ;
+//        this.purchaseRate = ;
+//        this.purchaseStnCostPerCt = ;
+//        this.cGstAmount = BigDecimal.ZERO = ;
+//        this.sGstAmount = BigDecimal.ZERO = ;
+//        this.itemAmount = ;
+        this.createdBy = purchaseItem.getCreatedBy();
+        if (null == purchaseItem.getStock()) return;
+        // Stock attributes
+        this.name = purchaseItem.getStock().getName();
+        this.code = purchaseItem.getStock().getCode();
+        this.weight = purchaseItem.getStock().getWeight();
+        this.stnWeight = purchaseItem.getStock().getStnWeight();
+        this.stnType = purchaseItem.getStock().getStnType();
+        this.saleStnCostPerCt = purchaseItem.getStock().getStnCostPerCt();
+        this.vaWeight = purchaseItem.getStock().getVaWeight();
+//        this.itemTotalWeight = purchaseItem.getStock().get;
+        this.saleMC = purchaseItem.getStock().getSaleMC();
+        this.huid = purchaseItem.getStock().getHuid();
+        this.purity = purchaseItem.getStock().getPurity();
+        this.active = purchaseItem.getStock().isActive();
+        this.itemTypeId = purchaseItem.getStock().getItemType() != null ? purchaseItem.getStock().getItemType().getId() : null;
+        this.stockId = purchaseItem.getStock().getId();
+        this.stockStatus = purchaseItem.getStock().getStockStatus();
+        this.pcs = purchaseItem.getStock().getPcs();
+    }
 
     public PurchaseItem toEntity() {
         return PurchaseItem.builder()
@@ -56,23 +89,23 @@ public class PurchaseItemDTO {
 //                .sGstAmount(this.sGstAmount)
 //                .purchaseMC(this.purchaseMC)
 //                .purchaseStnCostPerCt(this.purchaseStnCostPerCt)
-                .stock(Stock.builder()
-                        .id(this.stockId)
-                        .active(this.active)
-                        .code(this.code)
-                        .pcs(this.pcs)
-                        .huid(this.huid)
-                        .saleMC(this.saleMC)
-                        .name(this.name)
-                        .weight(this.weight)
-                        .stnWeight(this.stnWeight)
-                        .vaWeight(this.vaWeight)
-                        .stnCostPerCt(this.saleStnCostPerCt)
-                        .stnType(this.stnType)
-                        .purity(this.purity)
-                        .stockStatus(StockStatus.IN_STOCK)
-//                        .itemTotalWeight(this.itemTotalWeight)
-                        .build())
+//                .stock(Stock.builder()
+//                        .id(this.stockId)
+//                        .active(this.active)
+//                        .code(this.code)
+//                        .pcs(this.pcs)
+//                        .huid(this.huid)
+//                        .saleMC(this.saleMC)
+//                        .name(this.name)
+//                        .weight(this.weight)
+//                        .stnWeight(this.stnWeight)
+//                        .vaWeight(this.vaWeight)
+//                        .stnCostPerCt(this.saleStnCostPerCt)
+//                        .stnType(this.stnType)
+//                        .purity(this.purity)
+//                        .stockStatus(StockStatus.IN_STOCK)
+////                        .itemTotalWeight(this.itemTotalWeight)
+//                        .build())
                 .build();
     }
 }

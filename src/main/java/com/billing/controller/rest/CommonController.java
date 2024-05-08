@@ -57,29 +57,5 @@ public class CommonController {
         return List.of();
     }
 
-    @GetMapping("/purchase")
-    public ResponseEntity<?> getAllPurchase(@RequestParam(required = false) Long id) {
-        if (id != null && id > 0) {
-            PurchaseDTO purchaseDTO = purchaseService.getByPurchaseId(id);
-            return ResponseEntity.ok().body(purchaseDTO);
-        }
-        List<PurchaseDTO> purchaseDTOList = purchaseService.getAllPurchases();
-        return ResponseEntity.ok().body(purchaseDTOList);
-    }
 
-    @PostMapping("/purchase/save")
-    public ResponseEntity<PurchaseDTO> save(@RequestBody PurchaseDTO purchaseDTO) {
-        log.info("CommonController >> save >> RequestBody: {}", purchaseDTO);
-        Long id = purchaseService.savePurchase(purchaseDTO);
-        log.info("<< CommonController << save");
-        return ResponseEntity.ok(PurchaseDTO.builder().id(id).build());
-    }
-
-    @PostMapping("/purchase/{purchaseId}/items")
-    public ResponseEntity<?> addPurchaseItems(@PathVariable("purchaseId") Long purchaseId, @RequestBody List<PurchaseItemDTO> purchaseItems) {
-        log.info("CommonController >> addPurchaseItems >> purchaseId: {} >> items >> {}", purchaseId, purchaseItems);
-        List<PurchaseItemDTO> purchaseItemDTOS = purchaseService.savePurchaseItems(purchaseId, purchaseItems);
-        log.info("CommonController << addPurchaseItems << purchaseId: {}", purchaseId);
-        return new ResponseEntity<>(purchaseItemDTOS, HttpStatus.OK);
-    }
 }

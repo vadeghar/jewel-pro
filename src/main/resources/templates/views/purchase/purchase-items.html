@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: Purchase ::</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Purchase Items</h6>
+            <a class="btn btn-primary backToPurchase" type="button" id="backToPurchase" href="#"><i class="fa-solid fa-arrow-left"></i>Purchase</a>
+        </div>
+        <div class="card-body">
+            <input type="hidden" id="purchaseId" name="purhcaseId" th:value="${purchaseId}">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Purchase Date:</label>
+                    <p class="form-control-plaintext" id="purchaseDate">-</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Purchase Type:</label>
+                    <p class="form-control-plaintext" id="purchaseType">-</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Supplier Name:</label>
+                    <p class="form-control-plaintext" id="supplierName">-</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Purchase Bill No:</label>
+                    <p class="form-control-plaintext" id="purchaseBillNo">-</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Metal Type:</label>
+                    <p class="form-control-plaintext" id="metalType">-</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Total Gross Weight:</label>
+                    <p class="form-control-plaintext" id="totalGrossWeight">-</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Balance Amount:</label>
+                    <p class="form-control-plaintext" id="balAmount">-</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Is GST Purchase:</label>
+                    <p class="form-control-plaintext" id="isGstPurchase">-</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="font-weight-bold">Total Pieces:</label>
+                    <p class="form-control-plaintext" id="totalPcs">-</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Purchase Items
+                (<span id="totalNoOfPcs">0</span>/<span id="addedPcs">0</span> Pcs Added,
+                Weight <span id="totalWeight">0</span>/<span id="addedWeight">0.000</span> is Added)
+            </h6>
+            <button class="btn btn-primary" type="button" id="addPurchaseItem"><i class="fa-solid fa-plus"></i> Add Item</button>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered" id="purchaseItemsTable">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Weight</th>
+                            <th>VA(Wt)</th>
+                            <th>MC</th>
+                            <th>Stn Wt</th>
+                            <th>Stn Typ</th>
+                            <th>Stn ₹/Ct</th>
+                            <th>#PCS</th>
+                            <th style="width: 100px">Active?</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="purchaseItemsTBody">
+                        <tr>
+                            <td><input type="text" name="name" id="purchaseItems[0].name" class="form-control table-input" autocomplete="off"></td>
+                            <td>
+                                <input type="text" name="code" id="purchaseItems[0].code" class="form-control table-input" autocomplete="off">
+                                <input type="hidden" name="id" id="purchaseItems[0].id" class="form-control">
+                            </td>
+                            <td><input type="number" name="weight" id="purchaseItems[0].weight" class="form-control  table-input purchaseItemWeightCls" autocomplete="off"></td>
+                            <td><input type="number" name="vaWeight" id="purchaseItems[0].vaWeight" class="form-control  table-input"  autocomplete="off"></td>
+                            <td><input type="number" name="saleMC" id="purchaseItems[0].saleMC" class="form-control table-input" autocomplete="off"></td>
+                            <td><input type="number" name="stnWeight" id="purchaseItems[0].stnWeight" class="form-control table-input" autocomplete="off"></td>
+                            <td><input type="text" name="stnType" id="purchaseItems[0].stnType" class="form-control table-input" autocomplete="off"></td>
+                            <td><input type="number" name="stnCostPerCt" id="purchaseItems[0].stnCostPerCt" class="form-control table-input" autocomplete="off"></td>
+                            <td><input type="number" name="pcs" id="purchaseItems[0].pcs" class="form-control table-input purchaseItemPcs" autocomplete="off"></td>
+                            <td>
+                                <select name="active" id="purchaseItems[0].active" class="form-control">
+                                    <option value="true">YES</option>
+                                    <option value="false">NO</option>
+                                </select>
+                            <td><button type="button" class="btn btn-danger removePurchaseItemRow"><i class="fas fa-trash"></i></button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-3"></div>
+            <div class="col-md-3 text-right">
+                <button type="button" id="savePurchaseItems" class="btn btn-primary">Save</button>
+            </div>
+            <div class="col-md-3"><button type="button" class="btn btn-danger backToPurchase" id="cancelBtn">Cancel</button></div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/purchase-items.js}"></script>
+</th:block>
+</html>

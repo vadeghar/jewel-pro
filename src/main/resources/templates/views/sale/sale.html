@@ -1,0 +1,287 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sale</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Sale</h6>
+            <input type="hidden" id="id" name="id" th:value="${saleId}">
+        </div>
+        <div class="card-body saleDto">
+            <div class="row">
+                <div class="col text-center">
+                    <h6 class="font-weight-bold text-primary" id="invoiceNoLbl"></h6>
+                    <input type="hidden" class="form-control" id="invoiceNo" name="invoiceNo">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0">Date:</label>
+                    <input type="date" class="form-control" id="saleDate" name="saleDate" required>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0">Purchase Type:</label>
+                    <select class="form-control" id="saleType" name="saleType" required>
+                        <option value="SALE">Purchase</option>
+                        <option value="SALE_RETURN">Purchase Return</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0" for="isGstSale">GST Purchase?</label>
+                    <select class="form-control enableGst" id="isGstSale" name="isGstSale" required>
+                        <option value="NO">No</option>
+                        <option value="YES">Yes</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0">Name:</label>
+                    <input type="hidden" class="form-control" id="customerId" name="customerId" required>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0">Phone:</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0">Address:</label>
+                    <input type="text" class="form-control" id="address" name="address" required>
+                </div>
+            </div>
+
+            <div class="card shadow mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Sale Items</h6>
+                    <button class="btn btn-primary" type="button" id="addSaleItem"><i class="fa-solid fa-plus"></i> Add Item</button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <table class="table table-bordered" id="saleItemsTable">
+                                <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Weight</th>
+<!--                                    <th>Stn Wt</th>-->
+                                    <th>VA(Wt)</th>
+                                    <th>Stn Wt.</th>
+                                    <th>Net Wt.</th>
+<!--                                    <th>Total Wt.</th>-->
+                                    <th>MC</th>
+                                    <th>Rate</th>
+                                    <th>Item Cost</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody id="saleItemsTBody">
+                                <tr>
+                                    <td>
+                                        <input type="text" name="code" id="saleItemList[0].code" class="form-control code table-input">
+                                        <input type="hidden" name="id" id="saleItemList[0].id" class="form-control">
+                                        <input type="hidden" name="stockId" id="saleItemList[0].stockId">
+                                    </td>
+                                    <td><input type="text" name="name" id="saleItemList[0].name" class="form-control table-input"></td>
+                                    <td><input type="text" name="weight" id="saleItemList[0].weight" class="form-control saleItemCls table-input"></td>
+<!--                                    <td><input type="text" name="stnWeight" id="aleItemList[0].stnWeight" class="form-control"></td>-->
+                                    <td><input type="text" name="vaWeight" id="saleItemList[0].vaWeight" class="form-control saleItemCls table-input"></td>
+                                    <td><input type="text" name="stnWeight" id="saleItemList[0].stnWeight" class="form-control table-input"></td>
+                                    <td><input type="text" name="netWeight" id="saleItemList[0].netWeight" class="form-control table-input"></td>
+                                    <td><input type="text" name="makingCharge" id="saleItemList[0].makingCharge" class="form-control saleItemCls table-input"></td>
+                                    <td><input type="text" name="rate" id="saleItemList[0].rate" class="form-control saleItemCls table-input"></td>
+                                    <td><input type="text" name="itemTotal" id="saleItemList[0].itemTotal" class="form-control table-input" readonly></td>
+                                    <td><button type="button" class="btn btn-danger removeRow"><i class="fas fa-trash"></i></button></td>
+                                </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Exchange Items</h6>
+                    <button class="btn btn-primary" type="button" id="addExchangeItem"><i class="fa-solid fa-plus"></i> Add Item</button>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <table class="table table-bordered" id="exchangeItemsTable">
+                                <thead>
+                                <tr>
+                                    <th>desc</th>
+                                    <th>Weight</th>
+                                    <th>Melt(%)</th>
+                                    <th>Wastage Gms</th>
+                                    <th>Net Wt</th>
+                                    <th>Rate</th>
+                                    <th>Total Value</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody id="exchangeItemsTBody">
+                                <tr>
+                                    <td><input type="text" name="itemDesc" id="exchangedItems[0].itemDesc" class="form-control table-input"></td>
+                                    <td>
+                                        <input type="text" name="weight" id="exchangedItems[0].weight" class="form-control exchangeItemCls table-input">
+                                        <input type="hidden" name="id" id="exchangedItems[0].id" class="form-control table-input">
+                                    </td>
+                                    <td><input type="text" name="meltPercentage" id="exchangedItems[0].meltPercentage" class="form-control exchangeItemCls table-input"></td>
+                                    <td><input type="text" name="wastageInGms" id="exchangedItems[0].wastageInGms" class="form-control table-input" readonly></td>
+                                    <td><input type="text" name="netWeight" id="exchangedItems[0].netWeight" class="form-control table-input" readonly></td>
+                                    <td><input type="text" name="rate" id="exchangedItems[0].rate" class="form-control exchangeItemCls table-input"></td>
+                                    <td><input type="text" name="exchangeValue" id="exchangedItems[0].exchangeValue" class="form-control table-input" readonly></td>
+                                    <td><button type="button" class="btn btn-danger removeExchangeRow"><i class="fas fa-trash"></i></button></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="text-right">
+                                    <p class="font-weight-bold">Sale Amount:</p>
+                                </td>
+                                <td class="text-right" style="width: 100px">
+                                    <input type="hidden" id="totalSaleAmount" name="totalSaleAmount">
+                                    <p class="form-control-plaintext" id="totalSaleAmountLbl">-</p>
+                                </td>
+                            </tr>
+                            <tr class="gstBlock">
+                                <td class="text-right">
+                                    <p class="font-weight-bold">CGST:</p>
+                                </td>
+                                <td class="text-right" style="width: 100px">
+                                    <input type="hidden" id="cgstAmount" name="cgstAmount">
+                                    <p class="form-control-plaintext" id="cgstAmountLbl">-</p>
+                                </td>
+                            </tr>
+                            <tr class="gstBlock">
+                                <td class="text-right">
+                                    <p class="font-weight-bold">SGST:</p>
+                                </td>
+                                <td class="text-right" style="width: 100px">
+                                    <input type="hidden" id="sgstAmount" name="sgstAmount">
+                                    <p class="form-control-plaintext" id="sgstAmountLbl">-</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <p class="font-weight-bold">Exchange Amount:</p>
+                                </td>
+                                <td class="text-right" style="width: 100px">
+                                    <input type="hidden" id="totalExchangeAmount" name="totalExchangeAmount">
+                                    <p class="form-control-plaintext" id="totalExchangeAmountLbl">-</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="text-right">
+                                    <p class="font-weight-bold">Discount:</p>
+                                </td>
+                                <td class="text-right" style="width: 100px">
+                                    <input type="text" style="width: 75px;" class="form-control-small" id="discount" name="discount">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <p class="font-weight-bold">Total Amount:</p>
+                                </td>
+                                <td class="text-right" style="width: 100px">
+                                    <input type="hidden" id="grandTotalSaleAmount" name="grandTotalSaleAmount">
+                                    <p class="form-control-plaintext" id="grandTotalSaleAmountLbl">-</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td class="text-right">
+                                    <p class="font-weight-bold">Payment Mode:</p>
+                                </td>
+                                <td class="text-right" style="width: 100px">
+                                    <select class="form-control-small" style="width: 75px;" id="paymentMode" name="paymentMode">
+                                        <option value="Cash">CASH</option>
+                                        <option value="Online">Online</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-right">
+                                    <p class="font-weight-bold">Paid:</p>
+                                </td>
+                                <td class="text-right" style="width: 100px">
+                                    <input type="text" style="width: 75px;" class="form-control-small" id="paidAmount" name="paidAmount">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                <table class="table">
+                    <tbody>
+                    <tr>
+                        <td class="text-right">
+                            <p class="font-weight-bold">Balance:</p>
+                        </td>
+                        <td class="text-right" style="width: 100px">
+                            <input type="hidden" id="balAmount" name="balAmount">
+                            <p class="form-control-plaintext" id="balAmountLbl">-</p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+<hr/>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="font-weight-bold mb-0">Notes</label>
+                    <textarea class="form-control" id="description" name="description"></textarea>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-right">
+                    <button type="button" id="saveSale" class="btn btn-primary">Save</button>
+                </div>
+                <div class="col-md-3"><button type="button" class="btn btn-danger" id="cancelBtn">Cancel</button></div>
+                <div class="col-md-3"></div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/sale/sale.js}"></script>
+</th:block>
+</html>

@@ -13,8 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +37,7 @@ public class UserService {
         User user = new User();
         user.setName(userDto.getFirstName() + " " + userDto.getLastName());
         user.setEmail(userDto.getEmail());
+        user.setUsername(userDto.getUsername());
         // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
@@ -44,13 +45,15 @@ public class UserService {
         if (role == null) {
             role = checkRoleExist();
         }
-        //TODO: change this to UserRoles
-        //user.setRoles(Arrays.asList(role));
-        userRepository.save(user);
+        user.setRoles(Set.of(role));
+        User user1 = userRepository.save(user);
     }
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public boolean isUserLoggedIn() {
@@ -76,6 +79,7 @@ public class UserService {
         userDto.setFirstName(str[0]);
         userDto.setLastName(str[1]);
         userDto.setEmail(user.getEmail());
+        userDto.setUsername(user.getUsername());
         return userDto;
     }
 

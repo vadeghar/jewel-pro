@@ -1,5 +1,6 @@
 package com.billing.entity;
 
+import com.billing.dto.ExchangeItemDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
@@ -26,11 +27,24 @@ public class ExchangeItem {
     private Long sourceId;
     private BigDecimal rate;
     private BigDecimal exchangeValue;
-//    @ToString.Exclude
-//    @ManyToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "sale_id")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sale_id", nullable = false, referencedColumnName = "id")
     @JsonIgnore
     private Sale sale;
+//
+//    public ExchangeItemDTO toDto() {
+//        ExchangeItemDTO exchangeItemDTO = new ExchangeItemDTO();
+//        exchangeItemDTO.setId(this.id);
+//        exchangeItemDTO.setWeight(this.weight);
+//        exchangeItemDTO.setMeltPercentage(this.meltPercentage);
+//        exchangeItemDTO.setWastageInGms(this.wastageInGms);
+//        exchangeItemDTO.setNetWeight(this.netWeight);
+//        exchangeItemDTO.setItemDesc(this.itemDesc);
+//        exchangeItemDTO.setSource(this.source);
+//        exchangeItemDTO.setSourceId(this.sourceId);
+//        exchangeItemDTO.setRate(this.rate);
+//        exchangeItemDTO.setExchangeValue(this.exchangeValue);
+//        exchangeItemDTO.setSaleId(this.sale != null ? this.sale.getId() : null);
+//        return exchangeItemDTO;
+//    }
 }

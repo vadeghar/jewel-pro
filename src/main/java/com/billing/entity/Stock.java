@@ -1,5 +1,7 @@
 package com.billing.entity;
 
+//import com.billing.dto.PurchaseItemDTO;
+import com.billing.dto.PurchaseItemDTO;
 import com.billing.enums.StockStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "STOCK")
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(exclude = {"purchaseItem"})
 public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +49,7 @@ public class Stock {
     @Column(length = 20)
     private String purity;
     private boolean active;
-    @OneToOne(mappedBy = "stock", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "stock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private PurchaseItem purchaseItem;
     @LastModifiedDate
     private LocalDateTime updatedDate;
@@ -60,4 +63,22 @@ public class Stock {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_type_id")
     private ItemType itemType;
+
+    public Stock fromDto(PurchaseItemDTO dto) {
+//        this.getStock().setId(dto.getStockId());
+        this.setActive(dto.isActive());
+        this.setCode(dto.getCode());
+        this.setPcs(dto.getPcs());
+        this.setHuid(dto.getHuid());
+        this.setSaleMC(dto.getSaleMC());
+        this.setName(dto.getName());
+        this.setWeight(dto.getWeight());
+        this.setStnWeight(dto.getStnWeight());
+        this.setVaWeight(dto.getVaWeight());
+        this.setStnCostPerCt(dto.getSaleStnCostPerCt());
+        this.setStnType(dto.getStnType());
+        this.setPurity(dto.getPurity());
+        this.setStockStatus(dto.getStockStatus());
+        return this;
+    }
 }

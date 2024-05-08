@@ -1,5 +1,6 @@
 package com.billing.entity;
 
+//import com.billing.dto.PurchaseDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+//import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +23,7 @@ import java.util.List;
 @Entity
 @Table(name="PURCHASE")
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode(exclude = {"purchaseItems"})
 public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,8 +73,9 @@ public class Purchase {
     private BigDecimal balAmount;
     @Column(length = 2000)
     private String description;
-
-    @ManyToOne
+    @Column(length = 2000)
+    private String activePurchase = "YES";
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 
@@ -84,6 +88,39 @@ public class Purchase {
     private LocalDateTime createdDate;
     @CreatedBy
     private String createdBy;
+//
+//    public PurchaseDTO toDTO() {
+//        return PurchaseDTO.builder()
+//                .id(this.id)
+//                .actualPurity(this.actualPurity)
+//                .balAmount(this.balAmount)
+//                .createdBy(this.createdBy)
+//                .description(this.description)
+//                .gstNo(this.gstNo)
+//                .isGstPurchase(this.isGstPurchase)
+//                .metalType(this.metalType)
+//                .paidAmount(this.paidAmount)
+//                .paymentMode(this.paymentMode)
+//                .purchaseAmount(this.purchaseAmount)
+//                .purchaseBillNo(this.purchaseBillNo)
+//                .purchaseDate(this.purchaseDate)
+//                .purchaseRate(this.purchaseRate)
+//                .purchasePurity(this.purchasePurity)
+//                .purchaseType(this.purchaseType)
+//                .rate(this.purchaseRate)
+//                .supplierId(this.getSupplier().getId())
+//                .totalCgstAmount(this.totalCgstAmount)
+//                .totalSgstAmount(this.totalSGstAmount)
+//                .supplierName(this.getSupplier().getName())
+//                .totalGrossWeight(this.totalGrossWeight)
+//                .totalMcAmount(this.totalMcAmount)
+//                .totalNetWeight(this.totalNetWeight)
+//                .totalPcs(this.totalPcs)
+//                .totalPurchaseAmount(this.totalPurchaseAmount)
+//                .totalStnWeight(this.totalStnWeight)
+//                .purchaseItems(this.purchaseItems.stream().map( pi -> pi.toDto()).collect(Collectors.toList()))
+//                .build();
+//    }
 
 
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: Item Type ::</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Item Type</h6>
+            <a class="btn btn-primary" type="button" th:href="@{/itemtype}"><i class="fa-solid fa-arrow-left"></i>Items Type List</a>
+        </div>
+        <div class="card-body">
+            <form id="itemTypeForm" action="#">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">Item Type:</label>
+                        <input type="text" name="itemType" id="itemType" class="form-control" autocomplete="off">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="font-weight-bold">Item Type Description:</label>
+                        <input type="text" name="description" id="description" class="form-control" autocomplete="off">
+                    </div>
+                    <input type="hidden" name="id" id="id" th:value="${itemTypeId}">
+                </div>
+                <div class="row mb-4 mt-4">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-3 text-right">
+                        <button type="button" id="saveItemTypeBtn" class="btn btn-primary">Save</button>
+                    </div>
+                        <div class="col-md-3">
+                            <a class="btn btn-danger" type="button" th:href="@{/itemtype}">Cancel</a>
+<!--                            <button type="button" id="cancelItemTypeBtn" class="btn btn-danger">Cancel</button>-->
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/item-type/item-type.js}"></script>
+</th:block>
+</html>

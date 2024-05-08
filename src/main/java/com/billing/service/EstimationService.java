@@ -47,9 +47,8 @@ public class EstimationService {
             log.debug("Saving to db item {}", estimationDb);
             return estimationRepository.save(estimationDb);
         } else {
-            new EntityNotFoundException("Estimation not found with id "+id);
+            throw new EntityNotFoundException("Estimation not found with id "+id);
         }
-        return null;
     }
 
     public void delete(Long id) {

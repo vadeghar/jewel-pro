@@ -1,5 +1,7 @@
 package com.billing.entity;
 
+import com.billing.dto.SaleDTO;
+import com.billing.dto.SaleItemDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -18,9 +20,10 @@ public class SaleItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "purchase_item_id", referencedColumnName = "id")
-    private PurchaseItem purchaseItem;
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "stock_id", referencedColumnName = "id")
+//    private Stock stock;
+    private Long stockId;
     private String name;
     private String code;
     private String metalType;
@@ -38,7 +41,29 @@ public class SaleItem {
     private BigDecimal itemTotal;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sale_id", nullable = false, referencedColumnName = "id")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Sale sale;
+
+//    public SaleItemDTO toDto(SaleItem saleItem) {
+//        SaleItemDTO saleItemDTO = new SaleItemDTO();
+//        saleItemDTO.setId(saleItem.getId());
+//        saleItemDTO.setName(saleItem.getName());
+//        saleItemDTO.setCode(saleItem.getCode());
+//        saleItemDTO.setMetalType(saleItem.getMetalType());
+//        saleItemDTO.setPurity(saleItem.getPurity());
+//        saleItemDTO.setWeight(saleItem.getWeight());
+//        saleItemDTO.setStnWeight(saleItem.getStnWeight());
+//        saleItemDTO.setNetWeight(saleItem.getNetWeight());
+//        saleItemDTO.setVaWeight(saleItem.getVaWeight());
+//        saleItemDTO.setMakingCharge(saleItem.getMakingCharge());
+//        saleItemDTO.setStnType(saleItem.getStnType());
+//        saleItemDTO.setStnCostPerCt(saleItem.getStnCostPerCt());
+//        saleItemDTO.setPcs(saleItem.getPcs());
+//        saleItemDTO.setHuid(saleItem.getHuid());
+//        saleItemDTO.setRate(saleItem.getRate());
+//        saleItemDTO.setItemTotal(saleItem.getItemTotal());
+//        saleItemDTO.setStockId(saleItem.getStockId());
+////        saleItemDTO.setSaleId(saleItem.getSale() != null ? saleItem.getSale().getId() : null);
+//        return saleItemDTO;
+//    }
 }

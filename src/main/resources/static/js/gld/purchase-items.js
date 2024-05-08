@@ -20,7 +20,67 @@ function getPurchaseCallback(jsonResponse) {
     $('#totalPcs').text(jsonResponse.totalPcs);
     $('#totalWeight').text(jsonResponse.totalGrossWeight);
     $('#totalNoOfPcs').text(jsonResponse.totalPcs);
+    $('#backToPurchase').attr('data-id', jsonResponse.id);
+    $('#cancelBtn').attr('data-id', jsonResponse.id);
+    if (jsonResponse.purchaseItems) {
+        renderRows(jsonResponse.purchaseItems)
+    }
+
 }
+
+function renderRows(purchaseItems) {
+    var html = '';
+    purchaseItems.forEach(function(item, index) {
+        html += generateRowHTML(item, index);
+    });
+    $('#purchaseItemsTBody').html(html);
+    adjustPurchaseItemHeadingAttrs()
+}
+
+
+// Function to generate HTML for a single row
+    function generateRowHTML(item, index) {
+        return `
+            <tr>
+                <td><input type="text" name="name" id="purchaseItems[${index}].name" class="form-control table-input" autocomplete="off" value="${item.name}"></td>
+                <td>
+                    <input type="text" name="code" id="purchaseItems[${index}].code" class="form-control table-input" autocomplete="off" value="${item.code}">
+                    <input type="hidden" name="id" id="purchaseItems[${index}].id" class="form-control" value="${item.id}">
+                </td>
+                <td><input type="number" name="weight" id="purchaseItems[${index}].weight" class="form-control table-input purchaseItemWeightCls" autocomplete="off" value="${item.weight}"></td>
+                <td><input type="number" name="vaWeight" id="purchaseItems[${index}].vaWeight" class="form-control table-input" autocomplete="off" value="${item.vaWeight}"></td>
+                <td><input type="number" name="saleMC" id="purchaseItems[${index}].saleMC" class="form-control table-input" autocomplete="off" value="${item.saleMC}"></td>
+                <td><input type="number" name="stnWeight" id="purchaseItems[${index}].stnWeight" class="form-control table-input" autocomplete="off" value="${item.stnWeight}"></td>
+                <td><input type="text" name="stnType" id="purchaseItems[${index}].stnType" class="form-control table-input" autocomplete="off" value="${item.stnType}"></td>
+                <td><input type="number" name="stnCostPerCt" id="purchaseItems[${index}].stnCostPerCt" class="form-control table-input" autocomplete="off" value="${item.stnCostPerCt}"></td>
+                <td><input type="number" name="pcs" id="purchaseItems[${index}].pcs" class="form-control table-input purchaseItemPcs" autocomplete="off" value="${item.pcs}"></td>
+                <td>
+                    <select name="active" id="purchaseItems[${index}].active" class="form-control">
+                        <option value="true" ${item.active ? 'selected' : ''}>YES</option>
+                        <option value="false" ${!item.active ? 'selected' : ''}>NO</option>
+                    </select>
+                </td>
+                <td><button type="button" class="btn btn-danger removePurchaseItemRow"><i class="fas fa-trash"></i></button></td>
+            </tr>
+        `;
+    }
+
+$(document).on('click', '.backToPurchase', function(e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    var form = $('<form></form>', {
+        'method': 'POST',
+        'action': '/purchase/edit-purchase'
+    });
+    var idInput = $('<input>', {
+        'type': 'hidden',
+        'name': 'id',
+        'value': id
+    });
+    form.append(idInput);
+    $('body').append(form);
+    form.submit();
+});
 
 $("#addPurchaseItem").click(function() {
     var totalAddedPcs = $('#addedPcs').text();
@@ -41,20 +101,20 @@ $("#addPurchaseItem").click(function() {
 
     var rowCount = $('#purchaseItemsTable tbody tr').length;
     var newRow = '<tr>' +
-     '<td><input type="text" name="name" id="purchaseItems[' + rowCount + '].name" class="form-control" autocomplete="off"></td>' +
+     '<td><input type="text" name="name" id="purchaseItems[' + rowCount + '].name" class="form-control table-input" autocomplete="off"></td>' +
      '<td>' +
-         '<input type="text" name="code" id="purchaseItems[' + rowCount + '].code" class="form-control" autocomplete="off">' +
+         '<input type="text" name="code" id="purchaseItems[' + rowCount + '].code" class="form-control table-input" autocomplete="off">' +
          '<input type="hidden" name="id" id="purchaseItems[' + rowCount + '].id" class="form-control">' +
      '</td>' +
-     '<td><input type="number" name="weight" id="purchaseItems[' + rowCount + '].weight" class="form-control purchaseItemWeightCls" autocomplete="off"></td>' +
-     '<td><input type="number" name="vaWeight" id="purchaseItems[' + rowCount + '].vaWeight" class="form-control" autocomplete="off"></td>' +
-     '<td><input type="number" name="saleMC" id="purchaseItems[' + rowCount + '].saleMC" class="form-control" autocomplete="off"></td>' +
-     '<td><input type="number" name="stnWeight" id="purchaseItems[' + rowCount + '].stnWeight" class="form-control" autocomplete="off"></td>' +
-     '<td><input type="text" name="stnType" id="purchaseItems[' + rowCount + '].stnType" class="form-control" autocomplete="off"></td>' +
-     '<td><input type="number" name="stnCostPerCt" id="purchaseItems[' + rowCount + '].stnCostPerCt" class="form-control" autocomplete="off"></td>' +
-     '<td><input type="number" name="pcs" id="purchaseItems[' + rowCount + '].pcs" class="form-control purchaseItemPcs" autocomplete="off"></td>' +
+     '<td><input type="number" name="weight" id="purchaseItems[' + rowCount + '].weight" class="form-control table-input purchaseItemWeightCls" autocomplete="off"></td>' +
+     '<td><input type="number" name="vaWeight" id="purchaseItems[' + rowCount + '].vaWeight" class="form-control table-input" autocomplete="off"></td>' +
+     '<td><input type="number" name="saleMC" id="purchaseItems[' + rowCount + '].saleMC" class="form-control table-input" autocomplete="off"></td>' +
+     '<td><input type="number" name="stnWeight" id="purchaseItems[' + rowCount + '].stnWeight" class="form-control table-input" autocomplete="off"></td>' +
+     '<td><input type="text" name="stnType" id="purchaseItems[' + rowCount + '].stnType" class="form-control table-input" autocomplete="off"></td>' +
+     '<td><input type="number" name="stnCostPerCt" id="purchaseItems[' + rowCount + '].stnCostPerCt" class="form-control table-input" autocomplete="off"></td>' +
+     '<td><input type="number" name="pcs" id="purchaseItems[' + rowCount + '].pcs" class="form-control table-input purchaseItemPcs" autocomplete="off"></td>' +
      '<td>' +
-         '<select name="active" id="purchaseItems[' + rowCount + '].active" class="form-control">' +
+         '<select name="active" id="purchaseItems[' + rowCount + '].active" class="form-control table-input">' +
              '<option value="true">YES</option>' +
              '<option value="false">NO</option>' +
          '</select>' +
@@ -113,6 +173,7 @@ $('#savePurchaseItems').on('click', function(){
 });
 
 function savePurchaseItemsCallback(response) {
+
     console.log(response);
 }
 
