@@ -379,14 +379,15 @@ function formToJson(form) {
 }
 
 function saveSaleCallback(response) {
-    $(window).attr('location','http://localhost:8080/sale/view?id='+response.id)
+    navigateWindow('http://localhost:8080/sale/view?id='+response.id);
+//    $(window).attr('location','http://localhost:8080/sale/view?id='+response.id)
 }
 
 
 $('#name').autocomplete({
     source: function(request, response) {
         $.ajax({
-            url: 'http://localhost:8080/api/v1/customer',
+            url: 'http://localhost:8080/api/v1/customer/like',
             method: 'GET',
             dataType: 'json',
             data: {

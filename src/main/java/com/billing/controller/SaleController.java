@@ -29,6 +29,14 @@ public class SaleController {
         return "views/sale/sale";
     }
 
+    @GetMapping("payment-modal")
+    public String paymentModal() {
+        return "views/sale/payment-modal";
+    }
+    @GetMapping("/add-payment")
+    public String payment(Model model) {
+        return "views/payment/add-payment";
+    }
     @GetMapping("/view")
     public String view(@RequestParam Long id, Model model) {
         model.addAttribute("saleId", id);

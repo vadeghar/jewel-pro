@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,6 +58,21 @@ public class CommonController {
             return purchaseItemList;
         }
         return List.of();
+    }
+
+    @GetMapping("menu-items")
+    public Map<String, List<String>> getMenuItems() {
+        Map<String, List<String>> menuItems = new HashMap<>();
+        menuItems.put("purchaseSec", List.of("newSupplier","supplierList","newPurchase","purchaseList"));
+        menuItems.put("estimationSec", List.of("newEstimation", "EstimationList"));
+        menuItems.put("saleSec", List.of("newCustomer", "customerList", "salesList","newSale"));
+        menuItems.put("orderSec", List.of("newWorker","workerList","orderList","newOrder"));
+        menuItems.put("paymentSec", List.of("salesPayment", "purchasePayment"));
+        menuItems.put("settingsSec", new ArrayList<>());
+        menuItems.put("reportsSec", new ArrayList<>());
+        menuItems.put("plSec", new ArrayList<>());
+        menuItems.put("chartSec", new ArrayList<>());
+        return menuItems;
     }
 
 

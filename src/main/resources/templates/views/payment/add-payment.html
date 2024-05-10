@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/modal-layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: Add Payment ::</title>
+</head>
+<div layout:fragment="content" class="p-0">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Add Payment</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mt-2">
+                    <label class="font-weight-bold mb-0">Amount:</label>
+                    <input type="number" class="form-control" id="paidAmountMdl" name="paidAmountMdl" required>
+                    <input type="hidden" class="form-control" id="maxAmount" name="maxAmount" required>
+                </div>
+                <div class="col-md-6 mt-2">
+                    <label class="font-weight-bold mb-0">Payment Mode:</label>
+                    <select id="paymentModeMdl" name="paymentModeMdl" class="form-control">
+                        <option value="Cash">CASH</option>
+                        <option value="Online">Online</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mt-2 d-none">
+                    <label class="font-weight-bold mb-0">Last 4 digits (If online payment):</label>
+                    <input type="text" class="form-control" id="lastFourDigitsMdl" name="lastFourDigits" required>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-right">
+                    <button type="button" id="savePayment" class="btn btn-primary">Save</button>
+                </div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/payment/payment.js}"></script>
+</th:block>
+</html>

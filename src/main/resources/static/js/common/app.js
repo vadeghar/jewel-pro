@@ -1,3 +1,15 @@
+var baseUrl = 'http://localhost:8080/api/v1';
+
+$(document).ready(function () {
+    $('#accordionSidebar a').click(function () {
+        var navItemId = $(this).attr('id');
+        console.log("Clicked nav item ID:", navItemId);
+        // You can perform any further actions with the navItemId here
+    });
+});
+
+
+
 function simpleCall(url, method, title, tabId, requestData, responseCallback) {
 	doSignAndSend({
 		url: url,
@@ -79,4 +91,8 @@ function toWt(val) {
     } else {
         return parseFloat(val).toFixed(3);
     }
+}
+
+function navigateWindow(url) {
+    $(window).attr('location', url)
 }

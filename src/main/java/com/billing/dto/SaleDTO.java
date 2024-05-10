@@ -35,6 +35,7 @@ public class SaleDTO {
     private String description;
     private List<SaleItemDTO> saleItemList;
     private List<ExchangeItemDTO> exchangeItemList;
+    private String trnLastFourDigits;
 
 
 //    private Long id;

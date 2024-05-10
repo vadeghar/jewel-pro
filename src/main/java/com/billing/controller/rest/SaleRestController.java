@@ -2,6 +2,7 @@ package com.billing.controller.rest;
 
 import com.billing.dto.PurchaseDTO;
 import com.billing.dto.SaleDTO;
+import com.billing.entity.Payment;
 import com.billing.service.SaleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,11 @@ public class SaleRestController {
     @GetMapping
     public List<SaleDTO> getAllSales() {
         return saleService.getAllSales();
+    }
+
+    @GetMapping("/customer/{id}/sales")
+    public List<SaleDTO> customerSales(@PathVariable Long id) {
+        return saleService.getAllSalesByCustomerId(id);
     }
 
     // Get sale by ID
@@ -64,25 +70,17 @@ public class SaleRestController {
         }
     }
 
-//    @GetMapping
-//    public ResponseEntity<?> get(@RequestParam(required = false) Long id) {
-//        log.debug("SaleRestController >> get >> {} >>", id);
-//        if (id != null && id > 0) {
-//            SaleDTO saleDTO = saleService.getSaleById(id);
-//            return ResponseEntity.ok().body(saleDTO);
-//        }
-//        List<SaleDTO> saleList = saleService.getAllSales();
-//        log.debug("SaleRestController << get <<");
-//        return ResponseEntity.ok().body(saleList);
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<?> save(@RequestBody SaleDTO saleDTO) {
-//        log.debug("SaleRestController >> save >> {} >>", saleDTO);
-//        SaleDTO sale = saleService.saveSale(saleDTO);
-//        log.debug("SaleRestController << save <<");
-//        return ResponseEntity.ok().body(sale);
-//    }
+    @GetMapping("/{id}/payment-list")
+    public ResponseEntity<List<Payment>> getPaymentListBySaleId(@PathVariable Long id) {
+        List<Payment> paymentList = saleService.getPaymentListBySaleId(id);
+        return ResponseEntity.of(Optional.of(paymentList));
+    }
+
+    @PostMapping("/{id}/payment")
+    public ResponseEntity<SaleDTO> savePayment(@PathVariable Long id, @RequestBody Payment payment) {
+        SaleDTO saleDTO = saleService.addPaymentAndReturnSale(id, payment);
+        return ResponseEntity.of(Optional.of(saleDTO));
+    }
 
 
 }

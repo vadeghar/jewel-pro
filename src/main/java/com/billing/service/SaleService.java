@@ -1,5 +1,6 @@
 package com.billing.service;
 
+import com.billing.constant.Constants;
 import com.billing.dto.ExchangeItemDTO;
 import com.billing.dto.SaleDTO;
 import com.billing.dto.SaleItemDTO;
@@ -10,10 +11,12 @@ import com.billing.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,15 +30,17 @@ public class SaleService {
     private final ExchangeItemRepository exchangeItemRepository;
     private final PurchaseItemRepository purchaseItemRepository;
     private final StockRepository stockRepository;
+    private final PaymentRepository paymentRepository;
 
     @Autowired
-    public SaleService(SaleRepository saleRepository, CustomerRepository customerRepository, SaleItemRepository saleItemRepository, ExchangeItemRepository exchangeItemRepository, PurchaseItemRepository purchaseItemRepository, StockRepository stockRepository) {
+    public SaleService(SaleRepository saleRepository, CustomerRepository customerRepository, SaleItemRepository saleItemRepository, ExchangeItemRepository exchangeItemRepository, PurchaseItemRepository purchaseItemRepository, StockRepository stockRepository, PaymentRepository paymentRepository) {
         this.saleRepository = saleRepository;
         this.customerRepository = customerRepository;
         this.saleItemRepository = saleItemRepository;
         this.exchangeItemRepository = exchangeItemRepository;
         this.purchaseItemRepository = purchaseItemRepository;
         this.stockRepository = stockRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     public SaleDTO createSale(SaleDTO saleDTO) {
@@ -48,16 +53,29 @@ public class SaleService {
         if (StringUtils.isBlank(sale.getInvoiceNo())) {
             sale.setInvoiceNo(generateInvoiceNumber());
         }
-        Sale savedSale = saleRepository.save(sale);
 
+        Sale savedSale = saleRepository.save(sale);
+        if (saleDTO.getId() == null || saleDTO.getId() == 0) {
+            Payment payment = new Payment();
+            payment.setPaymentStatus(Constants.PAY_STATUS_COMPLETED); // AWAITING
+            payment.setSource(Constants.SOURCE_SALE);
+            payment.setIrrecoverableDebt(false);
+            payment.setSourceId(savedSale.getId());
+            payment.setPaidAmount(saleDTO.getPaidAmount());
+            payment.setPaymentMode(saleDTO.getPaymentMode());
+            payment.setLastFourDigits(saleDTO.getTrnLastFourDigits());
+            paymentRepository.save(payment);
+        }
         // Save sale items
         List<SaleItemDTO> saleItemDTOList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(saleDTO.getSaleItemList())) {
             for (SaleItemDTO saleItemDTO : saleDTO.getSaleItemList()) {
+                if (saleItemDTO.getWeight() == null || saleItemDTO.getWeight() == BigDecimal.ZERO) {
+                    continue;
+                }
                 SaleItem saleItem = convertToEntity(saleItemDTO);
                 PurchaseItem purchaseItem = purchaseItemRepository.findByStockId(saleItemDTO.getStockId()).orElseThrow(() -> new EntityNotFoundException("Stock not found with ID: "+saleItemDTO.getStockId()));
                 Stock stock = purchaseItem.getStock();
-                //huid, pcs, purity, stn_type,
                 saleItem.setHuid(stock.getHuid());
                 saleItem.setPcs(stock.getPcs());
                 saleItem.setPurity(stock.getPurity());
@@ -76,6 +94,9 @@ public class SaleService {
         List<ExchangeItemDTO> exchangeItemDTOList = new ArrayList<>();
         if (!CollectionUtils.isEmpty(saleDTO.getExchangeItemList())) {
             for (ExchangeItemDTO exchangeItemDTO : saleDTO.getExchangeItemList()) {
+                if (exchangeItemDTO.getWeight() == null || exchangeItemDTO.getWeight() == BigDecimal.ZERO) {
+                    continue;
+                }
                 ExchangeItem exchangeItem = convertToEntity(exchangeItemDTO);
                 exchangeItem.setSource("SALE");
                 exchangeItem.setSourceId(savedSale.getId());
@@ -100,6 +121,13 @@ public class SaleService {
 
     public List<SaleDTO> getAllSales() {
         List<Sale> sales = saleRepository.findAll();
+        return sales.stream()
+                .map(sale -> convertToDTO(sale))
+                .collect(Collectors.toList());
+    }
+
+    public List<SaleDTO> getAllSalesByCustomerId(Long customerId) {
+        List<Sale> sales = saleRepository.findByCustomerId(customerId);
         return sales.stream()
                 .map(sale -> convertToDTO(sale))
                 .collect(Collectors.toList());
@@ -155,6 +183,28 @@ public class SaleService {
             return true;
         }
         return false;
+    }
+
+    public List<Payment> getPaymentListBySaleId(Long id) {
+        return paymentRepository.findBySourceAndSourceId(Constants.SOURCE_SALE, id);
+    }
+
+    public SaleDTO addPaymentAndReturnSale(Long id, Payment paymentRequest) {
+        Sale sale = saleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Sale not found with id "+id));
+        Payment payment = new Payment();
+        payment.setPaymentStatus(Constants.PAY_STATUS_COMPLETED); // AWAITING
+        payment.setSource(Constants.SOURCE_SALE);
+        payment.setIrrecoverableDebt(false);
+        payment.setSourceId(sale.getId());
+        payment.setPaidAmount(paymentRequest.getPaidAmount());
+        payment.setPaymentMode(paymentRequest.getPaymentMode());
+        payment.setLastFourDigits(paymentRequest.getLastFourDigits());
+        paymentRepository.save(payment);
+
+        sale.setBalAmount(sale.getBalAmount().subtract(payment.getPaidAmount()));
+        sale.setPaidAmount(sale.getPaidAmount().add(payment.getPaidAmount()));
+        Sale savedSale = saleRepository.save(sale);
+        return convertToDTO(savedSale);
     }
 
 //    private Sale saveOrUpdate() {
@@ -326,7 +376,8 @@ public class SaleService {
         exchangeItem.setExchangeValue(exchangeItemDTO.getExchangeValue());
         return exchangeItem;
     }
-    
+
+
 //    public List<SaleDTO> getAllSales() {
 //        List<Sale> saleList = saleRepository.findAll();
 //        return saleList.stream().map(sale -> sale.toDTO()).collect(Collectors.toList());
