@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sale</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Sale List</h6>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered" id="saleListTable">
+                <thead>
+                    <tr>
+                        <td>Bill No.</td>
+                        <td>Date</td>
+                        <td>Name</td>
+                        <td>Sale (₹)</td>
+                        <td>Paid (₹)</td>
+                        <td>Balance (₹)</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="salesList">
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/sale/sale-list.js}"></script>
+</th:block>
+</html>

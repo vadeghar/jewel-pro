@@ -29,6 +29,11 @@ public class SaleController {
         return "views/sale/sale";
     }
 
+    @GetMapping("list")
+    public String saleList() {
+        return "views/sale/sale-list";
+    }
+
     @GetMapping("payment-modal")
     public String paymentModal() {
         return "views/payment/list-payment-modal";
@@ -41,15 +46,6 @@ public class SaleController {
     public String view(@RequestParam Long id, Model model) {
         model.addAttribute("saleId", id);
         return "views/sale/sale-view";
-    }
-
-
-
-    @GetMapping("/list")
-    public String getAllSales(Model model) {
-        List<Sale> sales = saleService.getAllSales2();
-        model.addAttribute("sales", sales);
-        return "sale/list"; // Assuming you have a Thymeleaf template named "list.html" in "sale" folder
     }
 
     @GetMapping("/create")

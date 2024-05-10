@@ -6,9 +6,28 @@ $(document).ready(function () {
         console.log("Clicked nav item ID:", navItemId);
         // You can perform any further actions with the navItemId here
     });
+
+    if($('#menuItem').val()) {
+        setActiveCollapseItem($('#menuItem').val())
+    }
 });
 
+function setActiveCollapseItem(itemId) {
+    // Remove "active" class from all collapse-items
+    $('.collapse-item').removeClass('active');
 
+    // Add "active" class to the collapse-item with the given ID
+    $('#' + itemId).addClass('active');
+
+    // Find the parent collapse div and add the "show" class
+    $('#' + itemId).closest('.collapse').addClass('show');
+
+    // Find the parent nav-link and remove the "collapsed" class
+    $('#' + itemId).closest('.nav-item').find('.nav-link').removeClass('collapsed');
+
+    // Set aria-expanded attribute to "true"
+    $('#' + itemId).closest('.nav-item').find('.nav-link').attr('aria-expanded', true);
+}
 
 function simpleCall(url, method, title, tabId, requestData, responseCallback) {
 	doSignAndSend({
