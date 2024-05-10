@@ -31,11 +31,11 @@ public class SaleController {
 
     @GetMapping("payment-modal")
     public String paymentModal() {
-        return "views/sale/payment-modal";
+        return "views/payment/list-payment-modal";
     }
     @GetMapping("/add-payment")
     public String payment(Model model) {
-        return "views/payment/add-payment";
+        return "views/payment/add-payment-modal";
     }
     @GetMapping("/view")
     public String view(@RequestParam Long id, Model model) {
