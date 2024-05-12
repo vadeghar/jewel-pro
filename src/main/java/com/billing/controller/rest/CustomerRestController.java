@@ -20,6 +20,11 @@ public class CustomerRestController {
         return customerService.findCustomerByNameLike(name);
     }
 
+    @PostMapping
+    public Customer saveCustomer(@RequestBody Customer customer) {
+        return customerService.createCustomer(customer);
+    }
+
     @GetMapping
     public List<Customer> get() {
         return customerService.getAllCustomers();

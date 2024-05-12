@@ -115,3 +115,31 @@ function toWt(val) {
 function navigateWindow(url) {
     $(window).attr('location', url)
 }
+
+function formToJson(parentId) {
+    var formData = {};
+    $(parentId).find(':input').each(function() {
+        if(this.name) {
+            formData[this.name] = $(this).val();
+        }
+    });
+    return formData;
+}
+
+function resetForm(parentId) {
+    $(parentId).find(':input').each(function() {
+        $(this).val('');
+    });
+}
+
+function getUrlVars()
+{
+    var vars = {}, hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}

@@ -16,8 +16,8 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping
-    public String showCustomer(Model model) {
-        return "views/customer/customer-list";
+    public String showCustomer(@RequestParam(value = "id", required = false) Long id, Model model) {
+        return "views/customer/customer";
     }
 
     @GetMapping("customer-list")

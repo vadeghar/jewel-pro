@@ -2,8 +2,42 @@ var _customerContext = '/customer'
 var url = baseUrl + _customerContext;
 
 $(document).ready(function() {
-    simpleCall(url, 'get', '', '', '', loadDatatable);
+    var urlParams = getUrlVars();
+    if(urlParams.id) {
+        // Get the value of the 'id' parameter
+        id = urlParams.id;
+        console.log("ID:", id);
+        simpleCall(url+'/'+id, 'get', '', '', '', loadCustomerCallback);
+    }
 });
+
+$(document).on('click', '#saveCustomer', function() {
+    //customerForm
+    var customerRequest = formToJson('#customerForm');
+    console.log(JSON.stringify(customerRequest));
+    simpleCall(url, 'post', '', '', JSON.stringify(customerRequest), saveCustomerCallback);
+});
+$(document).on('click', '#resetCustomer', function() {
+    resetForm('#customerForm');
+});
+
+function saveCustomerCallback(response) {
+    $('#id').val(response.id);
+    $('#alert').html('<div class="alert alert-success fade show" role="alert">'+
+                        '<strong>Success!</strong> Customer '+response.name+' is successfully saved.'+
+                      '</div>');
+}
+
+function loadCustomerCallback(response) {
+    $('#id').val(response.id);
+    $('#name').val(response.name);
+    $('#phone').val(response.phone);
+    $('#email').val(response.email);
+    $('#address').val(response.address);
+    $('#resetCustomer').addClass('d-none');
+    var btn = '<button type="button" class="btn btn-primary customerPurchases" data-id="' + response.id +'" data-name="' + response.name + '" title="Customer Purchases / Orders" data-toggle="modal" data-target="#exampleModal">Purchases</button> ' ;
+    $('.myBtn').append(btn);
+}
 
 $(document).on('click', '.customerPurchases', function() {
     var source = 'Customer';
@@ -21,28 +55,4 @@ $(document).on('click', '.customerPurchases', function() {
     $('#myModal').modal({show:true});
 });
 
-function loadDatatable(response) {
-    $('#customerTable').DataTable().destroy();
-    $('#customerTable').DataTable({
-        data: response,
-        columns: [
-            {data: 'id'},
-            {data: 'name'},
-            {data: 'phone'},
-            {data: 'address'},
-            {
-              data: 'id',
-              render: function (data, type, row) {
-                  return '<button type="button" class="btn btn-sm btn-primary customerPurchases" data-id="' + data +'" data-name="' + row.name + '" title="Customer Purchases / Orders" data-toggle="modal" data-target="#exampleModal"><i class="fa-brands fa-first-order-alt"></i></button> ' +
-                      '<button type="button" class="btn btn-sm btn-primary editRowCls" data-id="' + data +'" title="Edit Customer" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-edit"></i></button> ';
-              }
-            }
-        ],
-        responsive: true,
-        "columnDefs": [{
-                "targets": 'no-sort', // Target the columns with the class 'no-sort'
-                "orderable": false,   // Disable sorting for these columns
-            }],
-        order: [[1, 'desc']]
-    });
-}
+

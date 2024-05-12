@@ -33,8 +33,8 @@ public class SpringSecurity {
                                 "/register",
                                 "/login",
                                 "/api/v1/**",
-                                "/css/**",
-                                "/js/**",
+                                "/css/**","/scss/**",
+                                "/js/**", "/img/**",
                                 "/vendor/**").permitAll()
                                 .anyRequest().authenticated()
                 ).formLogin(

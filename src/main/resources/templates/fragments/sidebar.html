@@ -72,10 +72,10 @@
         <div id="saleSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" id="newCustomer" th:href="@{/customer}">New Customer</a>
+                <a class="collapse-item" id="newCustomer" th:href="@{/customer}">Customer</a>
                 <a class="collapse-item" id="customerList" th:href="@{/customer/customer-list}">Customer list</a>
-                <a class="collapse-item" id="salesList" th:href="@{/sale/list}">Sales list</a>
-                <a class="collapse-item" id="newSale" th:href="@{/sale}">New Sale</a>
+                <a class="collapse-item" id="salesList" th:href="@{/sale/list}">All Sales</a>
+                <a class="collapse-item" id="newSale" th:href="@{/sale}">Sale</a>
             </div>
         </div>
     </li>
@@ -130,6 +130,7 @@
                 <h6 class="collapse-header">Page Options:</h6>
                 <a class="collapse-item" th:href="@{/metal-rate}">Rate</a>
                 <a class="collapse-item" th:href="@{/}">Users</a>
+                <a class="collapse-item" th:href="@{/}">Business Settings</a>
             </div>
         </div>
     </li>
