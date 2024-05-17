@@ -75,7 +75,7 @@ public class Purchase {
     private String description;
     @Column(length = 2000)
     private String activePurchase = "YES";
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 

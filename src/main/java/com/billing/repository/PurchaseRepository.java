@@ -9,4 +9,5 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     List<Purchase> findAllByActivePurchase(String activePurchase);
 
+    List<Purchase> findBySupplierId(Long id);
 }

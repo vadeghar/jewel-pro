@@ -21,18 +21,28 @@ public class SupplierController {
     }
 
     @GetMapping
-    public String get(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("supplier") Supplier supplier,
-                      BindingResult result,
-                      Model model) {
-        if (httpHeaders.containsKey("X-Application-Name")) {
-            System.out.println("Found X-Application-Name in header");
-        }
-        List<Supplier> supplierList = supplierService.getAll();
-        //model.addAttribute("errorResponse", new ErrorResponse(new ArrayList<>(), LocalDateTime.now()));
-        model.addAttribute("supplierList", supplierList);
-        model.addAttribute("supplier", new Supplier());
-        return "supplier";
+    public String get(@RequestParam(value = "id", required = false) Long id, Model model) {
+        return "views/supplier/supplier";
     }
+
+    @GetMapping("supplier-list")
+    public String showSupplierList(Model model) {
+        return "views/supplier/supplier-list";
+    }
+
+    @GetMapping("supplier-sale")
+    public String supplierPurchase(Model model) {
+        return "views/supplier/supplier-sale";
+    }
+
+    @GetMapping("/{id}")
+    public String getById(Model model) {
+        return "views/supplier/supplier";
+    }
+    
+    
+    
+    
 
     @PostMapping("/save")
     public String registration(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("supplier") Supplier supplier,

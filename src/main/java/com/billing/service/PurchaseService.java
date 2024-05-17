@@ -201,6 +201,13 @@ public class PurchaseService {
         log.debug("PurchaseService << softDelete <<");
     }
 
+    public List<PurchaseDTO> getAllPurchasesBySupplierId(Long id) {
+        List<Purchase> purchaseList = purchaseRepository.findBySupplierId(id);
+        return purchaseList.stream()
+                .map( p -> toDto(p))
+                .collect(Collectors.toList());
+    }
+
     private PurchaseItem toEntity(PurchaseItemDTO pi, Purchase purchase) {
         log.debug("PurchaseService >> toEntity >>");
         PurchaseItem purchaseItem = purchaseItemRepository.findById(pi.getId())
@@ -229,4 +236,5 @@ public class PurchaseService {
         log.debug("PurchaseService << toItemDto <<");
         return purchaseItemDTO;
     }
+
 }

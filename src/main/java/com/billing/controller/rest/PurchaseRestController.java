@@ -2,6 +2,7 @@ package com.billing.controller.rest;
 
 import com.billing.dto.PurchaseDTO;
 import com.billing.dto.PurchaseItemDTO;
+import com.billing.dto.SaleDTO;
 import com.billing.service.PurchaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -55,5 +56,10 @@ public class PurchaseRestController {
         PurchaseDTO purchaseDTO = purchaseService.savePurchaseItems(purchaseId, purchaseItems);
         log.info("PurchaseController << addPurchaseItems << purchaseId: {} <<", purchaseId);
         return new ResponseEntity<>(purchaseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/supplier/{id}")
+    public List<PurchaseDTO> customerSales(@PathVariable Long id) {
+        return purchaseService.getAllPurchasesBySupplierId(id);
     }
 }
