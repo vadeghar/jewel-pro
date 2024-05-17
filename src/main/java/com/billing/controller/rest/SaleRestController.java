@@ -1,6 +1,5 @@
 package com.billing.controller.rest;
 
-import com.billing.dto.PurchaseDTO;
 import com.billing.dto.SaleDTO;
 import com.billing.entity.Payment;
 import com.billing.service.SaleService;

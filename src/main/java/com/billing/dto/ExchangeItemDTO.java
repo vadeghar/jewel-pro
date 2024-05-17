@@ -1,6 +1,5 @@
 package com.billing.dto;
 
-import com.billing.entity.ExchangeItem;
 import lombok.*;
 
 import java.math.BigDecimal;

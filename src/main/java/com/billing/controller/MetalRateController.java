@@ -1,10 +1,8 @@
 package com.billing.controller;
 
 import com.billing.dto.ErrorResponse;
-import com.billing.entity.Estimation;
 import com.billing.entity.MetalRate;
 import com.billing.service.MetalRateService;
-import com.billing.utils.BillingUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/metal-rate")

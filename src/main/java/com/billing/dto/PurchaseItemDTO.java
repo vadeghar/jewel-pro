@@ -2,7 +2,6 @@ package com.billing.dto;
 
 import com.billing.entity.ItemType;
 import com.billing.entity.PurchaseItem;
-import com.billing.entity.Stock;
 import com.billing.enums.StockStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

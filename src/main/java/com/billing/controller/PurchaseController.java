@@ -1,24 +1,17 @@
 package com.billing.controller;
 
-import com.billing.constant.Metal;
 import com.billing.dto.ErrorResponse;
 import com.billing.dto.PurchaseDTO;
-import com.billing.entity.Estimation;
 import com.billing.entity.Purchase;
-import com.billing.entity.PurchaseItem;
-import com.billing.service.MetalRateService;
 import com.billing.service.PurchaseItemService;
 import com.billing.service.PurchaseService;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.math.BigDecimal;
-import java.util.List;
 
 @Controller
 @RequestMapping("/purchase")

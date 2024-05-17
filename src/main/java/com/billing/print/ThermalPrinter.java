@@ -1,10 +1,6 @@
 package com.billing.print;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileOutputStream;
 import java.io.OutputStream;
@@ -13,8 +9,6 @@ import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
 
     public class ThermalPrinter {

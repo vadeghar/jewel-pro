@@ -4,7 +4,6 @@ import javax.print.attribute.*;
 import javax.print.attribute.standard.MediaSizeName;
 
 import javax.print.attribute.standard.PrinterName;
-import java.io.*;
 
 public class ThermalPrinterJavax {
 
