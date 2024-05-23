@@ -24,10 +24,20 @@ public class PurchaseController {
     }
 
     @GetMapping
-    public String get(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
-                      BindingResult result,
-                      Model model) {
+    public String get(Model model, @RequestParam(required = false) Long id) {
+        model.addAttribute("purchaseId", id);
+        return "views/purchase/purchase";
+    }
+
+    @GetMapping("purchase-list")
+    public String list() {
         return "views/purchase/purchase-list";
+    }
+
+    @GetMapping("/view")
+    public String view(@RequestParam Long id, Model model) {
+        model.addAttribute("purchaseId", id);
+        return "views/purchase/purchase-view";
     }
 
     @GetMapping("add-purchase")
@@ -41,6 +51,15 @@ public class PurchaseController {
         return "views/purchase/purchase";
     }
 
+    @GetMapping("/add-payment")
+    public String payment(Model model) {
+        return "views/payment/add-payment-modal";
+    }
+
+    @GetMapping("/payment-modal")
+    public String paymentModal() {
+        return "views/payment/list-payment-modal";
+    }
     @PostMapping(value = "/purchase-items")
     public String purchaseItems(@ModelAttribute PurchaseDTO purchaseDTO, Model model) {
         model.addAttribute("purchaseId", purchaseDTO.getId());

@@ -24,7 +24,7 @@
                             <th>Supplier</th>
                             <th>Date</th>
                             <th>Total Weight</th>
-                            <th>No. of Items</th>
+                            <th>Balance</th>
                             <th style="width: 280px;" class="no-sort">Actions</th>
                         </tr>
                         </thead>
@@ -35,8 +35,9 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="purchaseList">
 </div>
     <th:block layout:fragment="script">
-        <script th:src="@{/js/gld/purchaseList.js}"></script>
+        <script th:src="@{/js/gld/purchase/purchase-list.js}"></script>
     </th:block>
 </html>

@@ -1,8 +1,12 @@
 var _saleContext = '/sale'
 var url = baseUrl + _saleContext;
 $(document).ready(function() {
-    var saleId = $('#sourceId').val();
-    simpleCall(url+'/'+saleId+'/payment-list', 'get', '', '', '', loadDatatable);
+    var sourceId = $('#sourceId').val();
+    if ($('#source').val().toUpperCase() == 'PURCHASE') {
+        _saleContext = '/purchase'
+        url = baseUrl + _saleContext;
+    }
+    simpleCall(url+'/'+sourceId+'/payment-list', 'get', '', '', '', loadDatatable);
 });
 
 function loadDatatable(response) {

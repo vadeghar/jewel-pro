@@ -3,9 +3,9 @@ package com.billing.controller;
 import com.billing.constant.Metal;
 import com.billing.service.MetalRateService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.ui.Model;
 
 import java.math.BigDecimal;
 

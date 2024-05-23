@@ -46,6 +46,7 @@ public class PurchaseDTO {
     private Long supplierId;
 
     private String createdBy;
+    private String trnLastFourDigits;
 
     private List<PurchaseItemDTO> purchaseItems;
 

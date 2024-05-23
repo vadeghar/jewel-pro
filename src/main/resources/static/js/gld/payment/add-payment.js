@@ -20,6 +20,10 @@ $('#savePayment').on('click', function(){
     } else if (parseFloat(paidAmount) > parseFloat(balAmount)) {
         alert('Enter amount less than or equal to '+balAmount)
     } else {
+        if ($('#source').val().toUpperCase() == 'PURCHASE') {
+            _saleContext = '/purchase'
+            url = baseUrl + _saleContext;
+        }
         var payment = {};
         payment.source = $('#source').val();
         payment.sourceId = $('#sourceId').val();
@@ -31,5 +35,5 @@ $('#savePayment').on('click', function(){
 
 });
 function redirect(response) {
-    navigateWindow('http://localhost:8080/sale/view?id='+response.id);
+    navigateWindow('http://localhost:8080'+_saleContext+'/view?id='+response.id);
 }
