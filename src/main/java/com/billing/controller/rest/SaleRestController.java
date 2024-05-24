@@ -1,7 +1,9 @@
 package com.billing.controller.rest;
 
+import com.billing.constant.Constants;
 import com.billing.dto.SaleDTO;
 import com.billing.entity.Payment;
+import com.billing.service.PaymentService;
 import com.billing.service.SaleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,11 @@ import java.util.Optional;
 public class SaleRestController {
 
     private final SaleService saleService;
+    private final PaymentService paymentService;
 
-    public SaleRestController(SaleService saleService) {
+    public SaleRestController(SaleService saleService, PaymentService paymentService) {
         this.saleService = saleService;
+        this.paymentService = paymentService;
     }
 
     // Get all sales
@@ -71,7 +75,7 @@ public class SaleRestController {
 
     @GetMapping("/{id}/payment-list")
     public ResponseEntity<List<Payment>> getPaymentListBySaleId(@PathVariable Long id) {
-        List<Payment> paymentList = saleService.getPaymentListBySaleId(id);
+        List<Payment> paymentList = paymentService.getPaymentListBySourceAndSourceId(Constants.SOURCE_SALE, id);
         return ResponseEntity.of(Optional.of(paymentList));
     }
 

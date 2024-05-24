@@ -1,8 +1,10 @@
 package com.billing.controller.rest;
 
+import com.billing.constant.Constants;
 import com.billing.dto.PurchaseDTO;
 import com.billing.dto.PurchaseItemDTO;
 import com.billing.entity.Payment;
+import com.billing.service.PaymentService;
 import com.billing.service.PurchaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,9 +20,11 @@ import java.util.Optional;
 public class PurchaseRestController {
 
     private final PurchaseService purchaseService;
+    private final PaymentService paymentService;
 
-    public PurchaseRestController(PurchaseService purchaseService) {
+    public PurchaseRestController(PurchaseService purchaseService, PaymentService paymentService) {
         this.purchaseService = purchaseService;
+        this.paymentService = paymentService;
     }
 
     @GetMapping
@@ -68,7 +72,7 @@ public class PurchaseRestController {
 
     @GetMapping("/{id}/payment-list")
     public ResponseEntity<List<Payment>> getPaymentListBySaleId(@PathVariable Long id) {
-        List<Payment> paymentList = purchaseService.getPaymentListByPurchaseId(id);
+        List<Payment> paymentList = paymentService.getPaymentListBySourceAndSourceId(Constants.SOURCE_PURCHASE, id);
         return ResponseEntity.of(Optional.of(paymentList));
     }
 

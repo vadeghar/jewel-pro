@@ -185,10 +185,6 @@ public class SaleService {
         return false;
     }
 
-    public List<Payment> getPaymentListBySaleId(Long id) {
-        return paymentRepository.findBySourceAndSourceId(Constants.SOURCE_SALE, id);
-    }
-
     public SaleDTO addPaymentAndReturnSale(Long id, Payment paymentRequest) {
         Sale sale = saleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Sale not found with id "+id));
         Payment payment = new Payment();

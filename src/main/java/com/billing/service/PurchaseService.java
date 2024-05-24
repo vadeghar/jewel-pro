@@ -240,12 +240,6 @@ public class PurchaseService {
         return toDto(savedPurchase);
     }
 
-
-    public List<Payment> getPaymentListByPurchaseId(Long id) {
-        return paymentRepository.findBySourceAndSourceId(Constants.SOURCE_PURCHASE, id);
-    }
-
-
     private PurchaseItem toEntity(PurchaseItemDTO pi, Purchase purchase) {
         log.debug("PurchaseService >> toEntity >>");
         PurchaseItem purchaseItem = purchaseItemRepository.findById(pi.getId())
