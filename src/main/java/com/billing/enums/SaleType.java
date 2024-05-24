@@ -1,7 +1,7 @@
 package com.billing.enums;
 
 public enum SaleType {
-    DEPROSIONED,
+    DEPROVISIONED,
     SALE,
     SALE_RETURN
     ;

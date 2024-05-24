@@ -178,7 +178,7 @@ public class SaleService {
     public boolean deleteSale(Long id) {
         Sale existingSale = saleRepository.findById(id).orElse(null);
         if (existingSale != null) {
-            existingSale.setSaleType(SaleType.DEPROSIONED.name());
+            existingSale.setSaleType(SaleType.DEPROVISIONED.name());
             saleRepository.save(existingSale);
             return true;
         }

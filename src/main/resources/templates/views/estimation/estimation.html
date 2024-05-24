@@ -3,38 +3,38 @@
       layout:decorate="~{layout}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Sale</title>
+    <title>Estimation</title>
 </head>
 
 <!-- Begin Page Content -->
 <div layout:fragment="content" class="container-fluid">
     <div class="card shadow mb-4">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Sale</h6>
-            <input type="hidden" id="id" name="id" th:value="${saleId}">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Estimation</h6>
+            <input type="hidden" id="id" name="id" th:value="${estimationId}">
         </div>
-        <div class="card-body saleDto">
+        <div class="card-body estimationDto">
             <div class="row">
                 <div class="col text-center">
-                    <h6 class="font-weight-bold text-primary" id="invoiceNoLbl"></h6>
-                    <input type="hidden" class="form-control" id="invoiceNo" name="invoiceNo">
+                    <h6 class="font-weight-bold text-primary" id="estimationNoLbl"></h6>
+                    <input type="hidden" class="form-control" id="estimationNo" name="estimationNo">
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-4 mt-2">
                     <label class="font-weight-bold mb-0">Date:</label>
-                    <input type="date" class="form-control" id="saleDate" name="saleDate" required>
+                    <input type="date" class="form-control" id="estimationDate" name="estimationDate" required>
                 </div>
                 <div class="col-md-4 mt-2">
-                    <label class="font-weight-bold mb-0">Sale Type:</label>
-                    <select class="form-control" id="saleType" name="saleType" required>
-                        <option value="SALE">Sale</option>
-                        <option value="SALE_RETURN">Sale Return</option>
+                    <label class="font-weight-bold mb-0">Purchase Type:</label>
+                    <select class="form-control" id="estimationType" name="estimationType" required>
+                        <option value="SALE">Purchase</option>
+                        <option value="SALE_RETURN">Purchase Return</option>
                     </select>
                 </div>
                 <div class="col-md-4 mt-2">
-                    <label class="font-weight-bold mb-0" for="isGstSale">GST Sale?</label>
-                    <select class="form-control enableGst" id="isGstSale" name="isGstSale" required>
+                    <label class="font-weight-bold mb-0" for="isGstEstimation">GST Purchase?</label>
+                    <select class="form-control enableGst" id="isGstEstimation" name="isGstEstimation" required>
                         <option value="NO">No</option>
                         <option value="YES">Yes</option>
                     </select>
@@ -59,13 +59,13 @@
 
             <div class="card shadow mt-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Sale Items</h6>
-                    <button class="btn btn-primary" type="button" id="addSaleItem"><i class="fa-solid fa-plus"></i> Add Item</button>
+                    <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Estimation Items</h6>
+                    <button class="btn btn-primary" type="button" id="addEstimationItem"><i class="fa-solid fa-plus"></i> Add Item</button>
                 </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <table class="table table-bordered" id="saleItemsTable">
+                            <table class="table table-bordered" id="estimationItemsTable">
                                 <thead>
                                 <tr>
                                     <th>Code</th>
@@ -82,22 +82,22 @@
                                     <th>Action</th>
                                 </tr>
                                 </thead>
-                                <tbody id="saleItemsTBody">
+                                <tbody id="estimationItemsTBody">
                                 <tr>
                                     <td>
-                                        <input type="text" name="code" id="saleItemList[0].code" class="form-control code table-input">
-                                        <input type="hidden" name="id" id="saleItemList[0].id" class="form-control">
-                                        <input type="hidden" name="stockId" id="saleItemList[0].stockId">
+                                        <input type="text" name="code" id="estimationItemList[0].code" class="form-control code table-input">
+                                        <input type="hidden" name="id" id="estimationItemList[0].id" class="form-control">
+                                        <input type="hidden" name="stockId" id="estimationItemList[0].stockId">
                                     </td>
-                                    <td><input type="text" name="name" id="saleItemList[0].name" class="form-control table-input"></td>
-                                    <td><input type="text" name="weight" id="saleItemList[0].weight" class="form-control saleItemCls table-input"></td>
+                                    <td><input type="text" name="name" id="estimationItemList[0].name" class="form-control table-input"></td>
+                                    <td><input type="text" name="weight" id="estimationItemList[0].weight" class="form-control estimationItemCls table-input"></td>
 <!--                                    <td><input type="text" name="stnWeight" id="aleItemList[0].stnWeight" class="form-control"></td>-->
-                                    <td><input type="text" name="vaWeight" id="saleItemList[0].vaWeight" class="form-control saleItemCls table-input"></td>
-                                    <td><input type="text" name="stnWeight" id="saleItemList[0].stnWeight" class="form-control table-input"></td>
-                                    <td><input type="text" name="netWeight" id="saleItemList[0].netWeight" class="form-control table-input"></td>
-                                    <td><input type="text" name="makingCharge" id="saleItemList[0].makingCharge" class="form-control saleItemCls table-input"></td>
-                                    <td><input type="text" name="rate" id="saleItemList[0].rate" class="form-control saleItemCls table-input"></td>
-                                    <td><input type="text" name="itemTotal" id="saleItemList[0].itemTotal" class="form-control table-input" readonly></td>
+                                    <td><input type="text" name="vaWeight" id="estimationItemList[0].vaWeight" class="form-control estimationItemCls table-input"></td>
+                                    <td><input type="text" name="stnWeight" id="estimationItemList[0].stnWeight" class="form-control table-input"></td>
+                                    <td><input type="text" name="netWeight" id="estimationItemList[0].netWeight" class="form-control table-input"></td>
+                                    <td><input type="text" name="makingCharge" id="estimationItemList[0].makingCharge" class="form-control estimationItemCls table-input"></td>
+                                    <td><input type="text" name="rate" id="estimationItemList[0].rate" class="form-control estimationItemCls table-input"></td>
+                                    <td><input type="text" name="itemTotal" id="estimationItemList[0].itemTotal" class="form-control table-input" readonly></td>
                                     <td><button type="button" class="btn btn-danger removeRow"><i class="fas fa-trash"></i></button></td>
                                 </tr>
                                 </tbody>
@@ -156,11 +156,11 @@
                         <tbody>
                             <tr>
                                 <td class="text-right">
-                                    <p class="font-weight-bold">Sale Amount:</p>
+                                    <p class="font-weight-bold">Estimation Amount:</p>
                                 </td>
                                 <td class="text-right" style="width: 100px">
-                                    <input type="hidden" id="totalSaleAmount" name="totalSaleAmount">
-                                    <p class="form-control-plaintext" id="totalSaleAmountLbl">-</p>
+                                    <input type="hidden" id="totalEstimationAmount" name="totalEstimationAmount">
+                                    <p class="form-control-plaintext" id="totalEstimationAmountLbl">-</p>
                                 </td>
                             </tr>
                             <tr class="gstBlock">
@@ -209,8 +209,8 @@
                                     <p class="font-weight-bold">Total Amount:</p>
                                 </td>
                                 <td class="text-right" style="width: 100px">
-                                    <input type="hidden" id="grandTotalSaleAmount" name="grandTotalSaleAmount">
-                                    <p class="form-control-plaintext" id="grandTotalSaleAmountLbl">-</p>
+                                    <input type="hidden" id="grandTotalEstimationAmount" name="grandTotalEstimationAmount">
+                                    <p class="form-control-plaintext" id="grandTotalEstimationAmountLbl">-</p>
                                 </td>
                             </tr>
                         </tbody>
@@ -272,7 +272,7 @@
             <div class="row mt-4">
                 <div class="col-md-3"></div>
                 <div class="col-md-3 text-right">
-                    <button type="button" id="saveSale" class="btn btn-primary">Save</button>
+                    <button type="button" id="saveEstimation" class="btn btn-primary">Save</button>
                 </div>
                 <div class="col-md-3"><button type="button" class="btn btn-danger" id="cancelBtn">Cancel</button></div>
                 <div class="col-md-3"></div>
@@ -280,9 +280,9 @@
 
         </div>
     </div>
-    <input type="hidden" id="menuItem" name="menuItem" value="newSale">
+    <input type="hidden" id="menuItem" name="menuItem" value="newEstimation">
 </div>
 <th:block layout:fragment="script">
-    <script th:src="@{/js/gld/sale/sale.js}"></script>
+    <script th:src="@{/js/gld/estimation/estimation.js}"></script>
 </th:block>
 </html>

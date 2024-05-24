@@ -142,7 +142,7 @@ function setDefaultsOnPageLoad() {
     $('#purchaseDate').val(today);
     var purchaseId = $('#id').val();
     if(purchaseId) {
-        simpleCall(url+'?id='+purchaseId, 'get', '', '', '', loadPurchase);
+        simpleCall(url+'/'+purchaseId, 'get', '', '', '', loadPurchase);
         $('#savePurchase').text('Update')
     }
 }

@@ -11,12 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequestMapping("/sale")
 public class SaleController {
-    private final SaleService saleService;
-
-    @Autowired
-    public SaleController(SaleService saleService) {
-        this.saleService = saleService;
-    }
 
     @GetMapping
     public String get(Model model, @RequestParam(required = false) Long id) {

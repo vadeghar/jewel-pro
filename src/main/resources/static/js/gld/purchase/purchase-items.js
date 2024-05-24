@@ -4,7 +4,7 @@ var url = baseUrl + _purchaseContext;
 
 $(document).ready(function() {
     var id = $('#purchaseId').val();
-    simpleCall(url+'?id='+id, 'get', '', '', '', getPurchaseCallback)
+    simpleCall(url+'/'+id, 'get', '', '', '', getPurchaseCallback)
 });
 
 function getPurchaseCallback(jsonResponse) {
