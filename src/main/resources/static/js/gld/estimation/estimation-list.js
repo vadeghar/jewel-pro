@@ -1,4 +1,4 @@
-var _saleContext = '/sale'
+var _saleContext = '/estimation'
 var url = baseUrl + _saleContext;
 
 $(document).ready(function() {
@@ -6,27 +6,19 @@ $(document).ready(function() {
 })
 
 function loadDatatable(response) {
-    $('#saleListTable').DataTable().destroy();
-    $('#saleListTable').DataTable({
+    $('#estimationListTable').DataTable().destroy();
+    $('#estimationListTable').DataTable({
         data: response,
         columns: [
-            {data: 'invoiceNo'},
-            {data: 'saleDate', render: function (data, type, row) {
-                                   return data != null ? moment(data).format('DD-MM-yyyy') : '';
+            {data: 'estimationNo'},
+            {data: 'estimationDate', render: function (data, type, row) {
+                                   return data != null ? moment(data).format('DD/MM/yyyy') : '';
                                  }},
-            {data: 'customer', render: function (data, type, row) {
-                                return (data != null && data.name != null) ? data.name : '';
-                              }},
-            {data: 'grandTotalSaleAmount', render: function (data, type, row) {return toCurrency(data)}},
-            {data: 'paidAmount', render: function (data, type, row) {return toCurrency(data)}},
-            {data: 'balAmount', render: function (data, type, row) {return toCurrency(data)}},
+            {data: 'grandTotalEstimationAmount', render: function (data, type, row) {return toCurrency(data)}},
             {
               data: 'id',
               render: function (data, type, row) {
-                      var addPaymentBtn = toCurrency(row.balAmount) > 0 ? '<button type="button" class="btn btn-sm btn-primary addPayment" data-name="'+row.customer.name+'" data-id="' + data +'" title="Add New Payment" >+<i class="fa-solid fa-coins"></i></button> ' : '';
-                  return '<button type="button" class="btn btn-sm btn-primary showPayments" data-billno="'+row.invoiceNo+'" data-name="'+row.customer.name+'" data-id="' + data +'" title="Show Payments" ><i class="fa-solid fa-coins"></i></button> ' +
-                  addPaymentBtn +
-                      '<a class="btn btn-sm btn-primary viewSale" href="/sale/view?id='+data+'"  data-id="' + data +'"><i class="fas fa-eye"></i></a> ';
+                  return '<a class="btn btn-sm btn-primary viewSale" href="/estimation/view?id='+data+'"  data-id="' + data +'"><i class="fas fa-eye"></i></a> ';
               }
             }
         ],

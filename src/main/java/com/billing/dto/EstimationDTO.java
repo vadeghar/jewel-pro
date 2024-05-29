@@ -15,18 +15,18 @@ import java.util.List;
 @ToString
 public class EstimationDTO {
     private Long id;
-    private String saleType;
+    private String estimationType;
     private Customer customer;
     private String estimationNo;
-    private LocalDate date;
+    private LocalDate estimationDate;
     private LocalDateTime lastUpdatedTs;
-    private String isGstBill;
+    private String isGstEstimation;
     private BigDecimal cgstAmount;
     private BigDecimal sgstAmount;
-    private BigDecimal totalAmount;
+    private BigDecimal totalEstimationAmount;
     private BigDecimal totalExchangeAmount;
     private BigDecimal discount;
-    private BigDecimal grandTotalAmount;
+    private BigDecimal grandTotalEstimationAmount;
     private String paymentMode;
     private BigDecimal paidAmount;
     private BigDecimal balAmount;

@@ -1,6 +1,6 @@
 var baseUrl = 'http://localhost:8080/api/v1';
-var _saleContext = '/sale'
-var url = baseUrl + _saleContext;
+var _estimationContext = '/estimation'
+var url = baseUrl + _estimationContext;
 var id = null;
 $(document).ready(function() {
 var urlParams = getUrlVars();
@@ -11,46 +11,43 @@ if(urlParams.id) {
     console.log("ID:", id);
 } else {
     console.log("ID parameter not found in the URL.");
-    createDynamicModal(id, "Invalid sale", "Sale not found", "Close", closeSale)
+    createDynamicModal(id, "Invalid estimation", "Estimation not found", "Close", closeEstimation)
 }
 
-    simpleCall(url+'/'+id, 'get', '', '', null, getSaleCallback);
+    simpleCall(url+'/'+id, 'get', '', '', null, getEstimationCallback);
     // Print button functionality
     $('#printInvoice').on('click', function() {
         window.print();
     });
 
-    $('#editSale').on('click', function() {
-        $(window).attr('location','http://localhost:8080/sale?id='+id)
+    $('#editEstimation').on('click', function() {
+        $(window).attr('location','http://localhost:8080/estimation?id='+id)
     });
 });
 
-function getSaleCallback(response) {
+function getEstimationCallback(response) {
     if (response == null || response == '') {
         $('#printInvoice').addClass('d-none');
         $('#cancelBtn').addClass('d-none');
-        createDynamicModal(id, "Invalid sale", "Sale not found", "Close", closeSale);
+        createDynamicModal(id, "Invalid estimation", "Estimation not found", "Close", closeEstimation);
     } else {
         // Fill customer details
-        $('#name').text(response.customer.name);
-        $('#phone').text(response.customer.phone);
-        $('#address').text(response.customer.address);
 
-        var saleItemList = response.saleItemList;
+        var estimationItemList = response.estimationItemList;
 
-        // Iterate over each item in saleItemList
-        $.each(saleItemList, function(index, saleItem) {
+        // Iterate over each item in estimationItemList
+        $.each(estimationItemList, function(index, estimationItem) {
             // Append a new row to the table body for each item
-            $('#saleItemsTable tbody').append('<tr>' +
-                '<td>' + saleItem.code + '</td>' +
-                '<td>' + saleItem.name + '</td>' +
-                '<td>' + toWt(saleItem.weight) + '</td>' +
-                '<td>' + toWt(saleItem.vaWeight) + '</td>' +
-                '<td>' + toWt(saleItem.stnWeight)+ '</td>' +
-                '<td>' + toWt(saleItem.netWeight) + '</td>' +
-                '<td>' + toCurrency(saleItem.makingCharge) + '</td>' +
-                '<td>' + toCurrency(saleItem.rate) + '</td>' +
-                '<td>' + toCurrency(saleItem.itemTotal) + '</td>' +
+            $('#estimationItemsTable tbody').append('<tr>' +
+                '<td>' + estimationItem.code + '</td>' +
+                '<td>' + estimationItem.name + '</td>' +
+                '<td>' + toWt(estimationItem.weight) + '</td>' +
+                '<td>' + toWt(estimationItem.vaWeight) + '</td>' +
+                '<td>' + toWt(estimationItem.stnWeight)+ '</td>' +
+                '<td>' + toWt(estimationItem.netWeight) + '</td>' +
+                '<td>' + toCurrency(estimationItem.makingCharge) + '</td>' +
+                '<td>' + toCurrency(estimationItem.rate) + '</td>' +
+                '<td>' + toCurrency(estimationItem.itemTotal) + '</td>' +
                 '</tr>');
         });
 
@@ -68,18 +65,18 @@ function getSaleCallback(response) {
         });
 
         // Fill other details
-        $('#invoiceNo').text(response.invoiceNo);
-        $('#saleDate').text(response.saleDate);
-        $('#totalSaleAmount').text(toCurrency(response.totalSaleAmount));
+        $('#estimationNo').text(response.estimationNo);
+        $('#estimationDate').text(response.estimationDate);
+        $('#totalEstimationAmount').text(toCurrency(response.totalEstimationAmount));
         $('#totalExchangeAmount').text(toCurrency(response.totalExchangeAmount));
-        $('#grandTotalSaleAmount').text(toCurrency(response.grandTotalSaleAmount));
+        $('#grandTotalEstimationAmount').text(toCurrency(response.grandTotalEstimationAmount));
         $('#paidAmount').text(toCurrency(response.paidAmount));
         $('#balAmount').text(toCurrency(response.balAmount));
-        $('#saleType').text(response.saleType);
-        $('#isGstSale').text(response.isGstSale);
+        $('#estimationType').text(response.estimationType);
+        $('#isGstEstimation').text(response.isGstEstimation);
         $('#paymentMode').text(response.paymentMode);
         $('#description').text(response.description);
-        if (response.isGstSale == 'YES') {
+        if (response.isGstEstimation == 'YES') {
             $('#gstBlock').removeClass('d-none')
             $('#cgstAmount').text(toCurrency(response.cgstAmount));
             $('#sgstAmount').text(toCurrency(response.sgstAmount));
@@ -94,16 +91,16 @@ function getSaleCallback(response) {
 
 }
 
-function closeSale(id) {
+function closeEstimation(id) {
 
 }
 
 $(document).on('click', '#payments', function() {
-    var source = 'Sale';
+    var source = 'Estimation';
     var sourceId = $(this).attr('data-id');
     var name = $('#name').text();
     console.log('sourceId: '+sourceId);
-    $.get('/sale/payment-modal', function(htmlData) {
+    $.get('/estimation/payment-modal', function(htmlData) {
         $('#sourceId').val(sourceId);
         $('#source').val(source);
         // Update the content of the modal body with the HTML content
@@ -115,11 +112,11 @@ $(document).on('click', '#payments', function() {
 });
 
 $(document).on('click', '#addPayment', function() {
-    var source = 'Sale';
+    var source = 'Estimation';
     var sourceId = $(this).attr('data-id');
     var name = $('#name').text();
     console.log('sourceId: '+sourceId);
-    $.get('/sale/add-payment', function(htmlData) {
+    $.get('/estimation/add-payment', function(htmlData) {
         $('#sourceId').val(sourceId);
         $('#source').val(source);
         $('#myModalPlaceHolder').html(htmlData);

@@ -44,7 +44,7 @@ $(document).on('focus', '.code', function() {
             $('#estimationItemList\\[' + index + '\\]\\.vaWeight').val(ui.item.item.vaWeight != null ? parseFloat(ui.item.item.vaWeight).toFixed(3) : parseFloat(0).toFixed(3));
             $('#estimationItemList\\[' + index + '\\]\\.stnWeight').val(ui.item.item.stnWeight != null ? parseFloat(ui.item.item.stnWeight).toFixed(3) : parseFloat(0).toFixed(3));
              $('#estimationItemList\\[' + index + '\\]\\.netWeight').val(calcNetWeight(ui.item.item));
-            $('#estimationItemList\\[' + index + '\\]\\.makingCharge').val(ui.item.item.saleMC != null ? parseFloat(ui.item.item.saleMC).toFixed(2) : parseFloat(0).toFixed(3));
+            $('#estimationItemList\\[' + index + '\\]\\.makingCharge').val(ui.item.item.estimationMC != null ? parseFloat(ui.item.item.estimationMC).toFixed(2) : parseFloat(0).toFixed(3));
 
         }
     });
@@ -422,7 +422,12 @@ function loadEstimationCallback(response) {
         $('#invoiceNoLbl').removeClass('d-none');
         $('#estimationDate').val(response.estimationDate);
         $('#estimationType').val(response.estimationType);
-        $('#isGstEstimation').val(response.isGstEstimation);
+        $('#isGstEstimation').val(response.isGstSale);
+
+        $('#name').val(response.customer.name);
+        $('#phone').val(response.customer.phone);
+        $('#address').val(response.customer.address);
+        $('#customerId').val(response.customer.id);
 
         var estimationItemList = response.estimationItemList;
         $('#estimationItemsTable tbody').empty();

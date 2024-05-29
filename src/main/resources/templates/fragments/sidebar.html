@@ -58,8 +58,8 @@
         <div id="estimationSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" id="newEstimation" th:href="@{/supplier}">New Estimation</a>
-                <a class="collapse-item" id="estimationList" th:href="@{/purchase}">Estimation list</a>
+                <a class="collapse-item" id="newEstimation" th:href="@{/estimation}">New Estimation</a>
+                <a class="collapse-item" id="estimationList" th:href="@{/estimation/list}">Estimation list</a>
             </div>
         </div>
     </li>
@@ -162,12 +162,13 @@
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#plSec"
            aria-expanded="true" aria-controls="plSec">
             <i class="fa-solid fa-cash-register"></i>
-            <span>Profit & Loss</span>
+            <span>Graphs</span>
         </a>
         <div id="plSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" th:href="@{/metal-rate}">Profit & Loss</a>
+                <a class="collapse-item" id="purchaseChart" th:href="@{/graph/purchases}">Purchases</a>
+                <a class="collapse-item" id="saleChart" th:href="@{/graph/sales}">Sales</a>
             </div>
         </div>
     </li>

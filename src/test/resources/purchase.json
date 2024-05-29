@@ -1,0 +1,41 @@
+[
+  {
+    "name": "Ring (Women)",
+    "code": "",
+    "id": "",
+    "weight": "4.480",
+    "vaWeight": "0.492",
+    "saleMC": "1560.00",
+    "stnWeight": "",
+    "stnType": "",
+    "stnCostPerCt": "",
+    "pcs": "1",
+    "active": "true"
+  },
+  {
+    "name": "Ring (Women)",
+    "code": "",
+    "id": "",
+    "weight": "4.370",
+    "vaWeight": "0.480",
+    "saleMC": "1522.00",
+    "stnWeight": "",
+    "stnType": "",
+    "stnCostPerCt": "",
+    "pcs": "1",
+    "active": "true"
+  },
+  {
+    "name": "Ring (Women)",
+    "code": "",
+    "id": "",
+    "weight": "4.600",
+    "vaWeight": "0.506",
+    "saleMC": "1604.00",
+    "stnWeight": "",
+    "stnType": "",
+    "stnCostPerCt": "",
+    "pcs": "1",
+    "active": "true"
+  }
+]

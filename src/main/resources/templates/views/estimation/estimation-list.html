@@ -16,19 +16,16 @@
             <table class="table table-bordered" id="estimationListTable">
                 <thead>
                     <tr>
-                        <td>Bill No.</td>
+                        <td>Estimation No.</td>
                         <td>Date</td>
-                        <td>Name</td>
                         <td>Estimation (₹)</td>
-                        <td>Paid (₹)</td>
-                        <td>Balance (₹)</td>
                         <td>Action</td>
                     </tr>
                 </thead>
             </table>
         </div>
     </div>
-    <input type="hidden" id="menuItem" name="menuItem" value="estimationsList">
+    <input type="hidden" id="menuItem" name="menuItem" value="estimationList">
 </div>
 <th:block layout:fragment="script">
     <script th:src="@{/js/gld/estimation/estimation-list.js}"></script>

@@ -7,10 +7,12 @@ import com.billing.dto.SaleItemDTO;
 import com.billing.entity.*;
 import com.billing.enums.SaleType;
 import com.billing.enums.StockStatus;
+import com.billing.model.ChartData;
 import com.billing.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -373,198 +375,26 @@ public class SaleService {
         return exchangeItem;
     }
 
+    public List<ChartData> getYearlyData(LocalDate startDate, LocalDate endDate) {
+        return saleRepository.findSalesByYearly(startDate, endDate);
+    }
 
-//    public List<SaleDTO> getAllSales() {
-//        List<Sale> saleList = saleRepository.findAll();
-//        return saleList.stream().map(sale -> sale.toDTO()).collect(Collectors.toList());
-//    }
+    public List<ChartData> getMonthlyData(LocalDate startDate, LocalDate endDate) {
+        return saleRepository.findSalesByMonthly(startDate, endDate);
+    }
 
+    public List<ChartData> getWeeklyData(LocalDate startDate, LocalDate endDate) {
+        return saleRepository.findSalesByWeekly(startDate, endDate);
+    }
 
-//    public Sale getSaleById2(Long id) {
-//        return saleRepository.findById(id)
-//                .orElseThrow(() -> new NoSuchElementException("Sale not found with id: " + id));
-//
-//    }
-//
-//    public SaleDTO getSaleById(Long id) {
-//        Sale sale = saleRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Sale not found with id "+id));
-//        return sale.toDTO();
-//    }
+    public BigDecimal getCurrentMonthSaleTotal() {
+        return saleRepository.getCurrentMonthTotalSaleAmount();
+    }
 
+    public List<ChartData> getTopCustomers() {
+        PageRequest pageable = PageRequest.of(0, 3);
+        return saleRepository.findTopCustomersByTotalAmountLast5Days(pageable);
+    }
 
-//    @Transactional
-//    public SaleDTO saveSale3(SaleDTO sale) {
-//        Sale saleEntity = new Sale();
-//        sale.mapDtoToEntity(sale, saleEntity);
-//        saleEntity.setInvoiceNo(BillingUtils.generateInvoiceNumber());
-//        List<SaleItem> saleItemList = new ArrayList<>(saleEntity.getSaleItemList().size());
-//        saleEntity.getSaleItemList().stream()
-//                .forEach(si -> {
-//                    SaleItem dbSaleItem = null;
-//                    if(si.getId() != null && si.getId() > 0) {
-//                                dbSaleItem = saleItemRepository.findById(si.getId()).orElseThrow();
-//                            } else {
-//                                dbSaleItem = si;
-//                            }
-//                    if (dbSaleItem.getStock().getId() != null && dbSaleItem.getStock().getId() > 0) {
-//                        dbSaleItem.setStock(stockRepository.findById(dbSaleItem.getStock().getId()).orElseThrow());
-//                    }
-//                    saleItemList.add(dbSaleItem);
-//
-//                        });
-//
-//
-//        saleEntity.setSaleItemList(saleItemList);
-//        Customer customer = customerRepository.findByPhone(saleEntity.getCustomer().getPhone());
-//        if (null == customer) {
-//            customer = customerRepository.save(saleEntity.getCustomer());
-//        }
-//        saleEntity.setCustomer(customer);
-//        Sale dbSale = saleRepository.save(saleEntity);
-//        return dbSale.toDTO();
-//    }
-
-//    public SaleDTO saveSale(SaleDTO saleDTO) {
-//        log.debug("SaleService >> saveSale >> purchaseId: {}, sale item count: {}", saleDTO.getId(), saleDTO.getSaleItemList().size());
-//        Sale sale = new Sale();
-//        if(saleDTO.getId() != null && saleDTO.getId() > 0) {
-//            sale = saleRepository.findById(saleDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Sale not found with id: "+saleDTO.getId()));
-//        }
-//        Customer customer = null;
-//        if (sale.getCustomer() != null && sale.getCustomer().getId() != null) {
-//            customer = customerRepository.findById(sale.getCustomer().getId()).orElse(null);
-//        }
-//        if (customer == null) {
-//            customer = customerRepository.findByPhone(saleDTO.getCustomer().getPhone());
-//        }
-//        if (null == customer) {
-//            //sale.setCustomer(customer);
-//            customer = new Customer();
-//        }
-//        //customer = new Customer();
-////        customer.setSales(Arrays.asList(sale));
-//        customer.setName(saleDTO.getCustomer().getName());
-//        customer.setAddress(saleDTO.getCustomer().getAddress());
-//        customer.setPhone(saleDTO.getCustomer().getPhone());
-//        customer.setEmail(saleDTO.getCustomer().getEmail());
-//        sale.setCustomer(customer);
-//
-//
-//        saleDTO.mapDtoToEntity(saleDTO, sale);
-//        setSaleItems(saleDTO, sale);
-//        setExchangeItems(saleDTO, sale);
-//        Sale savedSale = saleRepository.save(sale);
-//        log.debug("SaleService << saveSale <<");
-//        return mapEntityToDto(savedSale);
-//    }
-//
-//    private void setSaleItems(SaleDTO saleDTO, Sale sale) {
-//        List<SaleItem> existingSaleItems = sale.getSaleItemList();
-//
-//        List<SaleItem> missingItems = existingSaleItems.stream()
-//                .filter(existingItem -> saleDTO.getExchangedItems().stream()
-//                        .noneMatch(saleItem -> saleItem.getId() == existingItem.getId()))
-//                .collect(Collectors.toList());
-//
-//        List<SaleItem> dbSaleItemList = new ArrayList<>();
-//        saleDTO.getSaleItemList().stream().forEach(siDto -> {
-//            if (siDto.getId() == null) {
-//                SaleItem saleItem = new SaleItem();
-//                siDto.mapDtoToEntity(siDto, saleItem);
-//                saleItem.setSale(sale);
-//                Stock stock = stockRepository.findById(siDto.getStockId()).orElseThrow(() -> new EntityNotFoundException("Stock not exist with id: "+siDto.getStockId()));
-//                stock.setStockStatus(StockStatus.OUT_OF_STOCK);
-//                saleItem.setStockId(stock.getId());
-//                dbSaleItemList.add(saleItem);
-//            } else {
-//                SaleItem saleItem = existingSaleItems.stream()
-//                        .filter(si -> si.getId().equals(siDto.getId()))
-//                        .findFirst()
-//                        .orElse(new SaleItem());
-//                siDto.mapDtoToEntity(siDto, saleItem);
-//                saleItem.setSale(sale);
-//                Stock stock = stockRepository.findById(siDto.getStockId()).orElseThrow(() -> new EntityNotFoundException("Stock not exist with id: "+siDto.getStockId()));
-//                stock.setStockStatus(StockStatus.OUT_OF_STOCK);
-//                saleItem.setStockId(stock.getId());
-//                dbSaleItemList.add(saleItem);
-//            }
-//        });
-//        if (!CollectionUtils.isEmpty(missingItems)) {
-//            missingItems.stream().forEach(saleItem -> {
-//                sale.getSaleItemList().remove(saleItem);
-//            });
-//            saleItemRepository.deleteAll(missingItems);
-//        }
-//        sale.setSaleItemList(dbSaleItemList);
-//    }
-//
-//
-//    private void setExchangeItems(SaleDTO saleDTO, Sale sale) {
-//        List<ExchangeItem> exchangeItemList = sale.getExchangeItemList();
-//
-//        List<ExchangeItem> missingItems = exchangeItemList.stream()
-//                .filter(existingItem -> saleDTO.getExchangedItems().stream()
-//                        .noneMatch(saleItem -> saleItem.getId() == existingItem.getId()))
-//                .collect(Collectors.toList());
-//
-//        List<ExchangeItem> dbExchnageItemList = new ArrayList<>();
-//        saleDTO.getExchangedItems().stream().forEach(exDto -> {
-//            if (exDto.getId() == null) {
-//                ExchangeItem exchangeItem = new ExchangeItem();
-//                exchangeItem.setSale(sale);
-//                dbExchnageItemList.add(exchangeItem);
-//            } else {
-//                ExchangeItem exchangeItem = exchangeItemList.stream()
-//                        .filter(si -> si.getId().equals(exDto.getId()))
-//                        .findFirst()
-//                        .orElse(new ExchangeItem());
-//                exchangeItem.setSale(sale);
-//                dbExchnageItemList.add(exchangeItem);
-//            }
-//        });
-//        if (!CollectionUtils.isEmpty(missingItems)) {
-//            missingItems.stream().forEach(exchangeItem -> {
-//                sale.getExchangeItemList().remove(exchangeItem);
-//            });
-//            exchangeItemRepository.deleteAll(missingItems);
-//        }
-//        sale.setExchangeItemList(dbExchnageItemList);
-//    }
-
-//    public void deleteSale(Long id) {
-//        saleRepository.deleteById(id);
-//    }
-
-//
-//    public SaleDTO mapEntityToDto(Sale sale) {
-//        SaleDTO saleDTO = new SaleDTO();
-//        saleDTO.setId(sale.getId());
-//        saleDTO.setSaleType(sale.getSaleType());
-//        //saleDTO.setCustomer(sale.getCustomer());
-//        saleDTO.setInvoiceNo(sale.getInvoiceNo());
-//        saleDTO.setSaleDate(sale.getSaleDate());
-////        saleDTO.setLastUpdatedTs(sale.getLastUpdatedTs());
-//        saleDTO.setIsGstSale(sale.getIsGstSale());
-//        saleDTO.setCGstAmount(sale.getCGstAmount());
-//        saleDTO.setSGstAmount(sale.getSGstAmount());
-//        saleDTO.setTotalSaleAmount(sale.getTotalSaleAmount());
-//        saleDTO.setTotalExchangeAmount(sale.getTotalExchangeAmount());
-//        saleDTO.setDiscount(sale.getDiscount());
-//        saleDTO.setGrandTotalSaleAmount(sale.getGrandTotalSaleAmount());
-//        saleDTO.setPaymentMode(sale.getPaymentMode());
-//        saleDTO.setPaidAmount(sale.getPaidAmount());
-//        saleDTO.setBalAmount(sale.getBalAmount());
-//        saleDTO.setSaleItemList(!CollectionUtils.isEmpty(sale.getSaleItemList()) ? sale.getSaleItemList().stream().map(saleItem -> {
-//            return saleItem.toDto(saleItem);
-//        }).collect(Collectors.toList()) : new ArrayList<>());
-//        saleDTO.setExchangedItems(!CollectionUtils.isEmpty(sale.getExchangeItemList()) ? sale.getExchangeItemList().stream().map(exchangeItem -> {
-//            return exchangeItem.toDto();
-//        }).collect(Collectors.toList()) : new ArrayList<>());
-//        saleDTO.setDescription(sale.getDescription());
-//        return saleDTO;
-//    }
-
-
-    // Implement other methods as needed
 }
 
