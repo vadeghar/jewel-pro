@@ -1,4 +1,3 @@
-var baseUrl = 'http://localhost:8080/api/v1';
 var _estimationContext = '/estimation'
 var url = baseUrl + _estimationContext;
 var id = null;
@@ -21,7 +20,7 @@ if(urlParams.id) {
     });
 
     $('#editEstimation').on('click', function() {
-        $(window).attr('location','http://localhost:8080/estimation?id='+id)
+        $(window).attr('location','/estimation?id='+id)
     });
 });
 

@@ -1,4 +1,4 @@
-var baseUrl = 'http://localhost:8080/api/v1';
+var baseUrl = '/api/v1';
 
 $(document).ready(function () {
     $('#accordionSidebar a').click(function () {

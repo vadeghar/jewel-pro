@@ -35,5 +35,5 @@ $('#savePayment').on('click', function(){
 
 });
 function redirect(response) {
-    navigateWindow('http://localhost:8080'+_saleContext+'/view?id='+response.id);
+    navigateWindow(_saleContext+'/view?id='+response.id);
 }

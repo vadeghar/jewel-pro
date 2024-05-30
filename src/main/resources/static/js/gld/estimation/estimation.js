@@ -1,4 +1,3 @@
-var baseUrl = 'http://localhost:8080/api/v1';
 var _estimationContext = '/estimation'
 var url = baseUrl + _estimationContext;
 var itemList = [];
@@ -7,7 +6,7 @@ $(document).on('focus', '.code', function() {
     $(this).autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: 'http://localhost:8080/api/v1/stock',
+                url: baseUrl+'/stock',
                 method: 'GET',
                 dataType: 'json',
                 data: {
@@ -379,15 +378,14 @@ function formToJson(form) {
 }
 
 function saveEstimationCallback(response) {
-    navigateWindow('http://localhost:8080/estimation/view?id='+response.id);
-//    $(window).attr('location','http://localhost:8080/estimation/view?id='+response.id)
+    navigateWindow('/estimation/view?id='+response.id);
 }
 
 
 $('#name').autocomplete({
     source: function(request, response) {
         $.ajax({
-            url: 'http://localhost:8080/api/v1/customer/like',
+            url: baseUrl+'/api/v1/customer/like',
             method: 'GET',
             dataType: 'json',
             data: {

@@ -1,4 +1,3 @@
-var baseUrl = 'http://localhost:8080/api/v1';
 var _purchaseContext = '/purchase'
 var url = baseUrl + _purchaseContext;
 

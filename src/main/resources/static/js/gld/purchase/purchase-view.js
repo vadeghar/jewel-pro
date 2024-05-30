@@ -1,4 +1,3 @@
-var baseUrl = 'http://localhost:8080/api/v1';
 var _purchaseContext = '/purchase'
 var url = baseUrl + _purchaseContext;
 var id = null;
@@ -21,7 +20,7 @@ if(urlParams.id) {
     });
 
     $('#editPurchase').on('click', function() {
-        $(window).attr('location','http://localhost:8080/purchase?id='+id)
+        $(window).attr('location','/purchase?id='+id)
     });
 });
 

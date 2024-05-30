@@ -1,4 +1,3 @@
-var baseUrl = 'http://localhost:8080/api/v1';
 var _saleContext = '/sale'
 var url = baseUrl + _saleContext;
 var id = null;
@@ -21,7 +20,7 @@ if(urlParams.id) {
     });
 
     $('#editSale').on('click', function() {
-        $(window).attr('location','http://localhost:8080/sale?id='+id)
+        $(window).attr('location','/sale?id='+id)
     });
 });
 
