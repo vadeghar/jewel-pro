@@ -24,9 +24,39 @@
 <!--            </div>-->
 <!--        </div>-->
 <!--    </form>-->
-    <div class="row" style="width: 500px">
-        <span class="m-0 font-weight-bold text-primary pr-4 col"><i class="fa-solid fa-rug silver-icon"></i> Silver (₹): <h6 id="currentSilverRate" style="display: inline"  th:text="${currentSilverRate}"></h6></span>
-        <span class="m-0 font-weight-bold text-primary pr-4 col"> <i class="fa-solid fa-rug gold-icon"></i> Gold (₹): <h6 id="currentGoldRate" style="display: inline" th:text="${currentGoldRate}"></h6></span>
+    <div class="row" style="width: 1500px">
+        <div class="col-xl-3 col-md-6 p-0">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body pt-0 pb-0">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Gold(₹)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="currentGoldRate">6540.00</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#" id="editGoldRate" data-name="GOLD"><i class="fas fa-edit fa-2x text-gray-300"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 p-0 ml-4">
+            <div class="card border-left-dark shadow h-100 py-2">
+                <div class="card-body pt-0 pb-0">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Silver(₹)</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="currentSilverRate">6540.00</div>
+                        </div>
+                        <div class="col-auto">
+                            <a href="#" id="editSilverRate" data-name="SILVER"><i class="fas fa-edit fa-2x text-gray-300"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <span class="m-0 font-weight-bold text-primary pr-4 col"><i class="fa-solid fa-rug silver-icon"></i> Silver (₹): <h6 id="currentSilverRate" style="display: inline"  th:text="${currentSilverRate}"></h6></span>-->
+<!--        <span class="m-0 font-weight-bold text-primary pr-4 col"> <i class="fa-solid fa-rug gold-icon"></i> Gold (₹): <h6 id="currentGoldRate" style="display: inline" th:text="${currentGoldRate}"></h6></span>-->
     </div>
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">

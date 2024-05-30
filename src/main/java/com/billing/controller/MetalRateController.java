@@ -26,6 +26,11 @@ public class MetalRateController {
         return "metal-rate";
     }
 
+    @GetMapping("modal")
+    public String modalWindow(Model model) {
+        return "views/metal/metal-rate";
+    }
+
     @PostMapping("/save")
     public String registration(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("metalRate") MetalRate metalRate,
                                BindingResult result,

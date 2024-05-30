@@ -28,7 +28,7 @@ public class MetalRateService {
     }
 
     public MetalRate save(MetalRate metalRate) {
-        log.debug("Saving Item {}", metalRate);
+//        log.debug("Saving Item {}", metalRate);
         metalRate.setLastUpdateAt(LocalDateTime.now());
         metalRate.setLastUpdatedBy(BillingUtils.getCurrentUsername());
         return metalRateRepository.save(metalRate);
@@ -60,7 +60,6 @@ public class MetalRateService {
         Optional<MetalRate> metalRateOptional = metalRateRepository.findTopByItemMetalOrderByLastUpdateAtDesc(metal);
         if (metalRateOptional.isPresent()) {
             MetalRate metalRate = metalRateOptional.get();
-            log.debug("RATE for {} : {}", metal, metalRate.getRate());
             return metalRate.getRate();
         }
         return null;

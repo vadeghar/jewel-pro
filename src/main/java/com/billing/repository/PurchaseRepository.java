@@ -47,7 +47,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 
     @Query("SELECT new com.billing.model.ChartData(p.supplier.name, SUM(p.totalPurchaseAmount)) " +
             "FROM Purchase p " +
-            "WHERE p.purchaseDate >= CURRENT_DATE - 5 " +
+            "WHERE p.purchaseDate >= CURRENT_DATE - 30 " +
             "GROUP BY p.supplier.name " +
             "ORDER BY SUM(p.totalPurchaseAmount) DESC")
     List<ChartData> findTopSuppliersByTotalAmountLast5Days(PageRequest pageable);

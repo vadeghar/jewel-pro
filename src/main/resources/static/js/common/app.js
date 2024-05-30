@@ -10,6 +10,27 @@ $(document).ready(function () {
     if($('#menuItem').val()) {
         setActiveCollapseItem($('#menuItem').val())
     }
+    simpleCall(baseUrl+'/rate/current-rate', 'get', '', '', '', updateBoardRate);
+});
+
+function updateBoardRate(response) {
+    $('#currentSilverRate').text(toCurrency(response.silverRate));
+    $('#currentGoldRate').text(toCurrency(response.goldRate));
+}
+
+$('#editSilverRate, #editGoldRate').on('click', function(e){
+    e.preventDefault();
+    var source = $(this).attr('data-name');
+//    console.log('source: '+source);
+    $.get('/metal-rate/modal', function(htmlData) {
+        $('#source').val(source);
+        // Update the content of the modal body with the HTML content
+        $('#myModalLabel').text(name+' New entry for todays rate for '+source);
+        $('#myModalPlaceHolder').html(htmlData);
+    });
+//        $('#myModalPlaceHolder').html('content.html');
+    $('#myModal').modal({show:true});
+
 });
 
 function setActiveCollapseItem(itemId) {
