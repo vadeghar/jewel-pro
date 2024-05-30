@@ -12,4 +12,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     List<Supplier> findByNameContainingIgnoreCase(@Param("value") String value);
 
     Supplier findByName(String name);
+
+    @Query("SELECT s FROM Supplier s WHERE s.name LIKE %:name%")
+    List<Supplier> findAllByNameLike(String name);
 }

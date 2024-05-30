@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: Customer List ::</title>
+</head>
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Customer List</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <a href="javascript:void(0);" data-href="getContent.php?id=1" class="openPopup">About Us</a>
+                    <table class="table table-bordered" id="customerTable">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Address</th>
+                            <th style="width: 280px;" class="no-sort">Actions</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="customerList">
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/customer/customer-list.js}"></script>
+</th:block>
+
+</html>

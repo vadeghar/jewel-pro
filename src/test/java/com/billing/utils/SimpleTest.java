@@ -1,8 +1,6 @@
 package com.billing.utils;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class SimpleTest {
 
@@ -29,6 +27,20 @@ public class SimpleTest {
 
         // Output the generated unique number
         System.out.println("Generated Unique Number: " + uniqueNumber);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 

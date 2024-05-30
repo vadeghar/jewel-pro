@@ -1,7 +1,5 @@
 package com.billing.controller.rest;
 
-import com.billing.dto.PurchaseDTO;
-import com.billing.dto.PurchaseItemDTO;
 import com.billing.entity.PurchaseItem;
 import com.billing.entity.Supplier;
 import com.billing.service.PurchaseItemService;
@@ -9,14 +7,17 @@ import com.billing.service.PurchaseService;
 import com.billing.service.SupplierService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequestMapping("/api/v1")
 @RestController
@@ -55,6 +56,21 @@ public class CommonController {
             return purchaseItemList;
         }
         return List.of();
+    }
+
+    @GetMapping("menu-items")
+    public Map<String, List<String>> getMenuItems() {
+        Map<String, List<String>> menuItems = new HashMap<>();
+        menuItems.put("purchaseSec", List.of("newSupplier","supplierList","newPurchase","purchaseList"));
+        menuItems.put("estimationSec", List.of("newEstimation", "EstimationList"));
+        menuItems.put("saleSec", List.of("newCustomer", "customerList", "salesList","newSale"));
+        menuItems.put("orderSec", List.of("newWorker","workerList","orderList","newOrder"));
+        menuItems.put("paymentSec", List.of("salesPayment", "purchasePayment"));
+        menuItems.put("settingsSec", new ArrayList<>());
+        menuItems.put("reportsSec", new ArrayList<>());
+        menuItems.put("plSec", new ArrayList<>());
+        menuItems.put("chartSec", new ArrayList<>());
+        return menuItems;
     }
 
 

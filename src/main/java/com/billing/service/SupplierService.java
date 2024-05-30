@@ -28,6 +28,22 @@ public class SupplierService {
         return supplierRepository.save(supplier);
     }
 
+    public List<Supplier> findSupplierByNameLike(String name) {
+        return supplierRepository.findAllByNameLike(name);
+    }
+
+    public Supplier createSupplier(Supplier supplier) {
+        return supplierRepository.save(supplier);
+    }
+
+    public List<Supplier> getAllSuppliers() {
+        return supplierRepository.findAll();
+    }
+
+    public Supplier getById(Long id) {
+        return supplierRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Supplier not found"));
+    }
+
     public List<Supplier> getAll() {
         return supplierRepository.findAll();
     }
@@ -62,4 +78,7 @@ public class SupplierService {
         log.debug("Exiting validate supplier, Found errors: {}", errorResponse.getErrors().size());
         return errorResponse;
     }
+
+
+
 }

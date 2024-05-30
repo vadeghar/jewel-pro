@@ -1,4 +1,4 @@
-var url = 'http://localhost:8080/api/v1/itemtype';
+var url = baseUrl+'/itemtype';
 
 
 $(document).ready(function(){

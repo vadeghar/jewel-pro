@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{layout}"
+      layout:decorate="~{layout/layout}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Sale</title>
@@ -26,14 +26,14 @@
                     <input type="date" class="form-control" id="saleDate" name="saleDate" required>
                 </div>
                 <div class="col-md-4 mt-2">
-                    <label class="font-weight-bold mb-0">Purchase Type:</label>
+                    <label class="font-weight-bold mb-0">Sale Type:</label>
                     <select class="form-control" id="saleType" name="saleType" required>
-                        <option value="SALE">Purchase</option>
-                        <option value="SALE_RETURN">Purchase Return</option>
+                        <option value="SALE">Sale</option>
+                        <option value="SALE_RETURN">Sale Return</option>
                     </select>
                 </div>
                 <div class="col-md-4 mt-2">
-                    <label class="font-weight-bold mb-0" for="isGstSale">GST Purchase?</label>
+                    <label class="font-weight-bold mb-0" for="isGstSale">GST Sale?</label>
                     <select class="form-control enableGst" id="isGstSale" name="isGstSale" required>
                         <option value="NO">No</option>
                         <option value="YES">Yes</option>
@@ -280,6 +280,7 @@
 
         </div>
     </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="newSale">
 </div>
 <th:block layout:fragment="script">
     <script th:src="@{/js/gld/sale/sale.js}"></script>

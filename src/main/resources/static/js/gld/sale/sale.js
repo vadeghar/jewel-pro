@@ -1,4 +1,3 @@
-var baseUrl = 'http://localhost:8080/api/v1';
 var _saleContext = '/sale'
 var url = baseUrl + _saleContext;
 var itemList = [];
@@ -7,7 +6,7 @@ $(document).on('focus', '.code', function() {
     $(this).autocomplete({
         source: function(request, response) {
             $.ajax({
-                url: 'http://localhost:8080/api/v1/stock',
+                url: baseUrl+'/stock',
                 method: 'GET',
                 dataType: 'json',
                 data: {
@@ -379,14 +378,14 @@ function formToJson(form) {
 }
 
 function saveSaleCallback(response) {
-    $(window).attr('location','http://localhost:8080/sale/view?id='+response.id)
+    navigateWindow('/sale/view?id='+response.id);
 }
 
 
 $('#name').autocomplete({
     source: function(request, response) {
         $.ajax({
-            url: 'http://localhost:8080/api/v1/customer',
+            url: baseUrl+'/customer/like',
             method: 'GET',
             dataType: 'json',
             data: {

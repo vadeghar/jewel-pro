@@ -7,28 +7,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @Controller
-@RequestMapping("/customers")
+@RequestMapping("/customer")
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
     @GetMapping
-    public String showCustomerList(Model model) {
-        List<Customer> customers = customerService.getAllCustomers();
-        model.addAttribute("customerList", customerService.getAllCustomers());
-        model.addAttribute("customer", new Customer());
-        return "customer";
+    public String showCustomer(@RequestParam(value = "id", required = false) Long id, Model model) {
+        return "views/customer/customer";
     }
 
-//    @GetMapping("/add")
-//    public String showAddCustomerForm(Model model) {
-//        model.addAttribute("customerList", customerService.getAllCustomers());
-//        model.addAttribute("customer", new Customer());
-//        return "customer";
-//    }
+    @GetMapping("customer-list")
+    public String showCustomerList(Model model) {
+        return "views/customer/customer-list";
+    }
+
+    @GetMapping("customer-purchase")
+    public String customerPurchase(Model model) {
+        return "views/customer/customer-purchase";
+    }
+
+    @GetMapping("/{id}")
+    public String getById(Model model) {
+        return "views/customer/customer";
+    }
 
     @PostMapping("/save")
     public String addCustomer(@ModelAttribute Customer customer, Model model) {
@@ -37,7 +41,7 @@ public class CustomerController {
         if(errorResponse.hasErrors()) {
             model.addAttribute("customer", customer);
             model.addAttribute("errorResponse", errorResponse);
-            return "customer";
+            return "views/customer/customer";
         }
 
         customerService.createCustomer(customer);

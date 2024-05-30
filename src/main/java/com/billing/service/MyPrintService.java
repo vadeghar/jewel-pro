@@ -4,7 +4,9 @@ package com.billing.service;
 import org.springframework.stereotype.Service;
 
 import javax.print.*;
-import javax.print.attribute.*;
+import javax.print.attribute.Attribute;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.*;
 import javax.print.event.PrintJobAdapter;
 import javax.print.event.PrintJobEvent;

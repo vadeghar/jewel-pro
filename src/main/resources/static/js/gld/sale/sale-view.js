@@ -1,4 +1,3 @@
-var baseUrl = 'http://localhost:8080/api/v1';
 var _saleContext = '/sale'
 var url = baseUrl + _saleContext;
 var id = null;
@@ -21,7 +20,7 @@ if(urlParams.id) {
     });
 
     $('#editSale').on('click', function() {
-        $(window).attr('location','http://localhost:8080/sale?id='+id)
+        $(window).attr('location','/sale?id='+id)
     });
 });
 
@@ -68,7 +67,7 @@ function getSaleCallback(response) {
         });
 
         // Fill other details
-        $('#invoiceNo').text('Invoice No. '+response.invoiceNo);
+        $('#invoiceNo').text(response.invoiceNo);
         $('#saleDate').text(response.saleDate);
         $('#totalSaleAmount').text(toCurrency(response.totalSaleAmount));
         $('#totalExchangeAmount').text(toCurrency(response.totalExchangeAmount));
@@ -86,6 +85,8 @@ function getSaleCallback(response) {
         } else {
             $('#gstBlock').addClass('d-none')
         }
+        $('#payments').attr('data-id', response.id);
+        $('#addPayment').attr('data-id', response.id);
         $('#printInvoice').removeClass('d-none');
         $('#cancelBtn').removeClass('d-none');
     }
@@ -96,16 +97,32 @@ function closeSale(id) {
 
 }
 
+$(document).on('click', '#payments', function() {
+    var source = 'Sale';
+    var sourceId = $(this).attr('data-id');
+    var name = $('#name').text();
+    console.log('sourceId: '+sourceId);
+    $.get('/sale/payment-modal', function(htmlData) {
+        $('#sourceId').val(sourceId);
+        $('#source').val(source);
+        // Update the content of the modal body with the HTML content
+        $('#myModalLabel').text(name+' Payments (Bill No. '+$('#invoiceNo').text()+')')
+        $('#myModalPlaceHolder').html(htmlData);
+    });
+//        $('#myModalPlaceHolder').html('content.html');
+    $('#myModal').modal({show:true});
+});
 
-function getUrlVars()
-{
-    var vars = {}, hash;
-    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-    for(var i = 0; i < hashes.length; i++)
-    {
-        hash = hashes[i].split('=');
-//        vars.push(hash[0]);
-        vars[hash[0]] = hash[1];
-    }
-    return vars;
-}
+$(document).on('click', '#addPayment', function() {
+    var source = 'Sale';
+    var sourceId = $(this).attr('data-id');
+    var name = $('#name').text();
+    console.log('sourceId: '+sourceId);
+    $.get('/sale/add-payment', function(htmlData) {
+        $('#sourceId').val(sourceId);
+        $('#source').val(source);
+        $('#myModalPlaceHolder').html(htmlData);
+    });
+//        $('#myModalPlaceHolder').html('content.html');
+    $('#myModal').modal({show:true});
+});

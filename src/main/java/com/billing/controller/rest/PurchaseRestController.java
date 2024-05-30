@@ -1,7 +1,10 @@
 package com.billing.controller.rest;
 
+import com.billing.constant.Constants;
 import com.billing.dto.PurchaseDTO;
 import com.billing.dto.PurchaseItemDTO;
+import com.billing.entity.Payment;
+import com.billing.service.PaymentService;
 import com.billing.service.PurchaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -9,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/purchase")
@@ -16,21 +20,25 @@ import java.util.List;
 public class PurchaseRestController {
 
     private final PurchaseService purchaseService;
+    private final PaymentService paymentService;
 
-    public PurchaseRestController(PurchaseService purchaseService) {
+    public PurchaseRestController(PurchaseService purchaseService, PaymentService paymentService) {
         this.purchaseService = purchaseService;
+        this.paymentService = paymentService;
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllPurchase(@RequestParam(required = false) Long id) {
-        log.debug("PurchaseController >> getAllPurchase >> {} >>", id);
-        if (id != null && id > 0) {
-            PurchaseDTO purchaseDTO = purchaseService.getByPurchaseId(id);
-            return ResponseEntity.ok().body(purchaseDTO);
-        }
+    public ResponseEntity<?> getAllPurchase() {
+        log.debug("PurchaseController >> getAllPurchase >>");
         List<PurchaseDTO> purchaseDTOList = purchaseService.getAllPurchases();
         log.debug("PurchaseController << getAllPurchase <<");
         return ResponseEntity.ok().body(purchaseDTOList);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<PurchaseDTO> getByid(@PathVariable Long id) {
+        PurchaseDTO purchaseDTO = purchaseService.getByPurchaseId(id);
+        return ResponseEntity.ok().body(purchaseDTO);
     }
 
     @PostMapping("/save")
@@ -55,5 +63,22 @@ public class PurchaseRestController {
         PurchaseDTO purchaseDTO = purchaseService.savePurchaseItems(purchaseId, purchaseItems);
         log.info("PurchaseController << addPurchaseItems << purchaseId: {} <<", purchaseId);
         return new ResponseEntity<>(purchaseDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/supplier/{id}")
+    public List<PurchaseDTO> customerSales(@PathVariable Long id) {
+        return purchaseService.getAllPurchasesBySupplierId(id);
+    }
+
+    @GetMapping("/{id}/payment-list")
+    public ResponseEntity<List<Payment>> getPaymentListBySaleId(@PathVariable Long id) {
+        List<Payment> paymentList = paymentService.getPaymentListBySourceAndSourceId(Constants.SOURCE_PURCHASE, id);
+        return ResponseEntity.of(Optional.of(paymentList));
+    }
+
+    @PostMapping("/{id}/payment")
+    public ResponseEntity<PurchaseDTO> savePayment(@PathVariable Long id, @RequestBody Payment payment) {
+        PurchaseDTO purchaseDTO = purchaseService.addPaymentAndReturnPurchase(id, payment);
+        return ResponseEntity.of(Optional.of(purchaseDTO));
     }
 }

@@ -1,21 +1,27 @@
 package com.billing.service;
 
 import com.billing.constant.Constants;
-import com.billing.dto.*;
 import com.billing.dto.Error;
+import com.billing.dto.ErrorResponse;
+import com.billing.dto.PurchaseDTO;
+import com.billing.dto.PurchaseItemDTO;
+import com.billing.entity.Payment;
 import com.billing.entity.Purchase;
 import com.billing.entity.PurchaseItem;
 import com.billing.entity.Stock;
-import com.billing.repository.PurchaseItemRepository;
-import com.billing.repository.PurchaseRepository;
-import com.billing.repository.StockRepository;
-import com.billing.repository.SupplierRepository;
+import com.billing.enums.StockStatus;
+import com.billing.model.ChartData;
+import com.billing.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.persistence.EntityNotFoundException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +36,13 @@ public class PurchaseService {
     private final PurchaseItemRepository purchaseItemRepository;
     private final SupplierRepository supplierRepository;
     private final StockRepository stockRepository;
-    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseItemRepository purchaseItemRepository, SupplierRepository supplierRepository, StockRepository stockRepository) {
+    private final PaymentRepository paymentRepository;
+    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseItemRepository purchaseItemRepository, SupplierRepository supplierRepository, StockRepository stockRepository, PaymentRepository paymentRepository) {
         this.purchaseRepository = purchaseRepository;
         this.purchaseItemRepository = purchaseItemRepository;
         this.supplierRepository = supplierRepository;
         this.stockRepository = stockRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     public Purchase save(Purchase purchase) {
@@ -83,6 +91,14 @@ public class PurchaseService {
         return errorResponse;
     }
 
+    public void saveAll(List<PurchaseDTO> purchaseDTOList) {
+        List<Purchase> purchaseList = new ArrayList<>();
+        List<Long> ids = purchaseDTOList.stream()
+                .map(purchaseDTO -> savePurchase(purchaseDTO))
+                .collect(Collectors.toList());
+        System.out.println("Generated ids: "+ids);
+    }
+
 
     public Long savePurchase(PurchaseDTO purchaseDTO) {
         log.debug("PurchaseService >> savePurchase >>");
@@ -104,7 +120,7 @@ public class PurchaseService {
         purchase.setPurchaseRate(purchaseDTO.getRate());
         purchase.setPurchaseBillNo(purchaseDTO.getPurchaseBillNo());
         purchase.setIsGstPurchase(purchaseDTO.getIsGstPurchase());
-        purchase.setGstNo(purchaseDTO.getGstNo());
+//        purchase.setGstNo(purchaseDTO.getGstNo());
         purchase.setTotalNetWeight(purchaseDTO.getTotalNetWeight());
         purchase.setPurchaseAmount(purchaseDTO.getPurchaseAmount());
         purchase.setTotalCgstAmount(purchaseDTO.getTotalCgstAmount());
@@ -116,6 +132,18 @@ public class PurchaseService {
         purchase.setDescription(purchaseDTO.getDescription());
 
         Purchase dbPurchase = purchaseRepository.save(purchase);
+        if (purchaseDTO.getId() == null || purchaseDTO.getId() == 0) {
+            Payment payment = new Payment();
+            payment.setPaymentStatus(Constants.PAY_STATUS_COMPLETED); // AWAITING
+            payment.setSource(Constants.SOURCE_PURCHASE);
+            payment.setIrrecoverableDebt(false);
+            payment.setSourceId(dbPurchase.getId());
+            payment.setPaidAmount(dbPurchase.getPaidAmount());
+            payment.setPaymentMode(dbPurchase.getPaymentMode());
+            payment.setLastFourDigits(purchaseDTO.getTrnLastFourDigits());
+            paymentRepository.save(payment);
+        }
+
         log.debug("<< PurchaseService << savePurchase <<");
         return dbPurchase.getId();
     }
@@ -163,6 +191,7 @@ public class PurchaseService {
                 purchaseItem.setPurchase(purchase);
                 Stock stock = new Stock();
                 stock = stock.fromDto(piDto);
+                stock.setStockStatus(StockStatus.IN_STOCK);
                 stock.setPurchaseItem(purchaseItem);
                 purchaseItem.setStock(stock);
                 dbPurchaseItemList.add(purchaseItem);
@@ -201,6 +230,59 @@ public class PurchaseService {
         log.debug("PurchaseService << softDelete <<");
     }
 
+    public List<PurchaseDTO> getAllPurchasesBySupplierId(Long id) {
+        List<Purchase> purchaseList = purchaseRepository.findBySupplierId(id);
+        return purchaseList.stream()
+                .map( p -> toDto(p))
+                .collect(Collectors.toList());
+    }
+
+    public PurchaseDTO addPaymentAndReturnPurchase(Long id, Payment paymentRequest) {
+        Purchase purchase = purchaseRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Purchase not found with id "+id));
+        Payment payment = new Payment();
+        payment.setPaymentStatus(Constants.PAY_STATUS_COMPLETED); // AWAITING
+        payment.setSource(Constants.SOURCE_PURCHASE);
+        payment.setIrrecoverableDebt(false);
+        payment.setSourceId(purchase.getId());
+        payment.setPaidAmount(paymentRequest.getPaidAmount());
+        payment.setPaymentMode(paymentRequest.getPaymentMode());
+        payment.setLastFourDigits(paymentRequest.getLastFourDigits());
+        paymentRepository.save(payment);
+
+        purchase.setBalAmount(purchase.getBalAmount().subtract(payment.getPaidAmount()));
+        purchase.setPaidAmount(purchase.getPaidAmount().add(payment.getPaidAmount()));
+        Purchase savedPurchase = purchaseRepository.save(purchase);
+        return toDto(savedPurchase);
+    }
+
+
+    public List<ChartData> getYearlyData(LocalDate startDate, LocalDate endDate) {
+//        LocalDateTime start = startDate.atStartOfDay();
+//        LocalDateTime end = endDate.atTime(LocalTime.MAX);
+        return purchaseRepository.findPurchasesByYear(startDate, endDate);
+    }
+
+    public List<ChartData> getMonthlyData(LocalDate startDate, LocalDate endDate) {
+//        LocalDateTime start = startDate.atStartOfDay();
+//        LocalDateTime end = endDate.atTime(LocalTime.MAX);
+        return purchaseRepository.findPurchasesByMonth(startDate, endDate);
+    }
+
+    public List<ChartData> getWeeklyData(LocalDate startDate, LocalDate endDate) {
+//        LocalDateTime start = startDate.atStartOfDay();
+//        LocalDateTime end = endDate.atTime(LocalTime.MAX);
+        return purchaseRepository.findPurchasesByWeek(startDate, endDate);
+    }
+
+
+    public BigDecimal getCurrentMonthPurchaseTotal() {
+        return purchaseRepository.getCurrentMonthTotalPurchaseAmount();
+    }
+    public List<ChartData> getTopSuppliers() {
+        PageRequest pageable = PageRequest.of(0, 3);
+        return purchaseRepository.findTopSuppliersByTotalAmountLast5Days(pageable);
+    }
+
     private PurchaseItem toEntity(PurchaseItemDTO pi, Purchase purchase) {
         log.debug("PurchaseService >> toEntity >>");
         PurchaseItem purchaseItem = purchaseItemRepository.findById(pi.getId())
@@ -229,4 +311,7 @@ public class PurchaseService {
         log.debug("PurchaseService << toItemDto <<");
         return purchaseItemDTO;
     }
+
+
+
 }

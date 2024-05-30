@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{layout}"
+      layout:decorate="~{layout/layout}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Sale</title>
@@ -16,7 +16,7 @@
         <div class="card-body saleDto">
             <div class="row">
                 <div class="col text-center">
-                    <h6 class="font-weight-bold text-primary" id="invoiceNo"></h6>
+                    <h6>Invoice No.</h6> <h6 class="font-weight-bold text-primary" id="invoiceNo"></h6>
                 </div>
             </div>
             <div class="row">
@@ -219,12 +219,19 @@
                 <div class="col-md-3 text-right">
                     <button type="button" id="printInvoice" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
                 </div>
-                <div class="col-md-3"><button type="button" class="btn btn-danger" id="editSale"><i class="fas fa-arrow-left"></i> Edit</button></div>
+                <div class="col-md-6"><button type="button" class="btn btn-primary" id="editSale"><i class="fas fa-edit"></i> Edit</button>
+                    &nbsp;
+                    <button type="button" class="btn btn-primary" id="payments" ><i class="fa-solid fa-coins"></i> Payments</button>
+                    &nbsp;
+                    <button type="button" class="btn btn-primary" id="addPayment" ><i class="fa-solid fa-plus"></i> Add Payment</button>
+                </div>
+<!--                <div class="col-md-3"></div>-->
                 <div class="col-md-3"></div>
             </div>
 
         </div>
     </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="newSale">
 </div>
 <th:block layout:fragment="script">
     <script th:src="@{/js/gld/sale/sale-view.js}"></script>

@@ -1,0 +1,221 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Estimation</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Estimation</h6>
+            <input type="hidden" id="id" name="id" th:value="${estimationId}">
+        </div>
+        <div class="card-body estimationDto">
+            <div class="row">
+                <div class="col text-center">
+                    <h6>Estimation No.</h6> <h6 class="font-weight-bold text-primary" id="estimationNo"></h6>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0">Date:</label>
+                    <p id="estimationDate"></p>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0">Estimation Type:</label>
+                    <p id="estimationType"></p>
+                </div>
+                <div class="col-md-4 mt-2">
+                    <label class="font-weight-bold mb-0">GST Estimation?</label>
+                    <p id="isGstEstimation"></p>
+                </div>
+            </div>
+
+            <div class="card shadow mt-4">
+                <div class="card-header d-flex">
+                    <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Estimation Items</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <table class="table table-bordered" id="estimationItemsTable">
+                                <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Weight</th>
+                                    <!--                                    <th>Stn Wt</th>-->
+                                    <th>VA(Wt)</th>
+                                    <th>Stn Wt.</th>
+                                    <th>Net Wt.</th>
+                                    <!--                                    <th>Total Wt.</th>-->
+                                    <th>MC</th>
+                                    <th>Rate</th>
+                                    <th>Item Cost</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mt-4">
+                <div class="card-header d-flex">
+                    <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Exchange Items</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <table class="table table-bordered" id="exchangeItemsTable">
+                                <thead>
+                                <tr>
+                                    <th>desc</th>
+                                    <th>Weight</th>
+                                    <th>Melt(%)</th>
+                                    <th>Wastage Gms</th>
+                                    <th>Net Wt</th>
+                                    <th>Rate</th>
+                                    <th>Total Value</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Estimation Amount:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="totalEstimationAmount"></p>
+                            </td>
+                        </tr>
+                        <tr class="gstBlock">
+                            <td class="text-right">
+                                <p class="font-weight-bold">CGST:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="cgstAmount"></p>
+                            </td>
+                        </tr>
+                        <tr class="gstBlock">
+                            <td class="text-right">
+                                <p class="font-weight-bold">SGST:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="sgstAmount"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Exchange Amount:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="totalExchangeAmount"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Discount:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p id="discount"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Total Amount:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="grandTotalEstimationAmount"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Payment Mode:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p id="paymentMode"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Paid:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p id="paidAmount"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Balance:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="balAmount"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-md-12">
+                    <label class="font-weight-bold mb-0">Notes</label>
+                    <p id="description" name="description"></p>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-right">
+                    <button type="button" id="printInvoice" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary" id="editEstimation"><i class="fas fa-edit"></i> Edit</button>
+                </div>
+<!--                <div class="col-md-3"></div>-->
+                <div class="col-md-3"></div>
+            </div>
+
+        </div>
+    </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="newEstimation">
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/estimation/estimation-view.js}"></script>
+</th:block>
+</html>

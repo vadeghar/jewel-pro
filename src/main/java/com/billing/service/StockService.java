@@ -1,13 +1,10 @@
 package com.billing.service;
 
-import com.billing.dto.ExchangeItemDTO;
 import com.billing.dto.StockDTO;
 import com.billing.entity.Stock;
 import com.billing.enums.StockStatus;
 import com.billing.repository.StockRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 

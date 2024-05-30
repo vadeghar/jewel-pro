@@ -1,3 +1,55 @@
+var baseUrl = '/api/v1';
+
+$(document).ready(function () {
+    $('#accordionSidebar a').click(function () {
+        var navItemId = $(this).attr('id');
+        console.log("Clicked nav item ID:", navItemId);
+        // You can perform any further actions with the navItemId here
+    });
+
+    if($('#menuItem').val()) {
+        setActiveCollapseItem($('#menuItem').val())
+    }
+    simpleCall(baseUrl+'/rate/current-rate', 'get', '', '', '', updateBoardRate);
+});
+
+function updateBoardRate(response) {
+    $('#currentSilverRate').text(toCurrency(response.silverRate));
+    $('#currentGoldRate').text(toCurrency(response.goldRate));
+}
+
+$('#editSilverRate, #editGoldRate').on('click', function(e){
+    e.preventDefault();
+    var source = $(this).attr('data-name');
+//    console.log('source: '+source);
+    $.get('/metal-rate/modal', function(htmlData) {
+        $('#source').val(source);
+        // Update the content of the modal body with the HTML content
+        $('#myModalLabel').text(name+' New entry for todays rate for '+source);
+        $('#myModalPlaceHolder').html(htmlData);
+    });
+//        $('#myModalPlaceHolder').html('content.html');
+    $('#myModal').modal({show:true});
+
+});
+
+function setActiveCollapseItem(itemId) {
+    // Remove "active" class from all collapse-items
+    $('.collapse-item').removeClass('active');
+
+    // Add "active" class to the collapse-item with the given ID
+    $('#' + itemId).addClass('active');
+
+    // Find the parent collapse div and add the "show" class
+    $('#' + itemId).closest('.collapse').addClass('show');
+
+    // Find the parent nav-link and remove the "collapsed" class
+    $('#' + itemId).closest('.nav-item').find('.nav-link').removeClass('collapsed');
+
+    // Set aria-expanded attribute to "true"
+    $('#' + itemId).closest('.nav-item').find('.nav-link').attr('aria-expanded', true);
+}
+
 function simpleCall(url, method, title, tabId, requestData, responseCallback) {
 	doSignAndSend({
 		url: url,
@@ -79,4 +131,36 @@ function toWt(val) {
     } else {
         return parseFloat(val).toFixed(3);
     }
+}
+
+function navigateWindow(url) {
+    $(window).attr('location', url)
+}
+
+function formToJson(parentId) {
+    var formData = {};
+    $(parentId).find(':input').each(function() {
+        if(this.name) {
+            formData[this.name] = $(this).val();
+        }
+    });
+    return formData;
+}
+
+function resetForm(parentId) {
+    $(parentId).find(':input').each(function() {
+        $(this).val('');
+    });
+}
+
+function getUrlVars()
+{
+    var vars = {}, hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
 }

@@ -2,7 +2,11 @@ package com.billing.dto;
 
 import com.billing.entity.ItemType;
 import com.billing.enums.StockStatus;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
 @Data

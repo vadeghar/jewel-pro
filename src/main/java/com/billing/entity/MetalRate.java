@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -15,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name="metal_rate")
 public class MetalRate {
     @Id
@@ -23,6 +27,8 @@ public class MetalRate {
     @Enumerated(EnumType.STRING)
     private Metal itemMetal;
     private BigDecimal rate;
+    @LastModifiedDate
     private LocalDateTime lastUpdateAt;
+    @CreatedBy
     private String lastUpdatedBy;
 }

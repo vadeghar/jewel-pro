@@ -2,15 +2,13 @@ package com.billing.controller;
 
 import com.billing.dto.ErrorResponse;
 import com.billing.entity.Worker;
-import com.billing.entity.Worker;
-import com.billing.service.WorkerService;
 import com.billing.service.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/worker")
@@ -23,7 +21,7 @@ public class WorkerController {
             List<Worker> workerlist = workerService.getAllWorkers();
             model.addAttribute("workerList", workerlist);
             model.addAttribute("worker", new Worker());
-            return "worker";
+            return "views/worker/worker";
         }
 
 //    @GetMapping("/add")
@@ -40,7 +38,7 @@ public class WorkerController {
             if(errorResponse.hasErrors()) {
                 model.addAttribute("worker", worker);
                 model.addAttribute("errorResponse", errorResponse);
-                return "worker";
+                return "views/worker/worker";
             }
 
             workerService.createWorker(worker);
