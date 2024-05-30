@@ -27,6 +27,7 @@ public class SpringSecurity {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
+
                 .authorizeHttpRequests((authorize) ->
                         authorize.antMatchers("/register/**",
                                 "/register",

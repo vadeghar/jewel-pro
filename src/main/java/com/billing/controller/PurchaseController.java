@@ -81,49 +81,49 @@ public class PurchaseController {
 //        model.addAttribute("purchase", purchaseService.getById(purchase.getId()));
 //        return "purchase";
 //    }
-
-    @PostMapping("/save")
-    public String registration(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
-                               BindingResult result,
-                               Model model) {
-        if (httpHeaders.containsKey("X-Application-Name")) {
-            System.out.println("Found X-Application-Name in header");
-        }
-        ErrorResponse errorResponse = purchaseService.validatePurchase(purchase);
-        model.addAttribute("purchaseList", purchaseService.getAll());
-        if(errorResponse.hasErrors()) {
-            model.addAttribute("purchase", purchase);
-            model.addAttribute("errorResponse", errorResponse);
-            return "item";
-        }
-        model.addAttribute("purchase", purchaseService.save(purchase));
-        return "redirect:/purchase?success";
-    }
-
-
-    @PostMapping("/items")
-    public String items(@ModelAttribute("purchase") Purchase purchase,
-                                                  BindingResult result,
-                                                  Model model) {
-        Purchase dbPurchase = purchaseService.getById(purchase.getId());
-        System.out.println("DB Purchase: "+dbPurchase);
-        model.addAttribute("purchase", dbPurchase);
-        model.addAttribute("purchaseItems", purchase.getPurchaseItems());
-        return "purchaseItems";
-    }
-
-    @PostMapping("/items/saveItems")
-    public String saveItems(@ModelAttribute("purchase") Purchase purchase,
-                                      BindingResult result,
-                                      Model model) {
-        System.out.println("Save items: "+purchase.getPurchaseItems());
-        Purchase dbPurchase = purchaseService.getById(purchase.getId());
-        purchase.getPurchaseItems()
-                .stream()
-                        .forEach(pi -> pi.setPurchase(dbPurchase));
-        dbPurchase.setPurchaseItems(purchase.getPurchaseItems());
-        purchaseService.save(dbPurchase);
-        return items(purchase, result, model);
-    }
+//
+//    @PostMapping("/save")
+//    public String registration(@RequestHeader HttpHeaders httpHeaders, @Valid @ModelAttribute("purchase") Purchase purchase,
+//                               BindingResult result,
+//                               Model model) {
+//        if (httpHeaders.containsKey("X-Application-Name")) {
+//            System.out.println("Found X-Application-Name in header");
+//        }
+//        ErrorResponse errorResponse = purchaseService.validatePurchase(purchase);
+//        model.addAttribute("purchaseList", purchaseService.getAll());
+//        if(errorResponse.hasErrors()) {
+//            model.addAttribute("purchase", purchase);
+//            model.addAttribute("errorResponse", errorResponse);
+//            return "item";
+//        }
+//        model.addAttribute("purchase", purchaseService.save(purchase));
+//        return "redirect:/purchase?success";
+//    }
+//
+//
+//    @PostMapping("/items")
+//    public String items(@ModelAttribute("purchase") Purchase purchase,
+//                                                  BindingResult result,
+//                                                  Model model) {
+//        Purchase dbPurchase = purchaseService.getById(purchase.getId());
+//        System.out.println("DB Purchase: "+dbPurchase);
+//        model.addAttribute("purchase", dbPurchase);
+//        model.addAttribute("purchaseItems", purchase.getPurchaseItems());
+//        return "purchaseItems";
+//    }
+//
+//    @PostMapping("/items/saveItems")
+//    public String saveItems(@ModelAttribute("purchase") Purchase purchase,
+//                                      BindingResult result,
+//                                      Model model) {
+//        System.out.println("Save items: "+purchase.getPurchaseItems());
+//        Purchase dbPurchase = purchaseService.getById(purchase.getId());
+//        purchase.getPurchaseItems()
+//                .stream()
+//                        .forEach(pi -> pi.setPurchase(dbPurchase));
+//        dbPurchase.setPurchaseItems(purchase.getPurchaseItems());
+//        purchaseService.save(dbPurchase);
+//        return items(purchase, result, model);
+//    }
 
 }

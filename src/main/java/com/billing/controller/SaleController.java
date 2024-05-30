@@ -37,20 +37,20 @@ public class SaleController {
         return "views/sale/sale-view";
     }
 
-    @GetMapping("/create")
-    public String showSaleForm(Model model) {
-        Sale sale = new Sale();
-        model.addAttribute("sale", sale);
-        return "sale/form"; // Assuming you have a Thymeleaf template named "form.html" in "sale" folder
-    }
-
-    @PostMapping("/save")
-    public String saveSale(@ModelAttribute("sale") SaleDTO sale, Model model) {
-        System.out.println("SaleDTO: "+sale);
-//        SaleDTO saleDTO = saleService.saveSale3(sale);
-        model.addAttribute("sale", new SaleDTO());
-        return "sale";
-    }
+//    @GetMapping("/create")
+//    public String showSaleForm(Model model) {
+//        Sale sale = new Sale();
+//        model.addAttribute("sale", sale);
+//        return "sale/form"; // Assuming you have a Thymeleaf template named "form.html" in "sale" folder
+//    }
+//
+//    @PostMapping("/save")
+//    public String saveSale(@ModelAttribute("sale") SaleDTO sale, Model model) {
+//        System.out.println("SaleDTO: "+sale);
+////        SaleDTO saleDTO = saleService.saveSale3(sale);
+//        model.addAttribute("sale", new SaleDTO());
+//        return "sale";
+//    }
 
     // Other CRUD operations for Sale entity
 }

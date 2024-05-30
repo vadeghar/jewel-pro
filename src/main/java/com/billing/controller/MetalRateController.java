@@ -23,7 +23,7 @@ public class MetalRateController {
     public String getItemRate(Model model) {
         model.addAttribute("metalRate", new MetalRate());
         model.addAttribute("metalRateList", metalRateService.getAll());
-        return "metal-rate";
+        return "views/metal-rate/metal-rate";
     }
 
     @GetMapping("modal")
@@ -42,7 +42,7 @@ public class MetalRateController {
         if(errorResponse.hasErrors()) {
             model.addAttribute("metalRate", metalRate);
             model.addAttribute("errorResponse", errorResponse);
-            return "metal-rate";
+            return "views/metal-rate/metal-rate";
         }
         model.addAttribute("itemMaster", metalRateService.save(metalRate));
         return "redirect:/metal-rate?success";

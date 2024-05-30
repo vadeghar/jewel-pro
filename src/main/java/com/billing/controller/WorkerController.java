@@ -21,7 +21,7 @@ public class WorkerController {
             List<Worker> workerlist = workerService.getAllWorkers();
             model.addAttribute("workerList", workerlist);
             model.addAttribute("worker", new Worker());
-            return "worker";
+            return "views/worker/worker";
         }
 
 //    @GetMapping("/add")
@@ -38,7 +38,7 @@ public class WorkerController {
             if(errorResponse.hasErrors()) {
                 model.addAttribute("worker", worker);
                 model.addAttribute("errorResponse", errorResponse);
-                return "worker";
+                return "views/worker/worker";
             }
 
             workerService.createWorker(worker);

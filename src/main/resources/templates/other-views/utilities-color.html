@@ -9,16 +9,16 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>SB Admin 2 - Border Utilities</title>
+    <title>SB Admin 2 - Color Utilities</title>
 
     <!-- Custom fonts for this template-->
-    <link href="../static/vendor/fontawesome-free_00/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../../static/vendor/fontawesome-free_00/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../static/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../../static/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -83,8 +83,8 @@
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item active" href="utilities-border.html">Borders</a>
+                        <a class="collapse-item active" href="utilities-color.html">Colors</a>
+                        <a class="collapse-item" href="utilities-border.html">Borders</a>
                         <a class="collapse-item" href="utilities-animation.html">Animations</a>
                         <a class="collapse-item" href="utilities-other.html">Other</a>
                     </div>
@@ -109,8 +109,8 @@
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Login Screens:</h6>
-                        <a class="collapse-item" href="login.html">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
+                        <a class="collapse-item" href="../views/registration/login.html">Login</a>
+                        <a class="collapse-item" href="../views/registration/register.html">Register</a>
                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>
@@ -267,7 +267,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../static/img/undraw_profile_1.svg"
+                                        <img class="rounded-circle" src="../../static/img/undraw_profile_1.svg"
                                             alt="...">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
@@ -279,7 +279,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../static/img/undraw_profile_2.svg"
+                                        <img class="rounded-circle" src="../../static/img/undraw_profile_2.svg"
                                             alt="...">
                                         <div class="status-indicator"></div>
                                     </div>
@@ -291,7 +291,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="../static/img/undraw_profile_3.svg"
+                                        <img class="rounded-circle" src="../../static/img/undraw_profile_3.svg"
                                             alt="...">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
@@ -325,7 +325,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                                 <img class="img-profile rounded-circle"
-                                    src="../static/img/undraw_profile.svg">
+                                    src="../../static/img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -359,7 +359,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-1 text-gray-800">Border Utilities</h1>
+                    <h1 class="h3 mb-1 text-gray-800">Color Utilities</h1>
                     <p class="mb-4">Bootstrap's default utility classes can be found on the official <a
                             href="https://getbootstrap.com/docs">Bootstrap Documentation</a> page. The custom utilities
                         below were created to extend this theme past the default utility classes built into Bootstrap's
@@ -368,98 +368,84 @@
                     <!-- Content Row -->
                     <div class="row">
 
-                        <!-- Border Left Utilities -->
-                        <div class="col-lg-6">
+                        <!-- First Column -->
+                        <div class="col-lg-4">
 
-                            <div class="card mb-4 py-3 border-left-primary">
+                            <!-- Custom Text Color Utilities -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Custom Text Color Utilities</h6>
+                                </div>
                                 <div class="card-body">
-                                    .border-left-primary
+                                    <p class="text-gray-100 p-3 bg-dark m-0">.text-gray-100</p>
+                                    <p class="text-gray-200 p-3 bg-dark m-0">.text-gray-200</p>
+                                    <p class="text-gray-300 p-3 bg-dark m-0">.text-gray-300</p>
+                                    <p class="text-gray-400 p-3 bg-dark m-0">.text-gray-400</p>
+                                    <p class="text-gray-500 p-3 m-0">.text-gray-500</p>
+                                    <p class="text-gray-600 p-3 m-0">.text-gray-600</p>
+                                    <p class="text-gray-700 p-3 m-0">.text-gray-700</p>
+                                    <p class="text-gray-800 p-3 m-0">.text-gray-800</p>
+                                    <p class="text-gray-900 p-3 m-0">.text-gray-900</p>
                                 </div>
                             </div>
 
-                            <div class="card mb-4 py-3 border-left-secondary">
-                                <div class="card-body">
-                                    .border-left-secondary
+                            <!-- Custom Font Size Utilities -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Custom Font Size Utilities</h6>
                                 </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-left-success">
                                 <div class="card-body">
-                                    .border-left-success
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-left-info">
-                                <div class="card-body">
-                                    .border-left-info
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-left-warning">
-                                <div class="card-body">
-                                    .border-left-warning
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-left-danger">
-                                <div class="card-body">
-                                    .border-left-danger
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-left-dark">
-                                <div class="card-body">
-                                    .border-left-dark
+                                    <p class="text-xs">.text-xs</p>
+                                    <p class="text-lg mb-0">.text-lg</p>
                                 </div>
                             </div>
 
                         </div>
 
-                        <!-- Border Bottom Utilities -->
-                        <div class="col-lg-6">
+                        <!-- Second Column -->
+                        <div class="col-lg-4">
 
-                            <div class="card mb-4 py-3 border-bottom-primary">
+                            <!-- Background Gradient Utilities -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Custom Background Gradient Utilities
+                                    </h6>
+                                </div>
                                 <div class="card-body">
-                                    .border-bottom-primary
+                                    <div class="px-3 py-5 bg-gradient-primary text-white">.bg-gradient-primary</div>
+                                    <div class="px-3 py-5 bg-gradient-secondary text-white">.bg-gradient-secondary</div>
+                                    <div class="px-3 py-5 bg-gradient-success text-white">.bg-gradient-success</div>
+                                    <div class="px-3 py-5 bg-gradient-info text-white">.bg-gradient-info</div>
+                                    <div class="px-3 py-5 bg-gradient-warning text-white">.bg-gradient-warning</div>
+                                    <div class="px-3 py-5 bg-gradient-danger text-white">.bg-gradient-danger</div>
+                                    <div class="px-3 py-5 bg-gradient-light text-white">.bg-gradient-light</div>
+                                    <div class="px-3 py-5 bg-gradient-dark text-white">.bg-gradient-dark</div>
                                 </div>
                             </div>
 
-                            <div class="card mb-4 py-3 border-bottom-secondary">
+                        </div>
+
+                        <!-- Third Column -->
+                        <div class="col-lg-4">
+
+                            <!-- Grayscale Utilities -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Custom Grayscale Background Utilities
+                                    </h6>
+                                </div>
                                 <div class="card-body">
-                                    .border-bottom-secondary
+                                    <div class="p-3 bg-gray-100">.bg-gray-100</div>
+                                    <div class="p-3 bg-gray-200">.bg-gray-200</div>
+                                    <div class="p-3 bg-gray-300">.bg-gray-300</div>
+                                    <div class="p-3 bg-gray-400">.bg-gray-400</div>
+                                    <div class="p-3 bg-gray-500 text-white">.bg-gray-500</div>
+                                    <div class="p-3 bg-gray-600 text-white">.bg-gray-600</div>
+                                    <div class="p-3 bg-gray-700 text-white">.bg-gray-700</div>
+                                    <div class="p-3 bg-gray-800 text-white">.bg-gray-800</div>
+                                    <div class="p-3 bg-gray-900 text-white">.bg-gray-900</div>
                                 </div>
                             </div>
-
-                            <div class="card mb-4 py-3 border-bottom-success">
-                                <div class="card-body">
-                                    .border-bottom-success
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-bottom-info">
-                                <div class="card-body">
-                                    .border-bottom-info
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-bottom-warning">
-                                <div class="card-body">
-                                    .border-bottom-warning
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-bottom-danger">
-                                <div class="card-body">
-                                    .border-bottom-danger
-                                </div>
-                            </div>
-
-                            <div class="card mb-4 py-3 border-bottom-dark">
-                                <div class="card-body">
-                                    .border-bottom-dark
-                                </div>
-                            </div>
-
                         </div>
 
                     </div>
@@ -505,21 +491,21 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+                    <a class="btn btn-primary" href="../views/registration/login.html">Logout</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="../static/vendor/jquery/jquery.min.js"></script>
-    <script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../static/vendor/jquery/jquery.min.js"></script>
+    <script src="../../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../static/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../static/js/sb-admin-2.min.js"></script>
+    <script src="../../static/js/sb-admin-2.min.js"></script>
 
 </body>
 

@@ -41,7 +41,7 @@ public class CustomerController {
         if(errorResponse.hasErrors()) {
             model.addAttribute("customer", customer);
             model.addAttribute("errorResponse", errorResponse);
-            return "customer";
+            return "views/customer/customer";
         }
 
         customerService.createCustomer(customer);

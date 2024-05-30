@@ -26,12 +26,4 @@ public class EstimationController {
         return "views/estimation/estimation-view";
     }
 
-    @GetMapping("/create")
-    public String showEstimationForm(Model model) {
-        Estimation estimation = new Estimation();
-        model.addAttribute("estimation", estimation);
-        return "estimation/form"; // Assuming you have a Thymeleaf template named "form.html" in "estimation" folder
-    }
-
-
 }
