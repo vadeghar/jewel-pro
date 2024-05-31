@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.billing</groupId>
-	<artifactId>spring-bill</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>spring-bill</name>
-	<description>Spring billing application</description>
+	<artifactId>jewel-pro</artifactId>
+	<version>1.0</version>
+	<name>jewel-pro</name>
+	<description>A professional-grade solution tailored specifically for the jewelry industry.</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
