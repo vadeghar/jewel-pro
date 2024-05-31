@@ -57,8 +57,6 @@ public class Purchase {
     private BigDecimal purchaseRate;
     @Column(length = 10)
     private String isGstPurchase;
-    @Column(length = 20)
-    private String gstNo;
     @Column(length = 20, scale = 2)
     private BigDecimal purchaseAmount;
     @Column(precision = 20, scale = 2)
@@ -73,9 +71,9 @@ public class Purchase {
     private BigDecimal balAmount;
     @Column(length = 2000)
     private String description;
-    @Column(length = 2000)
+    @Column(length = 20)
     private String activePurchase = "YES";
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
 

@@ -1,23 +1,12 @@
 package com.billing.print;
 
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.Printable;
-import static java.awt.print.Printable.NO_SUCH_PAGE;
-import static java.awt.print.Printable.PAGE_EXISTS;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import javax.imageio.ImageIO;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.print.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 /**
  *
  * @author All Open source developers

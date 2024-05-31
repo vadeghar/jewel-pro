@@ -1,6 +1,5 @@
 package com.billing.entity;
 
-import com.billing.dto.ExchangeItemDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 

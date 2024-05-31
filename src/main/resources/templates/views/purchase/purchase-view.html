@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: Purchase ::</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Purchase</h6>
+        </div>
+        <div class="card-body" id="purchaseForm">
+            <div class="row">
+                <div class="col-md-6">
+                    <input type="hidden" id="id" name="id" th:value="${purchaseId}">
+                    <label class="font-weight-bold mb-0">Purchase Type</label>
+                    <p id="purchaseType"/>
+                </div>
+                <div class="col-md-6">
+                    <label class="font-weight-bold mb-0" for="purchaseDate">Purchase Date</label>
+                    <p id="purchaseDate" name="purchaseDate">
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="metalType">Metal Type</label>
+                        <p id="metalType"/>
+                </div>
+
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="supplierName">Supplier Name</label>
+                        <p id="supplierName" />
+                        <input type="hidden" id="supplierId" name="supplierId">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="totalGrossWeight">Total Gross Weight</label>
+                        <p id="totalGrossWeight">
+                </div>
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="totalStnWeight">Total Stone Weight</label>
+                        <p id="totalStnWeight"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="purchasePurity">Actual Purity</label>
+                        <p id="actualPurity"/>
+                </div>
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="purchasePurity">Purchase Purity</label>
+                        <p id="purchasePurity"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="totalPcs">Total No. of Pcs</label>
+                        <p id="totalPcs">
+                </div>
+            </div>
+            <!-- Repeat the row structure for other attributes -->
+            <div class="row">
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="rate">Rate</label>
+                        <p id="rate"/>
+                </div>
+                <div class="col-md-6">
+                        <label class="font-weight-bold mb-0" for="purchaseBillNo">Purchase Bill Ref #</label>
+                        <p id="purchaseBillNo">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="font-weight-bold mb-0" for="metalType">GST Purchase?</label>
+                    <p id="isGstPurchase"/>
+                </div>
+                <div class="col-md-6 gstBlock">
+                        <label class="font-weight-bold mb-0" for="gstNo">GST No.</label>
+                        <p id="gstNo"/>
+                </div>
+            </div>
+
+
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Total Net Weight:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="totalNetWeight"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Purchase Amount:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="purchaseAmount"></p>
+                            </td>
+                        </tr>
+                        <tr class="gstBlock">
+                            <td class="text-right">
+                                <p class="font-weight-bold">CGST:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="totalCgstAmount"></p>
+                            </td>
+                        </tr>
+                        <tr class="gstBlock">
+                            <td class="text-right">
+                                <p class="font-weight-bold">SGST:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="totalSgstAmount"></p>
+                            </td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <td class="text-right">-->
+<!--                                <p class="font-weight-bold">Exchange Amount:</p>-->
+<!--                            </td>-->
+<!--                            <td class="text-right" style="width: 100px">-->
+<!--                                <p class="form-control-plaintext" id="totalExchangeAmount"></p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+<!--                        <tr>-->
+<!--                            <td class="text-right">-->
+<!--                                <p class="font-weight-bold">Discount:</p>-->
+<!--                            </td>-->
+<!--                            <td class="text-right" style="width: 100px">-->
+<!--                                <p id="discount"></p>-->
+<!--                            </td>-->
+<!--                        </tr>-->
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Total Amount:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="totalPurchaseAmount"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Payment Mode:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p id="paymentMode"></p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Paid:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p id="paidAmount"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td class="text-right">
+                                <p class="font-weight-bold">Balance:</p>
+                            </td>
+                            <td class="text-right" style="width: 100px">
+                                <p class="form-control-plaintext" id="balAmount"></p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-12">
+                        <label class="font-weight-bold mb-0" for="description">Notes:</label>
+                        <p id="description"></p>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-right">
+                    <button type="button" id="printInvoice" class="btn btn-primary"><i class="fas fa-print"></i> Print</button>
+                </div>
+                <div class="col-md-6"><button type="button" class="btn btn-primary" id="editPurchase"><i class="fas fa-edit"></i> Edit</button>
+                    &nbsp;
+                    <button type="button" class="btn btn-primary" id="payments" ><i class="fa-solid fa-coins"></i> Payments</button>
+                    &nbsp;
+                    <button type="button" class="btn btn-primary" id="addPayment" ><i class="fa-solid fa-plus"></i> Add Payment</button>
+                </div>
+                <!--                <div class="col-md-3"></div>-->
+                <div class="col-md-3"></div>
+            </div>
+
+
+
+<!--            <div class="row">-->
+<!--                <div class="col-md-3"></div>-->
+<!--                <div class="col-md-3 text-right pr-0">-->
+<!--                    <button type="button" id="savePurchase" class="btn btn-primary">Save</button>-->
+<!--                    <button type="button" id="addPurchaseItems" class="btn btn-success d-none addPurchaseItems" data-id="">Items</button>-->
+<!--                </div>-->
+<!--                <div class="col-md-3 pl-1">-->
+<!--                    <a class="btn btn-danger" th:href="@{/purchase}" title="Back to Purchases">Cancel</a>-->
+<!--                    <div class="col-md-3"></div>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="newPurchase">
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/purchase/purchase-view.js}"></script>
+</th:block>
+</html>

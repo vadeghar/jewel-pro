@@ -1,10 +1,10 @@
 package com.billing.print;
-import javax.print.*;
-import javax.print.attribute.*;
-import javax.print.attribute.standard.MediaSizeName;
 
+import javax.print.*;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.PrinterName;
-import java.io.*;
 
 public class ThermalPrinterJavax {
 

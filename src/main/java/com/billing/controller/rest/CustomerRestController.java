@@ -2,10 +2,7 @@ package com.billing.controller.rest;
 
 import com.billing.entity.Customer;
 import com.billing.service.CustomerService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,8 +15,23 @@ public class CustomerRestController {
         this.customerService = customerService;
     }
 
-    @GetMapping
+    @GetMapping("like")
     public List<Customer> getCustomerByNameLike(@RequestParam String name) {
         return customerService.findCustomerByNameLike(name);
+    }
+
+    @PostMapping
+    public Customer saveCustomer(@RequestBody Customer customer) {
+        return customerService.createCustomer(customer);
+    }
+
+    @GetMapping
+    public List<Customer> get() {
+        return customerService.getAllCustomers();
+    }
+
+    @GetMapping("/{id}")
+    public Customer getById(@PathVariable("id") Long id) {
+        return customerService.getById(id);
     }
 }

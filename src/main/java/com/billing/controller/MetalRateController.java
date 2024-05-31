@@ -1,10 +1,8 @@
 package com.billing.controller;
 
 import com.billing.dto.ErrorResponse;
-import com.billing.entity.Estimation;
 import com.billing.entity.MetalRate;
 import com.billing.service.MetalRateService;
-import com.billing.utils.BillingUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 
 @Controller
 @RequestMapping("/metal-rate")
@@ -26,7 +23,12 @@ public class MetalRateController {
     public String getItemRate(Model model) {
         model.addAttribute("metalRate", new MetalRate());
         model.addAttribute("metalRateList", metalRateService.getAll());
-        return "metal-rate";
+        return "views/metal-rate/metal-rate";
+    }
+
+    @GetMapping("modal")
+    public String modalWindow(Model model) {
+        return "views/metal/metal-rate";
     }
 
     @PostMapping("/save")
@@ -40,7 +42,7 @@ public class MetalRateController {
         if(errorResponse.hasErrors()) {
             model.addAttribute("metalRate", metalRate);
             model.addAttribute("errorResponse", errorResponse);
-            return "metal-rate";
+            return "views/metal-rate/metal-rate";
         }
         model.addAttribute("itemMaster", metalRateService.save(metalRate));
         return "redirect:/metal-rate?success";

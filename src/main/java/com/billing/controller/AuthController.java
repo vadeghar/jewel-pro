@@ -28,7 +28,7 @@ public class AuthController {
         if (userService.isUserLoggedIn()) {
             return users(model);
         }
-        return "login";
+        return "views/registration/login";
     }
 
     // handler method to handle user registration form request
@@ -37,7 +37,7 @@ public class AuthController {
         // create model object to store form data
         UserDto user = new UserDto();
         model.addAttribute("user", user);
-        return "register";
+        return "views/registration/register";
     }
 
     // handler method to handle user registration form submit request
@@ -54,7 +54,7 @@ public class AuthController {
 
         if (result.hasErrors()) {
             model.addAttribute("user", userDto);
-            return "/register";
+            return "views/registration/register";
         }
 
         userService.saveUser(userDto);
@@ -66,7 +66,7 @@ public class AuthController {
     public String users(Model model) {
         List<UserDto> users = userService.findAllUsers();
         model.addAttribute("users", users);
-        return "users";
+        return "views/registration/users";
     }
 
     @GetMapping("/home")

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/workorder")
@@ -21,14 +21,8 @@ public class WorkOrderController {
         List<WorkOrder> workOrders = workOrderService.getAllWorkOrders();
         model.addAttribute("workOrderList", workOrders);
         model.addAttribute("workOrder", new WorkOrder());
-        return "workOrder";
+        return "views/worker/workOrder";
     }
-
-//    @GetMapping("/add")
-//    public String showAddWorkOrderForm(Model model) {
-//        model.addAttribute("workOrder", new WorkOrder());
-//        return "workorder";
-//    }
 
     @PostMapping("/save")
     public String addWorkOrder(@ModelAttribute WorkOrder workOrder) {
@@ -36,12 +30,6 @@ public class WorkOrderController {
         return "redirect:/workorder";
     }
 
-//    @GetMapping("/edit/{id}")
-//    public String showEditWorkOrderForm(@PathVariable Long id, Model model) {
-//        Optional<WorkOrder> workOrder = workOrderService.getWorkOrderById(id);
-//        workOrder.ifPresent(value -> model.addAttribute("workOrder", value));
-//        return workOrder.isPresent() ? "workorder" : "workOrderNotFound";
-//    }
 
     @PostMapping("/edit/{id}")
     public String editWorkOrder(@PathVariable Long id, @ModelAttribute WorkOrder workOrder) {

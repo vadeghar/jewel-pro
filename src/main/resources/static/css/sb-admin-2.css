@@ -11355,3 +11355,24 @@ body.sidebar-toggled footer.sticky-footer {
 .row {
     align-items: flex-end;
 }
+
+.moving-div {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: #3498db;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: moveRightToLeft 5s linear infinite;
+}
+
+@keyframes moveRightToLeft {
+    0% {
+        right: -100px; /* Start just off the right edge */
+    }
+    100% {
+        right: 100vw; /* Move to just off the left edge */
+    }
+}

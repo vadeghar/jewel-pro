@@ -3,10 +3,8 @@ package com.billing.dto;
 import com.billing.entity.Purchase;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -42,12 +40,13 @@ public class PurchaseDTO {
     private BigDecimal totalCgstAmount = BigDecimal.ZERO;
     private BigDecimal totalSgstAmount = BigDecimal.ZERO;
     private BigDecimal totalPurchaseAmount;
-
+    private String active;
     private String description;
     private String supplierName;
     private Long supplierId;
 
     private String createdBy;
+    private String trnLastFourDigits;
 
     private List<PurchaseItemDTO> purchaseItems;
 
@@ -71,7 +70,7 @@ public class PurchaseDTO {
         this.setTotalMcAmount(entity.getTotalMcAmount());
         this.setPurchaseRate(entity.getPurchaseRate());
         this.setIsGstPurchase(entity.getIsGstPurchase());
-        this.setGstNo(entity.getGstNo());
+//        this.setGstNo(entity.getGstNo());
         this.setTotalCgstAmount(entity.getTotalCgstAmount());
         this.setTotalSgstAmount(entity.getTotalSGstAmount());
         this.setTotalPurchaseAmount(entity.getTotalPurchaseAmount());

@@ -9,6 +9,7 @@ import com.billing.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -89,5 +90,23 @@ public class UserService {
         return roleRepository.save(role);
     }
 
+    public boolean isUserIsAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext() != null ? SecurityContextHolder.getContext().getAuthentication() : null;
+        if (null != authentication && authentication.isAuthenticated()) {
+            List<? extends GrantedAuthority> admin = authentication.getAuthorities().stream()
+                    .filter(grantedAuthority -> grantedAuthority.getAuthority().contains("ADMIN"))
+                    .collect(Collectors.toList());
+            return admin.size() > 0;
+        }
+        return false;
+    }
+
+    public String getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext() != null ? SecurityContextHolder.getContext().getAuthentication() : null;
+        if (null != authentication && authentication.isAuthenticated()) {
+            return authentication.getName();
+        }
+        return "System";
+    }
 
 }

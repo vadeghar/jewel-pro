@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/modal-layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: Supplier List ::</title>
+</head>
+<div layout:fragment="content" class="p-0">
+    <table class="table table-bordered" id="supplierPurchaseTable">
+        <thead>
+        <tr>
+            <th>Bill No.</th>
+            <th>Date</th>
+            <th>Total</th>
+            <th>Paid</th>
+            <th>Balance</th>
+        </tr>
+        </thead>
+    </table>
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/supplier/supplier-sale.js}"></script>
+</th:block>
+</html>

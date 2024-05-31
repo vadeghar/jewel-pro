@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>:: Supplier List ::</title>
+</head>
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Supplier List</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered" id="supplierTable">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Phone</th>
+                            <th>GST No.</th>
+                            <th style="width: 280px;" class="no-sort">Actions</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="supplierList">
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/supplier/supplier-list.js}"></script>
+</th:block>
+
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Estimation</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Rate</h1>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">New Rate</h6>
+        </div>
+        <div class="card-body">
+            <div style="padding-left: 100px; padding-right: 100px;">
+                <div class="row">
+                    <div class="col">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">New Rate</h1>
+                            </div>
+                            <div th:if="${param.success}">
+                                <div class="alert alert-info">
+                                    Rate saved successfully.
+                                </div>
+                            </div>
+
+                            <div th:if="${errorResponse != null && errorResponse.hasErrors()}">
+                                <ul>
+                                    <div class="alert alert-danger">
+                                        <li th:each="error : ${errorResponse.errors}" th:text="${error.description}"></li>
+                                    </div>
+                                </ul>
+                            </div>
+                            <form class="user" method="post"
+                                  id="itemForm"
+                                  role="form"
+                                  th:action="@{/metal-rate/save}"
+                                  th:object="${metalRate}">
+                                <div class="form-group row">
+                                    <div class="col mb-sm-0">
+                                        <div class="custom-control" style="display: flex">
+                                            <input type="hidden" class="form-control form-control-user" id="id" name="id" th:field="*{id}">
+                                            <label class="pr-5">Select metal:  </label>
+                                            <select class="form-select form-control"
+                                                    id="itemMetal"
+                                                    name="itemMetal"
+                                                    th:field="*{itemMetal}"
+                                                    aria-label=".form-select-lg example">
+                                                <option value="GOLD">GOLD</option>
+                                                <option value="SILVER">SILVER</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col mb-sm-0">
+                                        <input class="form-control form-control-user"
+                                               id="rate"
+                                               name="rate"
+                                               placeholder="Rate"
+                                               th:field="*{rate}"
+                                               type="text">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-primary btn-user btn-block" type="submit">Save</button>
+                                    </div>
+                                    <div class="col-sm-6 mb-2 mb-sm-0 text-right">
+                                        <button class="btn btn-danger btn-user btn-block" type="button" id="cancelBtn">Cancel</button>
+                                    </div>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Rate update history</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                        <tr>
+                            <th>Metal</th>
+                            <th>Rate</th>
+                            <th>Date</th>
+                        </tr>
+                        </thead>
+                        <tfoot>
+                        <tr>
+                            <th>Metal</th>
+                            <th>Rate</th>
+                            <th>Date</th>
+                        </tr>
+                        </tfoot>
+                        <tbody>
+                        <tr th:each = "metalRate : ${metalRateList}">
+                            <td th:text = "${metalRate.itemMetal}"></td>
+                            <td th:text = "${metalRate.rate}"></td>
+                            <td th:text = "${metalRate.lastUpdateAt}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+</div>
+<th:block layout:fragment="script">
+<!--    <script th:src="@{/js/metal-rate.js}"></script>-->
+</th:block>
+</html>
