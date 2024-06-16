@@ -6,6 +6,8 @@ import com.billing.dto.EstRequest;
 import com.billing.dto.EstResponse;
 import com.billing.entity.StoneMaster;
 import com.billing.exception.EstimationException;
+import com.billing.model.ReportFilters;
+import com.billing.model.WeeklyReport;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
@@ -13,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -191,5 +194,44 @@ public class BillingUtils {
         }
         log.debug("Authentication not found in SSecurityContextHolder");
         return null;
+    }
+
+    public static String emptyToNull(String str) {
+        if (StringUtils.isBlank(str)) {
+            return null;
+        }
+        return str.trim();
+    }
+
+    public static WeeklyReport mapToWeeklyReport(Object[] result, ReportFilters filters) {
+        switch (filters.getReportType()) {
+            case YEARLY:
+            case MONTHLY:
+            case WEEKLY:
+            case ALL: {
+                LocalDate startDate = ((java.sql.Date) result[0]).toLocalDate();
+                LocalDate endDate = ((java.sql.Date) result[1]).toLocalDate();
+                BigDecimal totalNetWeight = (BigDecimal) result[2];
+                BigDecimal totalGst = (BigDecimal) result[3];
+                BigDecimal totalPurchaseAmount = (BigDecimal) result[4];
+                BigDecimal totalPaidAmount = (BigDecimal) result[5];
+                BigDecimal totalBalAmount = (BigDecimal) result[6];
+                return new WeeklyReport(startDate, endDate, totalNetWeight, totalGst, totalPurchaseAmount, totalPaidAmount, totalBalAmount);
+            }
+            case DAILY:
+            default: {
+                LocalDate startDate = ((java.sql.Date) result[0]).toLocalDate();
+                LocalDate endDate = startDate;
+                BigDecimal totalNetWeight = (BigDecimal) result[1];
+                BigDecimal totalGst = (BigDecimal) result[2];
+                BigDecimal totalPurchaseAmount = (BigDecimal) result[3];
+                BigDecimal totalPaidAmount = (BigDecimal) result[4];
+                BigDecimal totalBalAmount = (BigDecimal) result[5];
+                return new WeeklyReport(startDate, endDate, totalNetWeight, totalGst, totalPurchaseAmount, totalPaidAmount, totalBalAmount);
+            }
+
+        }
+
+
     }
 }

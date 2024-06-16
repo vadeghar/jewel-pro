@@ -1,10 +1,9 @@
 package com.billing.enums;
 
 public enum ReportTypeEnum {
-    ALl,
+    ALL,
     DAILY,
     WEEKLY,
     MONTHLY,
     YEARLY,
-    ALL
 }

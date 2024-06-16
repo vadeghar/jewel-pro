@@ -17,9 +17,12 @@ public class ReportFilters {
     private String purchaseType;
     private LocalDate startDate;
     private LocalDate endDate;
-    private BigDecimal minPurchaseAmount;
-    private BigDecimal maxPurchaseAmount;
-    private BigDecimal minBalAmount;
-    private BigDecimal maxBalAmount;
+    private String isGstPurchase;
+    private String saleType;
+    private Long customerId;
+//    private BigDecimal minPurchaseAmount;
+//    private BigDecimal maxPurchaseAmount;
+//    private BigDecimal minBalAmount;
+//    private BigDecimal maxBalAmount;
     private ReportTypeEnum reportType;
 }

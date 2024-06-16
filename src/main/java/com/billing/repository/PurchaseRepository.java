@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface PurchaseRepository extends JpaRepository<Purchase, Long>, JpaSpecificationExecutor<Purchase> {
+public interface PurchaseRepository extends JpaRepository<Purchase, Long>/*, JpaSpecificationExecutor<Purchase>*/ {
 
     List<Purchase> findAllByActivePurchase(String activePurchase);
 
@@ -93,13 +93,36 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>, JpaSp
             "  AND ((:paymentMode IS NULL AND LOWER(p.payment_mode) IN ('cash', 'online')) OR LOWER(p.payment_mode) = LOWER(:paymentMode)) " +
             "  AND (:supplierId IS NULL OR p.supplier_id = :supplierId) " +
             "  AND ((:purchaseType IS NULL AND LOWER(p.purchase_type) IN ('purchase', 'return')) OR LOWER(p.purchase_type) = LOWER(:purchaseType)) " +
+            "  AND ((:isGstPurchase IS NULL AND p.is_gst_purchase IS NOT NULL) OR p.is_gst_purchase = :isGstPurchase) " +
             "GROUP BY week_data.start_date, week_data.end_date " +
             "ORDER BY week_data.start_date",
             nativeQuery = true)
     List<Object[]> getWeeklyReport(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
                                    @Param("metalType") String metalType, @Param("paymentMode") String paymentMode,
-                                   @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType);
+                                   @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType,
+                                   @Param("isGstPurchase") String isGstPurchase);
 
+    @Query(value = "SELECT " +
+            "p.purchase_date AS startDate, " +
+            "p.purchase_date AS endDate, " +
+            "p.total_net_weight AS totalNetWeight, " +
+            "(p.total_cgst_amount + p.totalsgst_amount) AS totalGst, " +
+            "p.total_purchase_amount AS totalPurchaseAmount, " +
+            "p.paid_amount AS totalPaidAmount, " +
+            "p.bal_amount AS totalBalAmount " +
+            "FROM purchase p " +
+            "WHERE (p.purchase_date BETWEEN :startDate AND :endDate) " +
+            "  AND ((:metalType IS NULL AND p.metal_type IN ('GOLD', 'SILVER')) OR p.metal_type = :metalType) " +
+            "  AND ((:paymentMode IS NULL AND LOWER(p.payment_mode) IN ('cash', 'online')) OR LOWER(p.payment_mode) = LOWER(:paymentMode)) " +
+            "  AND (:supplierId IS NULL OR p.supplier_id = :supplierId) " +
+            "  AND ((:purchaseType IS NULL AND LOWER(p.purchase_type) IN ('purchase', 'return')) OR LOWER(p.purchase_type) = LOWER(:purchaseType)) " +
+            "  AND ((:isGstPurchase IS NULL AND p.is_gst_purchase IS NOT NULL) OR p.is_gst_purchase = :isGstPurchase) " +
+            "ORDER BY p.purchase_date",
+            nativeQuery = true)
+    List<Object[]> getAllTransactionsReport(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
+                                  @Param("metalType") String metalType, @Param("paymentMode") String paymentMode,
+                                  @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType,
+                                            @Param("isGstPurchase") String isGstPurchase);
 
     @Query(value = "SELECT " +
             "p.purchase_date AS purchaseDate, " +
@@ -114,12 +137,14 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>, JpaSp
             "  AND ((:paymentMode IS NULL AND LOWER(p.payment_mode) IN ('cash', 'online')) OR LOWER(p.payment_mode) = LOWER(:paymentMode)) " +
             "  AND (:supplierId IS NULL OR p.supplier_id = :supplierId) " +
             "  AND ((:purchaseType IS NULL AND LOWER(p.purchase_type) IN ('purchase', 'return')) OR LOWER(p.purchase_type) = LOWER(:purchaseType)) " +
+            "  AND ((:isGstPurchase IS NULL AND p.is_gst_purchase IS NOT NULL) OR p.is_gst_purchase = :isGstPurchase) " +
             "GROUP BY p.purchase_date " +
             "ORDER BY p.purchase_date",
             nativeQuery = true)
     List<Object[]> getDailyReport(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
                                   @Param("metalType") String metalType, @Param("paymentMode") String paymentMode,
-                                  @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType);
+                                  @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType,
+                                  @Param("isGstPurchase") String isGstPurchase);
 
     @Query(value = "SELECT month_data.start_date AS startDate, " +
             "month_data.end_date AS endDate, " +
@@ -151,9 +176,13 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>, JpaSp
             "   AND (:paymentMode IS NULL OR LOWER(p.payment_mode) IN ('cash', 'online') OR LOWER(p.payment_mode) = LOWER(:paymentMode)) " +
             "   AND (:supplierId IS NULL OR p.supplier_id = :supplierId) " +
             "   AND (:purchaseType IS NULL OR LOWER(p.purchase_type) IN ('purchase', 'return') OR LOWER(p.purchase_type) = LOWER(:purchaseType)) " +
+            "  AND ((:isGstPurchase IS NULL AND p.is_gst_purchase IS NOT NULL) OR p.is_gst_purchase = :isGstPurchase) " +
             "GROUP BY month_data.start_date, month_data.end_date " +
             "ORDER BY month_data.start_date", nativeQuery = true)
-    List<Object[]> getMonthlyReport(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, @Param("metalType") String metalType, @Param("paymentMode") String paymentMode, @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType);
+    List<Object[]> getMonthlyReport(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
+                                    @Param("metalType") String metalType, @Param("paymentMode") String paymentMode,
+                                    @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType,
+                                    @Param("isGstPurchase") String isGstPurchase);
 
     @Query(value = "SELECT year_data.start_date AS startDate, " +
             "year_data.end_date AS endDate, " +
@@ -178,11 +207,13 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>, JpaSp
             "   AND (:paymentMode IS NULL OR LOWER(p.payment_mode) IN ('cash', 'online') OR LOWER(p.payment_mode) = LOWER(:paymentMode)) " +
             "   AND (:supplierId IS NULL OR p.supplier_id = :supplierId) " +
             "   AND (:purchaseType IS NULL OR LOWER(p.purchase_type) IN ('purchase', 'return') OR LOWER(p.purchase_type) = LOWER(:purchaseType)) " +
+            "  AND ((:isGstPurchase IS NULL AND p.is_gst_purchase IS NOT NULL) OR p.is_gst_purchase = :isGstPurchase) " +
             "GROUP BY year_data.start_date, year_data.end_date " +
             "ORDER BY year_data.start_date", nativeQuery = true)
     List<Object[]> getYearlyReport(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate,
                                    @Param("metalType") String metalType, @Param("paymentMode") String paymentMode,
-                                   @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType);
+                                   @Param("supplierId") Long supplierId, @Param("purchaseType") String purchaseType,
+                                   @Param("isGstPurchase") String isGstPurchase);
 
 
 }

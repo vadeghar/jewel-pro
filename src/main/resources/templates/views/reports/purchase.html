@@ -12,7 +12,7 @@
         <div class="card-header d-flex justify-content-between align-items-center">
                 Purchase Reports
         </div>
-        <div class="card-body">
+        <div class="card-body" id="reportForm">
             <div class="row">
                 <div class="col-md-4 mt-2">
                     <fieldset class="form-group border p-3">
@@ -25,38 +25,6 @@
                             <div class="col mt-2">
                                 <label class="font-weight-bold mb-0">To Date:</label>
                                 <input type="date" class="form-control" id="endDate" name="endDate" required>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-
-                <div class="col-md-4 mt-2">
-                    <fieldset class="form-group border p-3">
-                        <legend class="w-auto px-2 fa-1x">Purchase Amount</legend>
-                        <div class="row">
-                            <div class="col mt-2">
-                                <label class="font-weight-bold mb-0">From</label>
-                                <input type="number" class="form-control" id="fromAmount" name="fromAmount" required>
-                            </div>
-                            <div class="col mt-2">
-                                <label class="font-weight-bold mb-0">To:</label>
-                                <input type="number" class="form-control" id="toAmount" name="toAmount" required>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-
-                <div class="col-md-4 mt-2">
-                    <fieldset class="form-group border p-3">
-                        <legend class="w-auto px-2 fa-1x">Balance Due Amount</legend>
-                        <div class="row">
-                            <div class="col mt-2">
-                                <label class="font-weight-bold mb-0">From:</label>
-                                <input type="number" class="form-control" id="fromBalAmount" name="fromBalAmount" required>
-                            </div>
-                            <div class="col mt-2">
-                                <label class="font-weight-bold mb-0">To:</label>
-                                <input type="number" class="form-control" id="toBalAmount" name="toBalAmount" required>
                             </div>
                         </div>
                     </fieldset>
@@ -92,14 +60,22 @@
                         <option value="PurchaseReturn">Purchase Return</option>
                     </select>
                 </div>
-                <div class="col-md-4 mt-2">
+                <div class="col-md-2 mt-2">
+                    <label class="font-weight-bold mb-0">Only GST Purchases:</label>
+                    <select class="form-control" id="isGstPurchase" name="isGstPurchase">
+                        <option value=""><-- Select --></option>
+                        <option value="YES">YES</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mt-2">
                     <label class="font-weight-bold mb-0">Report Type:</label>
-                    <select class="form-control" id="graphType" name="graphType">
-                        <option value="weekly">All</option>
-                        <option value="weekly">Daily</option>
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="yearly">Yearly</option>
+                    <select class="form-control" id="reportType" name="reportType">
+                        <option value="ALL">All Transactions</option>
+                        <option value="DAILY">Daily Basis</option>
+                        <option value="WEEKLY">Weekly Basis</option>
+                        <option value="MONTHLY">Monthly Basis</option>
+                        <option value="YEARLY">Yearly Basis</option>
                     </select>
                 </div>
             </div>
@@ -111,7 +87,29 @@
             </div>
         </div>
     </div>
-
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            Purchase Reports
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered" id="reportResponseTable">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Weight (in Grams)</th>
+                            <th>GST</th>
+                            <th>Purchase Amount</th>
+                            <th>Paid Amount</th>
+                            <th>Balance Amount</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <input type="hidden" id="menuItem" name="menuItem" value="purchaseRpt">

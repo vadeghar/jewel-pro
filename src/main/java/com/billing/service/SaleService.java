@@ -8,7 +8,10 @@ import com.billing.entity.*;
 import com.billing.enums.SaleType;
 import com.billing.enums.StockStatus;
 import com.billing.model.ChartData;
+import com.billing.model.ReportFilters;
+import com.billing.model.WeeklyReport;
 import com.billing.repository.*;
+import com.billing.utils.BillingUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.billing.utils.BillingUtils.mapToWeeklyReport;
 
 @Slf4j
 @Service
@@ -396,5 +401,60 @@ public class SaleService {
         return saleRepository.findTopCustomersByTotalAmountLast5Days(pageable);
     }
 
+    public List<WeeklyReport> generateReport(ReportFilters filters) {
+        filters.setSaleType(BillingUtils.emptyToNull(filters.getSaleType()));
+        filters.setMetalType(BillingUtils.emptyToNull(filters.getMetalType()));
+        filters.setPaymentMode(BillingUtils.emptyToNull(filters.getPaymentMode()));
+        filters.setIsGstPurchase(BillingUtils.emptyToNull(filters.getIsGstPurchase()));
+        log.info("Report filters: {}", filters);
+        switch (filters.getReportType()) {
+            case YEARLY:
+                return generateYearlyReport(filters);
+            case MONTHLY:
+                return generateMonthlyReport(filters);
+            case WEEKLY:
+                return generateWeeklyReport(filters);
+            case DAILY:
+                return getDailyReport(filters);
+            case ALL:
+            default:
+                return getAllTransactionsReport(filters);
+        }
+    }
+
+    private List<WeeklyReport> getAllTransactionsReport(ReportFilters filters) {
+        List<Object[]> results = saleRepository.getAllTransactionsReport(filters.getStartDate(), filters.getEndDate(),
+                 filters.getPaymentMode(),
+                filters.getCustomerId(), filters.getSaleType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+
+    private List<WeeklyReport> getDailyReport(ReportFilters filters) {
+        List<Object[]> results = saleRepository.getDailyReport(filters.getStartDate(), filters.getEndDate(),
+                 filters.getPaymentMode(),
+                filters.getCustomerId(), filters.getSaleType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+
+    private List<WeeklyReport> generateWeeklyReport(ReportFilters filters) {
+        List<Object[]> results = saleRepository.getWeeklyReport(filters.getStartDate(), filters.getEndDate(),
+                 filters.getPaymentMode(),
+                filters.getCustomerId(), filters.getSaleType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+
+    private List<WeeklyReport> generateMonthlyReport(ReportFilters filters) {
+        List<Object[]> results = saleRepository.getMonthlyReport(filters.getStartDate(), filters.getEndDate(),
+                 filters.getPaymentMode(),
+                filters.getCustomerId(), filters.getSaleType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+
+    private List<WeeklyReport> generateYearlyReport(ReportFilters filters) {
+        List<Object[]> results = saleRepository.getYearlyReport(filters.getStartDate(), filters.getEndDate(),
+                 filters.getPaymentMode(),
+                filters.getCustomerId(), filters.getSaleType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
 }
 

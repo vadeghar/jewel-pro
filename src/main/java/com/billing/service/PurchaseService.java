@@ -16,7 +16,9 @@ import com.billing.model.PurchaseReport;
 import com.billing.model.ReportFilters;
 import com.billing.model.WeeklyReport;
 import com.billing.repository.*;
+import com.billing.utils.BillingUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -289,6 +291,12 @@ public class PurchaseService {
     }
 
     public List<WeeklyReport> generateReport(ReportFilters filters) {
+        filters.setPurchaseType(BillingUtils.emptyToNull(filters.getPurchaseType()));
+        filters.setMetalType(BillingUtils.emptyToNull(filters.getMetalType()));
+        filters.setPaymentMode(BillingUtils.emptyToNull(filters.getPaymentMode()));
+        filters.setIsGstPurchase(BillingUtils.emptyToNull(filters.getIsGstPurchase()));
+//        filters.setSupplierId(filters.getSupplierId() > 0 ? filters.getSupplierId() : null);
+        log.info("Report filters: {}", filters);
         switch (filters.getReportType()) {
             case YEARLY:
                 return generateYearlyReport(filters);
@@ -297,45 +305,47 @@ public class PurchaseService {
             case WEEKLY:
                 return generateWeeklyReport(filters);
             case DAILY:
-            default:
                 return getDailyReport(filters);
+            case ALL:
+            default:
+                return getAllTransactionsReport(filters);
         }
 
     }
+
+    private List<WeeklyReport> getAllTransactionsReport(ReportFilters filters) {
+        List<Object[]> results = purchaseRepository.getAllTransactionsReport(filters.getStartDate(), filters.getEndDate(),
+                filters.getMetalType(), filters.getPaymentMode(),
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+
     private List<WeeklyReport> generateYearlyReport(ReportFilters filters) {
         List<Object[]> results = purchaseRepository.getYearlyReport(filters.getStartDate(), filters.getEndDate(),
                 filters.getMetalType(), filters.getPaymentMode(),
-                filters.getSupplierId(), filters.getPurchaseType());
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
         return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
     }
     private List<WeeklyReport> generateMonthlyReport(ReportFilters filters) {
         List<Object[]> results = purchaseRepository.getMonthlyReport(filters.getStartDate(), filters.getEndDate(),
                 filters.getMetalType(), filters.getPaymentMode(),
-                filters.getSupplierId(), filters.getPurchaseType());
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
         return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
     }
 
     public List<WeeklyReport> getDailyReport(ReportFilters filters) {
         List<Object[]> results = purchaseRepository.getDailyReport(filters.getStartDate(), filters.getEndDate(),
                 filters.getMetalType(), filters.getPaymentMode(),
-                filters.getSupplierId(), filters.getPurchaseType());
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
         return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
     }
 
     private WeeklyReport mapToWeeklyReport(Object[] result, ReportFilters filters) {
         switch (filters.getReportType()) {
             case YEARLY:
-            case MONTHLY: {
-                LocalDate startDate = ((java.sql.Date) result[0]).toLocalDate();
-                LocalDate endDate = ((java.sql.Date) result[1]).toLocalDate();
-                BigDecimal totalNetWeight = (BigDecimal) result[2];
-                BigDecimal totalGst = (BigDecimal) result[3];
-                BigDecimal totalPurchaseAmount = (BigDecimal) result[4];
-                BigDecimal totalPaidAmount = (BigDecimal) result[5];
-                BigDecimal totalBalAmount = (BigDecimal) result[6];
-                return new WeeklyReport(startDate, endDate, totalNetWeight, totalGst, totalPurchaseAmount, totalPaidAmount, totalBalAmount);
-            }
-            case WEEKLY: {
+            case MONTHLY:
+            case WEEKLY:
+            case ALL: {
                 LocalDate startDate = ((java.sql.Date) result[0]).toLocalDate();
                 LocalDate endDate = ((java.sql.Date) result[1]).toLocalDate();
                 BigDecimal totalNetWeight = (BigDecimal) result[2];
@@ -365,7 +375,7 @@ public class PurchaseService {
     private List<WeeklyReport> generateWeeklyReport(ReportFilters filters) {
         List<Object[]> results = purchaseRepository.getWeeklyReport(filters.getStartDate(), filters.getEndDate(),
                 filters.getMetalType(), filters.getPaymentMode(),
-                filters.getSupplierId(), filters.getPurchaseType());
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
         return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
     }
 //

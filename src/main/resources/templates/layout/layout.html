@@ -22,8 +22,10 @@
     <link th:href="@{/css/sb-admin-2.css}" rel="stylesheet">
 
     <!-- Custom styles for this page -->
-    <link th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}" rel="stylesheet">
+
+    <link th:href="@{/vendor/datatables/buttons.bootstrap4.css}" rel="stylesheet">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link th:href="@{/vendor/datatables/datatables.css}" rel="stylesheet">
     <style>
         .fade-out {
           animation: fadeOut 1s forwards;
@@ -43,6 +45,17 @@
         }
         .silver-icon {
             color: silver;
+        }
+.dt-buttons {
+        float: right !important;
+        margin-bottom: 0.5rem !important;
+        }
+        .dt-paging {
+            float: right !important;
+            margin-top: -25px !important;
+        }
+        .dt-info {
+            margin-top: 0.5rem !important;
         }
     </style>
 <!--    <title>Redirecting...</title>-->
@@ -137,6 +150,7 @@
     <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
 
+    <script th:src="@{/vendor/bootstrap/js/popper.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
     <!-- Core plugin JavaScript-->
@@ -147,8 +161,19 @@
     <script th:src="@{/js/sb-admin-2.min.js}"></script>
 
     <!-- Page level plugins -->
-    <script th:src="@{/vendor/datatables/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/vendor/datatables/datatables.js}"></script>
     <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
+    <script th:src="@{/vendor/datatables/dataTables.buttons.js}"></script>
+    <script th:src="@{/vendor/datatables/buttons.bootstrap4.js}"></script>
+    <script th:src="@{/vendor/datatables/jszip.min.js}"></script>
+    <script th:src="@{/vendor/datatables/pdfmake.min.js}"></script>
+
+    <script th:src="@{/vendor/datatables/vfs_fonts.js}"></script>
+    <script th:src="@{/vendor/datatables/buttons.html5.min.js}"></script>
+    <script th:src="@{/vendor/datatables/buttons.print.min.js}"></script>
+    <script th:src="@{/vendor/datatables/buttons.colVis.min.js}"></script>
+
+
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
     <!-- Page level custom scripts -->
