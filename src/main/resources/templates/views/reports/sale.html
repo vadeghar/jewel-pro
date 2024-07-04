@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sale Reports</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center" id="reportHeading">
+            Sale Report
+        </div>
+        <div class="card-body" id="reportForm">
+            <div class="row">
+                <div class="col-md-4 mt-2">
+                    <fieldset class="form-group border p-3">
+                        <legend class="w-auto px-2 fa-1x">Sale Date</legend>
+                        <div class="row">
+                            <div class="col mt-2">
+                                <label class="font-weight-bold mb-0">From Date:</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate" required>
+                            </div>
+                            <div class="col mt-2">
+                                <label class="font-weight-bold mb-0">To Date:</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate" required>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 mt-2">
+                    <label class="font-weight-bold mb-0">Metal:</label>
+                    <select class="form-control" id="metalType" name="metalType">
+                        <option value="">Select</option>
+                        <option value="GOLD">Gold</option>
+                        <option value="SILVER">Silver</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mt-2">
+                    <label class="font-weight-bold mb-0">Payment Mode:</label>
+                    <select class="form-control" id="paymentMode" name="paymentMode">
+                        <option value="">Select</option>
+                        <option value="Cash">Cash</option>
+                        <option value="Online">Online</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mt-2">
+                    <label class="font-weight-bold mb-0">Customer:</label>
+                    <input type="text" class="form-control" id="customerName" name="customerName" required>
+                    <input type="hidden" class="form-control" id="customerId" name="customerId" required>
+                </div>
+                <div class="col-md-2 mt-2">
+                    <label class="font-weight-bold mb-0">Sale Type:</label>
+                    <select class="form-control" id="saleType" name="saleType">
+                        <option value="">Select</option>
+                        <option value="Sale">Sale</option>
+                        <option value="saleReturn">Sale Return</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mt-2">
+                    <label class="font-weight-bold mb-0">Only GST Sales:</label>
+                    <select class="form-control" id="isGstPurchase" name="isGstPurchase">
+                        <option value=""><-- Select --></option>
+                        <option value="YES">YES</option>
+                        <option value="NO">No</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mt-2">
+                    <label class="font-weight-bold mb-0">Report Type:</label>
+                    <select class="form-control" id="reportType" name="reportType">
+                        <option value="ALL">All Transactions</option>
+                        <option value="DAILY">Daily Basis</option>
+                        <option value="WEEKLY">Weekly Basis</option>
+                        <option value="MONTHLY">Monthly Basis</option>
+                        <option value="YEARLY">Yearly Basis</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mt-4 text-center">
+                    <button type="button" id="report" class="btn btn-primary">Report</button>
+                    <button type="button" id="rest" class="btn btn-danger">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card shadow mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            Sale Report
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered" id="reportResponseTable">
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Weight (in Grams)</th>
+                            <th>GST</th>
+                            <th>Sale Amount</th>
+                            <th>Paid Amount</th>
+                            <th>Balance Amount</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="saleRpt">
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/reports/sale.js}"></script>
+</th:block>
+</html>

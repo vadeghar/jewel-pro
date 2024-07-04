@@ -9,13 +9,18 @@ import com.billing.entity.Payment;
 import com.billing.entity.Purchase;
 import com.billing.entity.PurchaseItem;
 import com.billing.entity.Stock;
+import com.billing.enums.ReportTypeEnum;
 import com.billing.enums.StockStatus;
 import com.billing.model.ChartData;
+import com.billing.model.PurchaseReport;
+import com.billing.model.ReportFilters;
+import com.billing.model.WeeklyReport;
 import com.billing.repository.*;
+import com.billing.utils.BillingUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -23,11 +28,13 @@ import javax.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.billing.constant.ErrorCode.DATA_ERROR_ESTIMATION;
+import static com.billing.enums.ReportTypeEnum.*;
 
 @Service
 @Slf4j
@@ -283,19 +290,169 @@ public class PurchaseService {
         return purchaseRepository.findTopSuppliersByTotalAmountLast5Days(pageable);
     }
 
-    private PurchaseItem toEntity(PurchaseItemDTO pi, Purchase purchase) {
-        log.debug("PurchaseService >> toEntity >>");
-        PurchaseItem purchaseItem = purchaseItemRepository.findById(pi.getId())
-                .orElseThrow(() -> new EntityNotFoundException("PurhcaseItem entity not found with id: "+pi.getId()));
-        purchaseItem.setPurchase(purchase);
-        if (pi.getStockId() != null && pi.getStockId() > 0) {
-            Stock stock = stockRepository.getReferenceById(pi.getStockId());
-            stock.fromDto(pi);
-            purchaseItem.setStock(stock);
+    public List<WeeklyReport> generateReport(ReportFilters filters) {
+        filters.setPurchaseType(BillingUtils.emptyToNull(filters.getPurchaseType()));
+        filters.setMetalType(BillingUtils.emptyToNull(filters.getMetalType()));
+        filters.setPaymentMode(BillingUtils.emptyToNull(filters.getPaymentMode()));
+        filters.setIsGstPurchase(BillingUtils.emptyToNull(filters.getIsGstPurchase()));
+//        filters.setSupplierId(filters.getSupplierId() > 0 ? filters.getSupplierId() : null);
+        log.info("Report filters: {}", filters);
+        switch (filters.getReportType()) {
+            case YEARLY:
+                return generateYearlyReport(filters);
+            case MONTHLY:
+                return generateMonthlyReport(filters);
+            case WEEKLY:
+                return generateWeeklyReport(filters);
+            case DAILY:
+                return getDailyReport(filters);
+            case ALL:
+            default:
+                return getAllTransactionsReport(filters);
         }
-        log.debug("PurchaseService << toEntity <<");
-        return purchaseItem;
+
     }
+
+    private List<WeeklyReport> getAllTransactionsReport(ReportFilters filters) {
+        List<Object[]> results = purchaseRepository.getAllTransactionsReport(filters.getStartDate(), filters.getEndDate(),
+                filters.getMetalType(), filters.getPaymentMode(),
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+
+    private List<WeeklyReport> generateYearlyReport(ReportFilters filters) {
+        List<Object[]> results = purchaseRepository.getYearlyReport(filters.getStartDate(), filters.getEndDate(),
+                filters.getMetalType(), filters.getPaymentMode(),
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+    private List<WeeklyReport> generateMonthlyReport(ReportFilters filters) {
+        List<Object[]> results = purchaseRepository.getMonthlyReport(filters.getStartDate(), filters.getEndDate(),
+                filters.getMetalType(), filters.getPaymentMode(),
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+
+    public List<WeeklyReport> getDailyReport(ReportFilters filters) {
+        List<Object[]> results = purchaseRepository.getDailyReport(filters.getStartDate(), filters.getEndDate(),
+                filters.getMetalType(), filters.getPaymentMode(),
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+
+    private WeeklyReport mapToWeeklyReport(Object[] result, ReportFilters filters) {
+        switch (filters.getReportType()) {
+            case YEARLY:
+            case MONTHLY:
+            case WEEKLY:
+            case ALL: {
+                LocalDate startDate = ((java.sql.Date) result[0]).toLocalDate();
+                LocalDate endDate = ((java.sql.Date) result[1]).toLocalDate();
+                BigDecimal totalNetWeight = (BigDecimal) result[2];
+                BigDecimal totalGst = (BigDecimal) result[3];
+                BigDecimal totalPurchaseAmount = (BigDecimal) result[4];
+                BigDecimal totalPaidAmount = (BigDecimal) result[5];
+                BigDecimal totalBalAmount = (BigDecimal) result[6];
+                return new WeeklyReport(startDate, endDate, totalNetWeight, totalGst, totalPurchaseAmount, totalPaidAmount, totalBalAmount);
+            }
+            case DAILY:
+            default: {
+                LocalDate startDate = ((java.sql.Date) result[0]).toLocalDate();
+                LocalDate endDate = startDate;
+                BigDecimal totalNetWeight = (BigDecimal) result[1];
+                BigDecimal totalGst = (BigDecimal) result[2];
+                BigDecimal totalPurchaseAmount = (BigDecimal) result[3];
+                BigDecimal totalPaidAmount = (BigDecimal) result[4];
+                BigDecimal totalBalAmount = (BigDecimal) result[5];
+                return new WeeklyReport(startDate, endDate, totalNetWeight, totalGst, totalPurchaseAmount, totalPaidAmount, totalBalAmount);
+            }
+
+        }
+
+
+    }
+
+    private List<WeeklyReport> generateWeeklyReport(ReportFilters filters) {
+        List<Object[]> results = purchaseRepository.getWeeklyReport(filters.getStartDate(), filters.getEndDate(),
+                filters.getMetalType(), filters.getPaymentMode(),
+                filters.getSupplierId(), filters.getPurchaseType(), filters.getIsGstPurchase());
+        return results.stream().map( r -> mapToWeeklyReport(r, filters)).collect(Collectors.toList());
+    }
+//
+//    private List<PurchaseReport> generateMonthlyReport(ReportFilters filters) {
+//        List<PurchaseReport> reports = new ArrayList<>();
+//        LocalDate periodStartDate = filters.getStartDate().with(TemporalAdjusters.firstDayOfMonth());
+//        while (!periodStartDate.isAfter(filters.getEndDate())) {
+//            LocalDate periodEndDate = periodStartDate.with(TemporalAdjusters.lastDayOfMonth());
+//            filters.setEndDate(periodEndDate);
+//            reports.add(calculateAggregatedReport(filters));
+//            periodStartDate = periodStartDate.plusMonths(1);
+//        }
+//        return reports;
+//    }
+//
+//    private List<PurchaseReport> generateYearlyReport(ReportFilters filters) {
+//        List<PurchaseReport> reports = new ArrayList<>();
+//        LocalDate periodStartDate = filters.getStartDate().with(TemporalAdjusters.firstDayOfYear());
+//        while (!periodStartDate.isAfter(filters.getEndDate())) {
+//            LocalDate periodEndDate = periodStartDate.with(TemporalAdjusters.lastDayOfYear());
+//            reports.add(calculateAggregatedReport(filters));
+//            periodStartDate = periodStartDate.plusYears(1);
+//        }
+//        return reports;
+//    }
+//
+//    private List<PurchaseReport> generateAllTransactionsReport(ReportFilters filters) {
+////        List<PurchaseReport> reports = new ArrayList<>();
+//        List<Purchase> purchases = purchaseRepository.findAll(PurchaseSpecification.byFilters(filters));
+//        return purchases.stream().map(p -> convertToDTO(p)).collect(Collectors.toList());
+////        reports.add(calculateAggregatedReport(filters));
+////        return reports;
+//    }
+//
+//    private PurchaseReport calculateAggregatedReport(ReportFilters filters) {
+//        List<Purchase> purchases = purchaseRepository.findAll(PurchaseSpecification.byFilters(filters));
+//
+//        PurchaseReport report = new PurchaseReport();
+//        report.setPeriodStartDate(filters.getStartDate());
+//        report.setPeriodEndDate(filters.getEndDate());
+//        report.setTotalNetWeight(purchases.stream().map(Purchase::getTotalNetWeight).reduce(BigDecimal.ZERO, BigDecimal::add));
+//        report.setTotalPurchaseAmount(purchases.stream().map(Purchase::getTotalPurchaseAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
+//        report.setTotalGstAmount(purchases.stream().map(p -> p.getTotalCgstAmount().add(p.getTotalSGstAmount())).reduce(BigDecimal.ZERO, BigDecimal::add));
+//        report.setTotalBalAmount(purchases.stream().map(Purchase::getBalAmount).reduce(BigDecimal.ZERO, BigDecimal::add));
+//        return report;
+//    }
+//
+//
+//
+//    private PurchaseReport convertToDTO(Purchase purchase) {
+//        PurchaseReport dto = new PurchaseReport();
+//        dto.setPurchaseDate(purchase.getPurchaseDate());
+//        dto.setMetalType(purchase.getMetalType());
+//        dto.setSupplierName(purchase.getSupplier().getName());  // Set supplier name
+//        dto.setTotalNetWeight(purchase.getTotalNetWeight());
+//        dto.setPurchaseRate(purchase.getPurchaseRate());
+//        dto.setIsGstPurchase(purchase.getIsGstPurchase());
+//        dto.setTotalGstAmount(purchase.getTotalCgstAmount().add(purchase.getTotalSGstAmount()));
+//        dto.setGstNo(purchase.getSupplier().getBusinessGstNo());
+//        dto.setTotalPurchaseAmount(purchase.getTotalPurchaseAmount());
+//        dto.setTotalBalAmount(purchase.getBalAmount());
+//        return dto;
+//    }
+//
+//    private PurchaseItem toEntity(PurchaseItemDTO pi, Purchase purchase) {
+//        log.debug("PurchaseService >> toEntity >>");
+//        PurchaseItem purchaseItem = purchaseItemRepository.findById(pi.getId())
+//                .orElseThrow(() -> new EntityNotFoundException("PurhcaseItem entity not found with id: "+pi.getId()));
+//        purchaseItem.setPurchase(purchase);
+//        if (pi.getStockId() != null && pi.getStockId() > 0) {
+//            Stock stock = stockRepository.getReferenceById(pi.getStockId());
+//            stock.fromDto(pi);
+//            purchaseItem.setStock(stock);
+//        }
+//        log.debug("PurchaseService << toEntity <<");
+//        return purchaseItem;
+//    }
 
     private PurchaseDTO toDto(Purchase entity) {
         log.debug("PurchaseService >> toDto >>");

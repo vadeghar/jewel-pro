@@ -150,11 +150,11 @@
         <div id="reportsSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" th:href="@{/metal-rate}">Purchase</a>
-                <a class="collapse-item" th:href="@{/metal-rate}">Sales</a>
-                <a class="collapse-item" th:href="@{/metal-rate}">Stock</a>
-                <a class="collapse-item" th:href="@{/metal-rate}">Customers</a>
-                <a class="collapse-item" th:href="@{/metal-rate}">Suppliers</a>
+                <a class="collapse-item" id="purchaseRpt" th:href="@{/reports/purchase}">Purchase</a>
+                <a class="collapse-item" id="purchaseRptGst" th:href="@{/reports/purchase-gst}">Purchase-GST</a>
+                <a class="collapse-item" id="saleRpt" th:href="@{/reports/sale}">Sale</a>
+                <a class="collapse-item" id="saleRptGst" th:href="@{/reports/sale-gst}">Sale-GST</a>
+                <a class="collapse-item" id="todoRpt" th:href="@{/todo}">Suppliers</a>
             </div>
         </div>
     </li>

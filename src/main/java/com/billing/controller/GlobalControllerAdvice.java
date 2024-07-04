@@ -23,7 +23,7 @@
 //    public void globalAttributes(Model model) {
 ////        BigDecimal goldRate = metalRateService.getRate(Metal.GOLD);
 ////        BigDecimal silverRate = metalRateService.getRate(Metal.SILVER);
-////        model.addAttribute("currentGoldRate", goldRate != null ? goldRate.toPlainString() : "0.00");
+////        model.addAttribute("currentGold24CtRate", goldRate != null ? goldRate.toPlainString() : "0.00");
 ////        model.addAttribute("currentSilverRate", silverRate!= null ? silverRate.toPlainString() : "0.00");
 //    }
 //}
