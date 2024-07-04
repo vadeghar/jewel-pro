@@ -18,6 +18,7 @@ $('#saveRate').on('click', function(e){
 
 function saveRateCallback(response) {
     $('#currentSilverRate').text(toCurrency(response.silverRate));
-    $('#currentGoldRate').text(toCurrency(response.goldRate));
+    $('#currentGold24CtRate').text(toCurrency(response.goldRate));
+    $('#currentGold22CtRate').text(toCurrency(response.gold22CtRate));
     $("#myModal").modal('hide');
 }

@@ -25,7 +25,8 @@ public class MetalRateRestController {
     public ResponseEntity<BoardRate> currentRate() {
         BigDecimal goldRate = metalRateService.getRate(Metal.GOLD);
         BigDecimal silverRate = metalRateService.getRate(Metal.SILVER);
-        return ResponseEntity.ok(BoardRate.builder().goldRate(goldRate).silverRate(silverRate).build());
+        BigDecimal gold22CtRate = metalRateService.getRate(Metal.GOLD22CT);
+        return ResponseEntity.ok(BoardRate.builder().goldRate(goldRate).silverRate(silverRate).gold22CtRate(gold22CtRate).build());
     }
 
     @PostMapping("save")
@@ -33,7 +34,8 @@ public class MetalRateRestController {
         MetalRate newMetalRate = metalRateService.save(metalRate);
         BigDecimal goldRate = metalRateService.getRate(Metal.GOLD);
         BigDecimal silverRate = metalRateService.getRate(Metal.SILVER);
-        return ResponseEntity.ok(BoardRate.builder().goldRate(goldRate).silverRate(silverRate).build());
+        BigDecimal gold22CtRate = metalRateService.getRate(Metal.GOLD22CT);
+        return ResponseEntity.ok(BoardRate.builder().goldRate(goldRate).silverRate(silverRate).gold22CtRate(gold22CtRate).build());
     }
 //
 //    @PostMapping("/save")

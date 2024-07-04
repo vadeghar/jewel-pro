@@ -13,5 +13,6 @@ import java.math.BigDecimal;
 @Builder
 public class BoardRate {
     private BigDecimal goldRate;
+    private BigDecimal gold22CtRate;
     private BigDecimal silverRate;
 }
