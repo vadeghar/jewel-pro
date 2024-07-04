@@ -6,8 +6,10 @@ $(document).ready(function() {
     $('#metalType').on('change', function(){
         var selectedValue = $(this).val();
         if (selectedValue == 'GOLD') {
-            $('#rate').val($('#currentGoldRate').text());
-        } else if (selectedValue == 'SILVER') {
+            $('#rate').val($('#currentGold24CtRate').text());
+        } if (selectedValue == 'GOLD22CT') {
+            $('#rate').val($('#currentGold22CtRate').text());
+        }else if (selectedValue == 'SILVER') {
             $('#rate').val($('#currentSilverRate').text());
         }
     });
@@ -135,7 +137,7 @@ function calcTotalPurchaseAmount() {
 
 }
 function setDefaultsOnPageLoad() {
-    $('#rate').val($('#currentGoldRate').text());
+    $('#rate').val($('#currentGold22CtRate').text());
     var today = new Date().toISOString().split('T')[0];
     // Set the value of the input element to today's date
     $('#purchaseDate').val(today);

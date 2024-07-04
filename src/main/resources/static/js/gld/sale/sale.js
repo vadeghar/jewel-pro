@@ -42,9 +42,10 @@ $(document).on('focus', '.code', function() {
             $('#saleItemList\\[' + index + '\\]\\.weight').val(ui.item.item.weight != null ? parseFloat(ui.item.item.weight).toFixed(3) : parseFloat(0).toFixed(3));
             $('#saleItemList\\[' + index + '\\]\\.vaWeight').val(ui.item.item.vaWeight != null ? parseFloat(ui.item.item.vaWeight).toFixed(3) : parseFloat(0).toFixed(3));
             $('#saleItemList\\[' + index + '\\]\\.stnWeight').val(ui.item.item.stnWeight != null ? parseFloat(ui.item.item.stnWeight).toFixed(3) : parseFloat(0).toFixed(3));
-             $('#saleItemList\\[' + index + '\\]\\.netWeight').val(calcNetWeight(ui.item.item));
+            $('#saleItemList\\[' + index + '\\]\\.netWeight').val(calcNetWeight(ui.item.item));
             $('#saleItemList\\[' + index + '\\]\\.makingCharge').val(ui.item.item.saleMC != null ? parseFloat(ui.item.item.saleMC).toFixed(2) : parseFloat(0).toFixed(3));
-
+            $('#saleItemList\\[' + index + '\\]\\.rate').val($('#currentGold22CtRate').text());
+            calcItemTotal(index);
         }
     });
 });
@@ -180,11 +181,13 @@ function calcItemTotal(index) {
     var vaWeight = parseFloat($('#saleItemList\\[' + index + '\\]\\.vaWeight').val());
     var stnWeight = parseFloat($('#saleItemList\\[' + index + '\\]\\.stnWeight').val());
     var makingCharge = parseFloat($('#saleItemList\\[' + index + '\\]\\.makingCharge').val());
+    var netWeight = parseFloat(vaWeight + weight);
     var rate = parseFloat($('#saleItemList\\[' + index + '\\]\\.rate').val());
     console.log('index:'+index+', weight: '+weight+', vaWeight:'+vaWeight+', makingCharge:'+makingCharge+', rate:'+rate);
     // Calculate gross weight
     var grossWeight = weight + vaWeight;
     var itemTotal = (grossWeight * rate) + makingCharge;
+    $('#saleItemList\\[' + index + '\\]\\.netWeight').val(grossWeight.toFixed(3));
     $('#saleItemList\\[' + index + '\\]\\.itemTotal').val(itemTotal.toFixed(2));
     calcMainTotals();
 }

@@ -15,10 +15,11 @@ $(document).ready(function () {
 
 function updateBoardRate(response) {
     $('#currentSilverRate').text(toCurrency(response.silverRate));
-    $('#currentGoldRate').text(toCurrency(response.goldRate));
+    $('#currentGold24CtRate').text(toCurrency(response.goldRate));
+    $('#currentGold22CtRate').text(toCurrency(response.gold22CtRate));
 }
 
-$('#editSilverRate, #editGoldRate').on('click', function(e){
+$('#editSilverRate, #editGoldRate, #editGold22CtRate').on('click', function(e){
     e.preventDefault();
     var source = $(this).attr('data-name');
 //    console.log('source: '+source);
