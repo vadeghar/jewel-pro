@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Permission Group List</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <div class="row no-gutters">
+                <div class="col d-flex justify-content-start font-weight-bold text-primary">
+                    Permission Group List
+                </div>
+                <div class="col d-flex justify-content-end font-weight-bold text-primary">
+                    <a th:href="@{/permission-group}">New Permission Group</a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+        </div>
+    </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="permissionGroupList">
+</div>
+
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/permission-group/permission-group-list.js}"></script>
+</th:block>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Permission List</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Permission List</h6>
+        </div>
+        <div class="card-body">
+
+        </div>
+    </div>
+</div>
+<input type="hidden" id="menuItem" name="menuItem" value="permissionList">
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/permissions/permission-list.js}"></script>
+</th:block>
+</html>
