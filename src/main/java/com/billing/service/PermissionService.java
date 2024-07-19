@@ -1,6 +1,7 @@
 package com.billing.service;
 
 import com.billing.entity.Permission;
+import com.billing.repository.PermissionGroupRepository;
 import com.billing.repository.PermissionRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +11,11 @@ import java.util.List;
 @Service
 public class PermissionService {
     private final PermissionRepository permissionRepository;
+    private final PermissionGroupRepository permissionGroupRepository;
 
-    public PermissionService(PermissionRepository permissionRepository) {
+    public PermissionService(PermissionRepository permissionRepository, PermissionGroupRepository permissionGroupRepository) {
         this.permissionRepository = permissionRepository;
+        this.permissionGroupRepository = permissionGroupRepository;
     }
 
     public Permission get(Long id) {
@@ -24,6 +27,9 @@ public class PermissionService {
     }
 
     public Permission save(Permission permission) {
+        if (permission.getPermissionGroupId() != null) {
+            permission.setPermissionGroup(permissionGroupRepository.findById(permission.getPermissionGroupId()).orElse(null));
+        }
         return permissionRepository.save(permission);
     }
 

@@ -145,6 +145,11 @@ function formToJson(parentId) {
             formData[this.name] = $(this).val();
         }
     });
+    $(parentId).find('select').each(function() {
+        if(this.name) {
+            formData[this.name] = $(this).val();
+        }
+    });
     return formData;
 }
 
@@ -165,3 +170,25 @@ function getUrlVars()
     }
     return vars;
 }
+
+function showSuccessMsg(sText) {
+    var alertDiv = $('<div class="alert alert-success fade-in" role="alert">'+
+                     '<strong>Success!</strong> ' + sText + '</div>');
+
+    $('#alert').html(alertDiv);
+
+    // Trigger the fade-in effect
+    setTimeout(function() {
+        alertDiv.addClass('show');
+    }, 10); // A small timeout to ensure the class is added after the element is inserted
+
+    // Optionally remove the message after a few seconds
+    setTimeout(function() {
+        alertDiv.removeClass('show').addClass('fade-out hide');
+        // Remove the element from the DOM after the fade-out animation
+        setTimeout(function() {
+            alertDiv.remove();
+        }, 500); // Match this duration with the transition time in CSS
+    }, 3000); // Duration the alert should be visible before fading out (in milliseconds)
+}
+

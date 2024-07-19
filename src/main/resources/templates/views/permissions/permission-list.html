@@ -8,16 +8,84 @@
 
 <!-- Begin Page Content -->
 <div layout:fragment="content" class="container-fluid">
+
     <div class="card shadow mb-4">
         <div class="card-header">
-            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Permission List</h6>
-        </div>
-        <div class="card-body">
+            <div class="row no-gutters">
+                <div class="col d-flex justify-content-start font-weight-bold text-primary" id="cardHeader">
+                    New Permission
+                </div>
+            </div>
 
         </div>
+        <div class="card-body">
+            <div id="permissionForm">
+                <div class="row">
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Permission Group:</label>
+                        <select id="permissionGroupId" name="permissionGroupId" class="form-control">
+                            <option value="">Select</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Prefix:</label>
+                        <input type="text" class="form-control" id="prefix" name="prefix" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Permission Name: <span id="effectivePermissionName" class="btn-primary"></span></label>
+                        <input type="text" class="form-control" id="name" name="name">
+                        <input type="hidden" id="id" name="id" th:value="${permissionId}">
+                    </div>
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Description:</label>
+                        <input type="text" class="form-control" id="desc" name="desc">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-right">
+                    <button type="button" id="savePermission" class="btn btn-primary">Save</button>
+                </div>
+                <div class="col-md-3 myBtn"><button type="button" class="btn btn-danger" id="resetPermission">Reset</button></div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
     </div>
+
+
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <div class="row no-gutters">
+                <div class="col d-flex justify-content-start font-weight-bold text-primary">
+                    Permission List
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered dataTable" id="permissionsTable">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th style="width: 280px;" class="no-sort">Actions</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="menuItem" name="menuItem" value="permissionList">
 </div>
-<input type="hidden" id="menuItem" name="menuItem" value="permissionList">
+
 <th:block layout:fragment="script">
     <script th:src="@{/js/gld/permissions/permission-list.js}"></script>
 </th:block>

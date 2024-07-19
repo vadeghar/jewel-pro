@@ -1,24 +1,64 @@
-<!DOCTYPE HTML>
-<html xmlns:layout="http://www.w3.org/1999/xhtml"
-      layout:decorate="~{layout/layout}"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Permission</title>
-</head>
+<!--<!DOCTYPE HTML>-->
+<!--<html xmlns:layout="http://www.w3.org/1999/xhtml"-->
+<!--      layout:decorate="~{layout/layout}"-->
+<!--      xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Permission</title>-->
+<!--</head>-->
 
-<!-- Begin Page Content -->
-<div layout:fragment="content" class="container-fluid">
-    <div class="card shadow mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="m-0 font-weight-bold text-primary" style="display: inline-block;">Permission</h6>
-            <input type="hidden" id="id" name="id" th:value="${permissionId}">
-        </div>
-        <div class="card-body">
+<!--&lt;!&ndash; Begin Page Content &ndash;&gt;-->
+<!--<div layout:fragment="content" class="container-fluid">-->
+<!--    <div class="card shadow mb-4">-->
+<!--        <div class="card-header">-->
+<!--            <div class="row no-gutters">-->
+<!--                <div class="col d-flex justify-content-start font-weight-bold text-primary">-->
+<!--                    Permission-->
+<!--                </div>-->
+<!--                <div class="col d-flex justify-content-end font-weight-bold text-primary">-->
+<!--                    <a th:href="@{/permissions/list}">List</a>-->
+<!--                </div>-->
+<!--            </div>-->
 
-        </div>
-    </div>
-</div>
-<th:block layout:fragment="script">
-    <script th:src="@{/js/gld/permissions/permission.js}"></script>
-</th:block>
-</html>
+<!--        </div>-->
+<!--        <div class="card-body">-->
+<!--            <div id="permissionForm">-->
+<!--                <div class="row">-->
+<!--                    <div class="col-md-6 mt-2">-->
+<!--                        <label class="font-weight-bold mb-0">Permission Group:</label>-->
+<!--                        <select id="permissionGroupId" name="permissionGroupId" class="form-control">-->
+<!--                            <option value="">Select</option>-->
+<!--                        </select>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6 mt-2">-->
+<!--                        <label class="font-weight-bold mb-0">Prefix:</label>-->
+<!--                        <input type="text" class="form-control" id="prefix" name="prefix" readonly>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row">-->
+<!--                    <div class="col-md-6 mt-2">-->
+<!--                        <label class="font-weight-bold mb-0">Permission Name: <span id="effectivePermissionName" class="btn-primary"></span></label>-->
+<!--                        <input type="text" class="form-control" id="name" name="name">-->
+<!--                        <input type="hidden" id="id" name="id" th:value="${permissionId}">-->
+<!--                    </div>-->
+<!--                    <div class="col-md-6 mt-2">-->
+<!--                        <label class="font-weight-bold mb-0">Description:</label>-->
+<!--                        <input type="text" class="form-control" id="desc" name="desc">-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="row mt-4">-->
+<!--                <div class="col-md-3"></div>-->
+<!--                <div class="col-md-3 text-right">-->
+<!--                    <button type="button" id="savePermission" class="btn btn-primary">Save</button>-->
+<!--                </div>-->
+<!--                <div class="col-md-3 myBtn"><button type="button" class="btn btn-danger" id="resetPermissionGroup">Reset</button></div>-->
+<!--                <div class="col-md-3"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <input type="hidden" id="menuItem" name="menuItem" value="permissionList">-->
+<!--</div>-->
+<!--<th:block layout:fragment="script">-->
+<!--    <script th:src="@{/js/gld/permissions/permission.js}"></script>-->
+<!--</th:block>-->
+<!--</html>-->

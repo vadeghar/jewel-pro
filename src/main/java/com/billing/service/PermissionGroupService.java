@@ -29,7 +29,7 @@ public class PermissionGroupService {
     public Optional<PermissionGroup> updatePermissionGroup(Long id, PermissionGroup permissionGroupDetails) {
         return permissionGroupRepository.findById(id).map(permissionGroup -> {
             permissionGroup.setName(permissionGroupDetails.getName());
-            permissionGroup.setPermissions(permissionGroupDetails.getPermissions());
+//            permissionGroup.setPermissions(permissionGroupDetails.getPermissions());
             return permissionGroupRepository.save(permissionGroup);
         });
     }

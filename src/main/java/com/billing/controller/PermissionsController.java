@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.*;
 public class PermissionsController {
 
     @GetMapping
-    @RequestMapping("{id}")
-    public String get(@PathVariable(required = false) Long id) {
+    public String get(@RequestParam(required = false, name = "id") Long id) {
         return "views/permissions/permission";
     }
 
@@ -18,7 +17,7 @@ public class PermissionsController {
         return "views/permissions/permission";
     }
 
-    @GetMapping
+    @GetMapping("list")
     public String list() {
         return "views/permissions/permission-list";
     }

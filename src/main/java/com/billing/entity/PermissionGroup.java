@@ -1,5 +1,6 @@
 package com.billing.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class PermissionGroup {
     private Long id;
 
     private String name;
+    @Column(name = "`desc`")
     private String desc;
 
     @OneToMany(mappedBy = "permissionGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

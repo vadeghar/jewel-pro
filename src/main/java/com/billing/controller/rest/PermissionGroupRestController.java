@@ -41,12 +41,16 @@ public class PermissionGroupRestController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePermissionGroup(@PathVariable Long id) {
-        boolean isDeleted = permissionGroupService.deletePermissionGroup(id);
+    public ResponseEntity<?> deletePermissionGroup(@PathVariable Long id) {
+        PermissionGroup deletePermissionGroup = permissionGroupService.getPermissionGroupById(id).orElseThrow();
+        boolean isDeleted = false;
+        if (deletePermissionGroup.getPermissions().size() == 0) {
+            isDeleted = permissionGroupService.deletePermissionGroup(id);
+        }
         if (isDeleted) {
             return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body("Permissions attached to this group");
         }
     }
 }

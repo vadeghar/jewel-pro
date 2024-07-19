@@ -35,6 +35,9 @@ public class PermissionsRestController {
     @GetMapping("/{id}")
     public ResponseEntity<Permission> getPermissionById(@PathVariable Long id) {
         Permission permission = permissionService.get(id);
+        if (permission.getPermissionGroup() != null) {
+            permission.setPermissionGroupId(permission.getPermissionGroup().getId());
+        }
         return ResponseEntity.ok(permission);
     }
 
