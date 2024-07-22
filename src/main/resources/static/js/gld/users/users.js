@@ -69,3 +69,9 @@ function loadUserAndRoles(response) {
     $('#username').val(response.username);
     $('#userFormHeading').text('Edit User')
 }
+
+$('#resetUser').on('click', function(){
+    resetForm('#userForm');
+    var checkboxes = $('#rolesContainer input:checkbox');
+    checkboxes.prop('checked', false);
+})
