@@ -3,7 +3,7 @@
       layout:decorate="~{layout/layout}"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Roles</title>
+    <title>Users</title>
 </head>
 
 <!-- Begin Page Content -->
@@ -13,7 +13,7 @@
         <div class="card-header">
             <div class="row no-gutters">
                 <div class="col d-flex justify-content-start font-weight-bold text-primary">
-                    Roles
+                    Users
                 </div>
             </div>
 
@@ -21,10 +21,10 @@
         <div class="card-body" id="">
             <div class="row">
                 <div class="col">
-                    <table class="table table-bordered dataTable" id="rolesTable">
+                    <table class="table table-bordered dataTable" id="usersTable">
                         <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Username</th>
                             <th>Name</th>
                             <th style="width: 280px;" class="no-sort">Actions</th>
                         </tr>
@@ -33,14 +33,13 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="card shadow mb-4">
         <div class="card-header">
             <div class="row no-gutters">
-                <div class="col d-flex justify-content-start font-weight-bold text-primary" id="roleFormHeading">
-                    New Role
+                <div class="col d-flex justify-content-start font-weight-bold text-primary" id="userFormHeading">
+                    New User
                 </div>
             </div>
         </div>
@@ -48,18 +47,27 @@
             <div id="roleForm">
                 <div class="row">
                     <div class="col-md-6 mt-2">
-                        <label class="font-weight-bold mb-0">Role:</label>
+                        <label class="font-weight-bold mb-0">Name:</label>
                         <input type="text" class="form-control" id="name" name="name">
+                        <input type="hidden" id="id" name="id">
+                    </div>
+                    <div class="col-md-6 mt-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Username:</label>
+                        <input type="text" class="form-control" id="username" name="username">
                     </div>
                     <div class="col-md-6 mt-2">
-                        <input type="hidden" id="id" name="id">
+                        <label class="font-weight-bold mb-0">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password">
                     </div>
                 </div>
             </div>
             <div class="row mt-4">
-                <h5>Permissions:</h5>
+                <h5>Roles:</h5>
             </div>
-            <div class="row" id="permissionsContainer">
+            <div class="row" id="rolesContainer">
             </div>
             <div class="row mt-4">
                 <div class="col-md-3"></div>
@@ -72,10 +80,10 @@
         </div>
     </div>
 
+    <input type="hidden" id="menuItem" name="menuItem" value="users">
 
-    <input type="hidden" id="menuItem" name="menuItem" value="roles">
 </div>
 <th:block layout:fragment="script">
-    <script th:src="@{/js/gld/roles/roles.js}"></script>
+    <script th:src="@{/js/gld/users/users.js}"></script>
 </th:block>
 </html>
