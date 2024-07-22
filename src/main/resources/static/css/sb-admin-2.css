@@ -11376,3 +11376,65 @@ body.sidebar-toggled footer.sticky-footer {
         right: 100vw; /* Move to just off the left edge */
     }
 }
+
+
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
+  }
+
+  .fade-in.show {
+    opacity: 1;
+  }
+
+  .fade-out {
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+  }
+
+  .fade-out.hide {
+    opacity: 0;
+  }
+
+  /* Custom styles for aligning DataTable elements */
+  /* Custom styles for aligning DataTable elements */
+  .dataTables_wrapper .dt-container {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+  }
+
+  .dt-container .dt-length,
+  .dt-container .dt-search {
+      display: inline-block;
+      margin-top: 0.5rem;
+  }
+
+  /* Styles the length selection dropdown */
+  .dt-container .dt-length {
+      display: inline-block;
+      float: left;
+      margin-top: 0.5rem;
+  }
+
+  /* Styles the search box */
+  .dt-container .dt-search {
+      display: inline-block;
+      float: right;
+      text-align: right;
+      margin-top: 0.5rem;
+  }
+
+  /* Styles the pagination controls */
+  .dt-container .dt-paging {
+      float: right;
+      text-align: right;
+      margin-top: 5px;
+  }
+
+  /* Styles the info text */
+  .dt-container .dt-info {
+      float: left;
+      margin-top: 5px;
+  }
+

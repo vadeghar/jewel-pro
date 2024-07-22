@@ -26,7 +26,7 @@ public class AuthController {
     @GetMapping({"", "/", "/login"})
     public String login(Model model) {
         if (userService.isUserLoggedIn()) {
-            return users(model);
+            return "redirect:/users";
         }
         return "views/registration/login";
     }
@@ -62,12 +62,12 @@ public class AuthController {
     }
 
     // handler method to handle list of users
-    @GetMapping("/users")
-    public String users(Model model) {
-        List<UserDto> users = userService.findAllUsers();
-        model.addAttribute("users", users);
-        return "views/registration/users";
-    }
+//    @GetMapping("/users")
+//    public String users(Model model) {
+//        List<UserDto> users = userService.findAllUsers();
+//        model.addAttribute("users", users);
+//        return "views/registration/users";
+//    }
 
     @GetMapping("/home")
     public String home(Model model) {
