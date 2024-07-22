@@ -67,5 +67,5 @@ function loadUserAndRoles(response) {
     $('#id').val(response.id);
     $('#password').val(response.password);
     $('#username').val(response.username);
-    ('#userFormHeading').text('Edit User')
+    $('#userFormHeading').text('Edit User')
 }
