@@ -9,7 +9,7 @@ function loadDatatable(response) {
     $('#permissionGroupsTable').DataTable({
         data: response,
         columns: [
-            {data: 'id'},
+            {data: 'displayOrder'},
             {data: 'name'},
             {data: 'desc'},
             {
@@ -48,6 +48,7 @@ function loadPermissionGroup(response) {
     $('#id').val(response.id);
     $('#name').val(response.name);
     $('#desc').val(response.desc);
+    $('#displayOrder').val(response.displayOrder);
     $('#cardHeader').text('Edit Permission Group')
 }
 
@@ -63,9 +64,7 @@ $(document).on('click', '#resetPermissionGroup', function() {
 });
 
 function saveCallback(response) {
-    $('#id').val('');
-    $('#name').val('');
-    $('#desc').val('');
+    resetForm('#permissionGroupForm');
     showSuccessMsg('Permission Group: '+response.name+' successfully saved.')
     $('#cardHeader').text('New Permission Group')
     simpleCall(url, 'get', '', '', '', loadDatatable);

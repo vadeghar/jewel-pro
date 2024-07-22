@@ -15,13 +15,14 @@ function loadDatatable(response) {
     $('#permissionsTable').DataTable({
         data: response,
         columns: [
-            {data: 'id'},
+            {data: 'permissionGroupName', render: function (data, type, row) {return data != undefined ? data : ''}},
             {data: 'name'},
             {data: 'desc'},
             {
               data: 'id',
               render: function (data, type, row) {
-                  return  '<button class="btn btn-sm btn-primary editRowCls" data-id="' + data +'" title="Edit Permission"><i class="fas fa-edit"></i></button> ';
+                  return '<button class="btn btn-sm btn-primary editRowCls" data-id="' + data +'" title="Edit Permission"><i class="fas fa-edit"></i></button> '+
+                  '<button class="btn btn-sm btn-danger deleteRowCls" data-id="' + data +'" title="Delete Permission"><i class="fas fa-trash"></i></button> ';
               }
             }
         ],
@@ -30,7 +31,7 @@ function loadDatatable(response) {
                 "targets": 'no-sort', // Target the columns with the class 'no-sort'
                 "orderable": false,   // Disable sorting for these columns
             }],
-        order: [[1, 'desc']]
+        order: [[0, 'asc']]
     });
 }
 
@@ -38,9 +39,13 @@ $(document).on('click', '.editRowCls', function() {
     var id = $(this).data('id');
     simpleCall(url+'/'+id, 'get', '', '', '', loadPermission);
 });
-$('#name').on('input', function(){
-    $('#effectivePermissionName').text($('#prefix').val()+'_'+$(this).val());
+
+$(document).on('click', '.deleteRowCls', function() {
+    var id = $(this).data('id');
+    createDynamicModal(id, "Delete Permission Group?.", "Are you sure want to delete?", "Yes", deletePermission)
 });
+
+
 $('#savePermission').on('click', function(){
     var reportRequest = formToJson('#permissionForm');
     simpleCall(url, 'post', '', '', JSON.stringify(reportRequest), saveCallback);
@@ -72,6 +77,12 @@ function loadPermission(response) {
     $('#prefix').val($('#permissionGroupId option:selected').text());
     $('#effectivePermissionName').text($('#prefix').val()+'_'+$('#name').val());
     $('#cardHeader').text('Edit Permission')
+}
+
+function deletePermission(id) {
+    simpleCall(url+'/'+id, 'delete', '', '', '', function(){
+        simpleCall(url, 'get', '', '', '', loadDatatable);
+    });
 }
 
 function setPermissionGroups(response) {

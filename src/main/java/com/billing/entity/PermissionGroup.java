@@ -24,6 +24,8 @@ public class PermissionGroup {
     @Column(name = "`desc`")
     private String desc;
 
+    private int displayOrder;
+
     @OneToMany(mappedBy = "permissionGroup", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Permission> permissions;
 

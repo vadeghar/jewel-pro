@@ -1,6 +1,7 @@
 package com.billing.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,32 +27,13 @@ public class Role {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+//    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY) // Eager fetching ensures permissions are loaded with role
+    @JoinTable(name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Set<Permission> permissions;
 
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RolePermissions> rolePermissions = new HashSet<>();
 
-    // Constructors, getters, setters, etc.
-
-    // Method to add RolePermission
-    public void addRolePermission(Permission permission) {
-        RolePermissions rolePermission = new RolePermissions(null,this, permission);
-        rolePermissions.add(rolePermission);
-        permission.getRolePermissions().add(rolePermission);
-    }
-
-    // Method to remove RolePermission
-    public void removeRolePermission(Permission permission) {
-        for (Iterator<RolePermissions> iterator = rolePermissions.iterator(); iterator.hasNext();) {
-            RolePermissions rolePermission = iterator.next();
-            if (rolePermission.getRole().equals(this) && rolePermission.getPermission().equals(permission)) {
-                iterator.remove();
-                rolePermission.getPermission().getRolePermissions().remove(rolePermission);
-                rolePermission.setRole(null);
-                rolePermission.setPermission(null);
-            }
-        }
-    }
 
 }

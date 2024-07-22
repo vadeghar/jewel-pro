@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,9 +43,12 @@ public class UserService {
         // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        Role role = roleRepository.findByName("ROLE_ADMIN");
-        if (role == null) {
+        Optional<Role> roleOpt = roleRepository.findByName("ROLE_ADMIN");
+        Role role = null;
+        if (!roleOpt.isPresent()) {
             role = checkRoleExist();
+        } else {
+            role = roleOpt.get();
         }
         user.setRoles(Set.of(role));
         User user1 = userRepository.save(user);

@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Purchase Reports</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+
+        <div class="card-header">
+            <div class="row no-gutters">
+                <div class="col d-flex justify-content-start font-weight-bold text-primary">
+                    Roles
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body" id="">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered dataTable" id="rolesTable">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th style="width: 280px;" class="no-sort">Actions</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <div class="row no-gutters">
+                <div class="col d-flex justify-content-start font-weight-bold text-primary" id="roleFormHeading">
+                    New Role
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="roleForm">
+                <div class="row">
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Role:</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                    </div>
+                    <div class="col-md-6 mt-2">
+                        <input type="hidden" id="id" name="id">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <h5>Permissions:</h5>
+            </div>
+            <div class="row" id="permissionsContainer">
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-right">
+                    <button type="button" id="saveRole" class="btn btn-primary">Save</button>
+                </div>
+                <div class="col-md-3 myBtn"><button type="button" class="btn btn-danger" id="resetRole">Reset</button></div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <input type="hidden" id="menuItem" name="menuItem" value="roles">
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/roles/roles.js}"></script>
+</th:block>
+</html>

@@ -1,6 +1,7 @@
 package com.billing.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "permission")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Permission {
 
     @Id
@@ -34,29 +36,38 @@ public class Permission {
 
     @Transient
     private Long permissionGroupId;
+    @Transient
+    private String permissionGroupName;
 
-    @OneToMany(mappedBy = "permission", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<RolePermissions> rolePermissions = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER) // Eager fetching ensures permissions are loaded with role
+    @JoinTable(name = "role_permissions",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    @JsonIgnore
+    private Set<Role> roles;
+
+//    @OneToMany(mappedBy = "permission", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<RolePermissions> rolePermissions = new HashSet<>();
 
     // Constructors, getters, setters, etc.
 
     // Method to add RolePermission
-    public void addRolePermission(Role role) {
-        RolePermissions rolePermission = new RolePermissions(null, role, this);
-        rolePermissions.add(rolePermission);
-        role.getRolePermissions().add(rolePermission);
-    }
-
-    // Method to remove RolePermission
-    public void removeRolePermission(Role role) {
-        for (Iterator<RolePermissions> iterator = rolePermissions.iterator(); iterator.hasNext();) {
-            RolePermissions rolePermission = iterator.next();
-            if (rolePermission.getPermission().equals(this) && rolePermission.getRole().equals(role)) {
-                iterator.remove();
-                rolePermission.getRole().getRolePermissions().remove(rolePermission);
-                rolePermission.setPermission(null);
-                rolePermission.setRole(null);
-            }
-        }
-    }
+//    public void addRolePermission(Role role) {
+//        RolePermissions rolePermission = new RolePermissions(null, role, this);
+//        rolePermissions.add(rolePermission);
+//        role.getRolePermissions().add(rolePermission);
+//    }
+//
+//    // Method to remove RolePermission
+//    public void removeRolePermission(Role role) {
+//        for (Iterator<RolePermissions> iterator = rolePermissions.iterator(); iterator.hasNext();) {
+//            RolePermissions rolePermission = iterator.next();
+//            if (rolePermission.getPermission().equals(this) && rolePermission.getRole().equals(role)) {
+//                iterator.remove();
+//                rolePermission.getRole().getRolePermissions().remove(rolePermission);
+//                rolePermission.setPermission(null);
+//                rolePermission.setRole(null);
+//            }
+//        }
+//    }
 }
