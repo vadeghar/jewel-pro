@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout/layout}"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Users</title>
+</head>
+
+<!-- Begin Page Content -->
+<div layout:fragment="content" class="container-fluid">
+    <div class="card shadow mb-4">
+
+        <div class="card-header">
+            <div class="row no-gutters">
+                <div class="col d-flex justify-content-start font-weight-bold text-primary">
+                    Users
+                </div>
+            </div>
+
+        </div>
+        <div class="card-body" id="">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-bordered dataTable" id="usersTable">
+                        <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Name</th>
+                            <th style="width: 280px;" class="no-sort">Actions</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header">
+            <div class="row no-gutters">
+                <div class="col d-flex justify-content-start font-weight-bold text-primary" id="userFormHeading">
+                    New User
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div id="userForm">
+                <div class="row">
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name">
+                        <input type="hidden" id="id" name="id">
+                    </div>
+                    <div class="col-md-6 mt-2"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Username:</label>
+                        <input type="text" class="form-control" id="username" name="username">
+                    </div>
+                    <div class="col-md-6 mt-2">
+                        <label class="font-weight-bold mb-0">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <h5>Roles:</h5>
+            </div>
+            <div class="row" id="rolesContainer">
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-right">
+                    <button type="button" id="saveUser" class="btn btn-primary">Save</button>
+                </div>
+                <div class="col-md-3 myBtn"><button type="button" class="btn btn-danger" id="resetUser">Reset</button></div>
+                <div class="col-md-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="menuItem" name="menuItem" value="users">
+
+</div>
+<th:block layout:fragment="script">
+    <script th:src="@{/js/gld/users/users.js}"></script>
+</th:block>
+</html>

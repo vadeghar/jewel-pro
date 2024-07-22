@@ -14,7 +14,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,9 +44,12 @@ public class UserService {
         // encrypt the password using spring security
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-        Role role = roleRepository.findByName("ROLE_ADMIN");
-        if (role == null) {
+        Optional<Role> roleOpt = roleRepository.findByName("ROLE_ADMIN");
+        Role role = null;
+        if (!roleOpt.isPresent()) {
             role = checkRoleExist();
+        } else {
+            role = roleOpt.get();
         }
         user.setRoles(Set.of(role));
         User user1 = userRepository.save(user);
@@ -56,6 +61,7 @@ public class UserService {
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
 
     public boolean isUserLoggedIn() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -73,6 +79,44 @@ public class UserService {
                 .map((user) -> mapToUserDto(user))
                 .collect(Collectors.toList());
     }
+
+    public User saveUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public User updateUser(Long id, User userDetails) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        user.setName(userDetails.getName());
+        user.setEmail(userDetails.getEmail());
+        user.setUsername(userDetails.getUsername());
+        user.setPassword(userDetails.getPassword());
+        user.setRoles(userDetails.getRoles());
+
+        return userRepository.save(user);
+    }
+
+
+
+
+
+
+
+
+
 
     private UserDto mapToUserDto(User user) {
         UserDto userDto = new UserDto();
