@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${DATA_SOURCE_URL:jdbc:mysql://avnadmin:AVNS_G40tXtDUqJn_g-6PGYe@mysql-2339a621-lakshman-6868.a.aivencloud.com:13707/gld-retail?ssl-mode=REQUIRED}
-    username: ${DATA_USERNAME:avnadmin}
-    password: ${DATA_PASSWORD:AVNS_G40tXtDUqJn_g-6PGYe}
+    url: ${DATA_SOURCE_URL:}
+    username: ${DATA_USERNAME:}
+    password: ${DATA_PASSWORD:}
 #    driver-class-name: com.mysql.jdbc.Driver
     hikari:
       leakDetectionThreshold: 30000
