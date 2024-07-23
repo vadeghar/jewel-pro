@@ -43,12 +43,21 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
             "ORDER BY CONCAT(YEAR(s.saleDate), '')")
     List<ChartData> findSalesByYearly(LocalDate startDate, LocalDate endDate);
 
-    @Query("SELECT new com.billing.model.ChartData(s.customer.name, SUM(s.totalSaleAmount + s.totalExchangeAmount)) " +
-            "FROM Sale s " +
-            "WHERE s.saleDate >= CURRENT_DATE - 5 " +
-            "GROUP BY s.customer.name " +
-            "ORDER BY SUM(s.totalSaleAmount + s.totalExchangeAmount) DESC")
-    List<ChartData> findTopCustomersByTotalAmountLast5Days(Pageable pageable);
+//    @Query("SELECT new com.billing.model.ChartData(s.customer.name, SUM(s.totalSaleAmount + s.totalExchangeAmount)) " +
+//            "FROM Sale s " +
+//            "WHERE s.saleDate >= CURRENT_DATE - 5 " +
+//            "GROUP BY s.customer.name " +
+//            "ORDER BY SUM(s.totalSaleAmount + s.totalExchangeAmount) DESC")
+//    List<ChartData> findTopCustomersByTotalAmountLast5Days(Pageable pageable);
+
+    @Query(value = "SELECT c.name AS customerName, SUM(s.total_sale_amount + s.total_exchange_amount) AS totalAmount " +
+            "FROM sale s " +
+            "JOIN customer c ON s.customer_id = c.id " +
+            "WHERE s.sale_date >= CURRENT_DATE - INTERVAL '5 DAY' " +
+            "GROUP BY c.name " +
+            "ORDER BY totalAmount DESC",
+            nativeQuery = true)
+    List<ChartData> findTopCustomersByTotalAmountLast5Days();
 
     @Query(value = "SELECT " +
             "s.sale_date AS startDate, " +

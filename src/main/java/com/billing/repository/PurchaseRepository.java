@@ -2,17 +2,18 @@ package com.billing.repository;
 
 import com.billing.entity.Purchase;
 import com.billing.model.ChartData;
-import com.billing.model.WeeklyReport;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+@Repository
 public interface PurchaseRepository extends JpaRepository<Purchase, Long>/*, JpaSpecificationExecutor<Purchase>*/ {
 
     List<Purchase> findAllByActivePurchase(String activePurchase);
@@ -47,12 +48,20 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long>/*, Jpa
             "AND MONTH(p.purchaseDate) = MONTH(CURRENT_DATE())")
     BigDecimal getCurrentMonthTotalPurchaseAmount();
 
-    @Query("SELECT new com.billing.model.ChartData(p.supplier.name, SUM(p.totalPurchaseAmount)) " +
-            "FROM Purchase p " +
-            "WHERE p.purchaseDate >= CURRENT_DATE - 30 " +
+//    @Query("SELECT new com.billing.model.ChartData(p.supplier.name, SUM(p.totalPurchaseAmount)) " +
+//            "FROM Purchase p " +
+//            "WHERE p.purchaseDate >= CURRENT_DATE - 30 " +
+//            "GROUP BY p.supplier.name " +
+//            "ORDER BY SUM(p.totalPurchaseAmount) DESC")
+//    List<ChartData> findTopSuppliersByTotalAmountLast5Days(Pageable pageable);
+
+    @Query(value = "SELECT p.supplier.name AS supplierName, SUM(p.total_purchase_amount) AS totalPurchaseAmount " +
+            "FROM purchase p " +
+            "WHERE p.purchase_date >= CURRENT_DATE - INTERVAL '30 DAY' " +
             "GROUP BY p.supplier.name " +
-            "ORDER BY SUM(p.totalPurchaseAmount) DESC")
-    List<ChartData> findTopSuppliersByTotalAmountLast5Days(PageRequest pageable);
+            "ORDER BY SUM(p.total_purchase_amount) DESC",
+            nativeQuery = true)
+    List<ChartData> findTopSuppliersByTotalAmountLast30Days();
 
 //    @Query("SELECT new com.billing.model.WeeklyReport(" +
 //            "DATE_ADD(:startDate, INTERVAL (WEEK(p.purchaseDate) - 1) WEEK), " + // Start date of the week
