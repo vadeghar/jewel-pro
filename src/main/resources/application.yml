@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url: ${DATA_SOURCE_URL:}
+    username: ${DATA_USERNAME:}
+    password: ${DATA_PASSWORD:}
+#    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      leakDetectionThreshold: 30000
+  jpa:
+    properties:
+      hibernate:
+        dialect:
+          storage_engine: innodb
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  mvc:
+    format:
+      date: yyyy-MM-dd
+      date-time: yyyy-MM-dd HH:mm:ss
+  server:
+    error:
+      whitelabel:
+        enabled: false
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    com.billing: DEBUG
