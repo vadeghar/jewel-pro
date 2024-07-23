@@ -1,16 +1,12 @@
 package com.billing.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
+import jakarta.persistence.*;
 import java.util.Set;
 
 @Setter
@@ -28,7 +24,7 @@ public class Role {
     private String name;
 
 //    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY) // Eager fetching ensures permissions are loaded with role
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_permissions",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))

@@ -4,7 +4,7 @@ import com.billing.entity.ItemType;
 import com.billing.repository.ItemTypeRepository;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 

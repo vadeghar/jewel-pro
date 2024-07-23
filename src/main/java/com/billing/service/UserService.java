@@ -7,6 +7,7 @@ import com.billing.entity.User;
 import com.billing.repository.RoleRepository;
 import com.billing.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,23 +37,28 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void saveUser(UserDto userDto) {
-        User user = new User();
-        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
-        user.setEmail(userDto.getEmail());
-        user.setUsername(userDto.getUsername());
+    public User saveUser(User user) {
+//        User user = new User();
+//        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
+//        user.setEmail(userDto.getEmail());
+//        user.setUsername(userDto.getUsername());
         // encrypt the password using spring security
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-
-        Optional<Role> roleOpt = roleRepository.findByName("ROLE_ADMIN");
-        Role role = null;
-        if (!roleOpt.isPresent()) {
-            role = checkRoleExist();
+        if (StringUtils.isEmpty(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode("password"));
         } else {
-            role = roleOpt.get();
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        user.setRoles(Set.of(role));
+
+//        Optional<Role> roleOpt = roleRepository.findByName("ROLE_ADMIN");
+//        Role role = null;
+//        if (!roleOpt.isPresent()) {
+//            role = checkRoleExist();
+//        } else {
+//            role = roleOpt.get();
+//        }
+//        user.setRoles(Set.of(role));
         User user1 = userRepository.save(user);
+        return user1;
     }
 
     public User findUserByEmail(String email) {
@@ -80,9 +86,9 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User saveUser(User user) {
-        return userRepository.save(user);
-    }
+//    public User saveUser(User user) {
+//        return userRepository.save(user);
+//    }
 
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
@@ -99,13 +105,14 @@ public class UserService {
     public User updateUser(Long id, User userDetails) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-
         user.setName(userDetails.getName());
         user.setEmail(userDetails.getEmail());
         user.setUsername(userDetails.getUsername());
-        user.setPassword(userDetails.getPassword());
+        //user.setPassword(userDetails.getPassword());
+        if (StringUtils.isNotBlank(userDetails.getPassword())) {
+            user.setPassword(passwordEncoder.encode(userDetails.getPassword()));
+        }
         user.setRoles(userDetails.getRoles());
-
         return userRepository.save(user);
     }
 

@@ -16,7 +16,7 @@ function loadUsers(response) {
             {
               data: 'id',
               render: function (data, type, row) {
-                  return  '<button class="btn btn-sm btn-primary editRowCls" data-id="' + data +'" title="Edit Permission"><i class="fas fa-edit"></i></button> ';
+                  return  '<button class="btn btn-sm btn-primary editRowCls" data-id="' + data +'" title="Edit Role"><i class="fas fa-edit"></i></button> ';
               }
             }
         ],
@@ -68,6 +68,16 @@ function loadUserAndRoles(response) {
     $('#password').val(response.password);
     $('#username').val(response.username);
     $('#userFormHeading').text('Edit User')
+    var checkboxes = $('#rolesContainer input:checkbox');
+    $.each(response.roles, function(index, role) {
+        var roleId = role.id;
+        var matchingCheckbox = checkboxes.filter(function() {
+            return $(this).attr('id') == roleId;
+        });
+        if (matchingCheckbox) {
+            matchingCheckbox.prop('checked', true);
+        }
+    });
 }
 
 $('#resetUser').on('click', function(){
@@ -75,3 +85,34 @@ $('#resetUser').on('click', function(){
     var checkboxes = $('#rolesContainer input:checkbox');
     checkboxes.prop('checked', false);
 })
+
+
+$('#saveUser').on('click', function(){
+    var userRequest = formToJson('#userForm');
+    var checkedRoles = [];
+    $('#rolesContainer input:checkbox:checked').each(function() {
+        var roleId = $(this).attr('id') || $(this).attr('name');
+        var role = {
+          "id": roleId
+        };
+        checkedRoles.push(role);
+    });
+    console.log('checkedRoles: '+checkedRoles)
+    userRequest.roles = checkedRoles;
+    console.log('userRequest: '+JSON.stringify(userRequest));
+    if (userRequest.id == '') {
+        simpleCall(url, 'post', '', '', JSON.stringify(userRequest), saveCallback);
+    } else {
+        simpleCall(url+'/'+userRequest.id, 'put', '', '', JSON.stringify(userRequest), saveCallback);
+    }
+
+})
+
+function saveCallback(response) {
+    resetForm('#userForm');
+    var checkboxes = $('#rolesContainer input:checkbox');
+    checkboxes.prop('checked', false);
+    showSuccessMsg('User: '+response.name+' successfully saved.')
+    $('#userFormHeading').text('New User')
+    simpleCall(url, 'get', '', '', '', loadUsers);
+}

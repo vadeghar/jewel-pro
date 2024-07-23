@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <div th:fragment="sidebar">
 <!-- Sidebar -->
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
@@ -33,7 +34,10 @@
         Application
     </div>
 
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAuthority('Supplier_Page') ||
+                                        hasAuthority('Supplier_List_Page') ||
+                                        hasAuthority('Purchases_Page') ||
+                                        hasAuthority('Purchase_List_Page')">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#purchaseSec"
            aria-expanded="true" aria-controls="purchaseSec">
             <i class="fa-solid fa-cart-arrow-down"></i>
@@ -42,14 +46,15 @@
         <div id="purchaseSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" id="newSupplier" th:href="@{/supplier}">Supplier</a>
-                <a class="collapse-item" id="supplierList" th:href="@{/supplier/supplier-list}">Supplier list</a>
-                <a class="collapse-item" id="newPurchase" th:href="@{/purchase}">Purchase</a>
-                <a class="collapse-item" id="purchaseList" th:href="@{/purchase/purchase-list}">Purchase list</a>
+                <a class="collapse-item" id="newSupplier" sec:authorize="hasAuthority('Supplier_Page')" th:href="@{/supplier}">Supplier</a>
+                <a class="collapse-item" id="supplierList" sec:authorize="hasAuthority('Supplier_List_Page')" th:href="@{/supplier/supplier-list}">Supplier list</a>
+                <a class="collapse-item" id="newPurchase" th:href="@{/purchase}" sec:authorize="hasAuthority('Purchases_Page')">Purchase</a>
+                <a class="collapse-item" id="purchaseList" th:href="@{/purchase/purchase-list}" sec:authorize="hasAuthority('Purchase_List_Page')">Purchase list</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAuthority('Estimation_Page') ||
+                                        hasAuthority('Estimation_List_Page')">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#estimationSec"
            aria-expanded="true" aria-controls="estimationSec">
             <i class="fa-solid fa-scale-balanced"></i>
@@ -58,12 +63,15 @@
         <div id="estimationSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" id="newEstimation" th:href="@{/estimation}">New Estimation</a>
-                <a class="collapse-item" id="estimationList" th:href="@{/estimation/list}">Estimation list</a>
+                <a class="collapse-item" id="newEstimation" sec:authorize="hasAuthority('Estimation_Page')" th:href="@{/estimation}">New Estimation</a>
+                <a class="collapse-item" id="estimationList" sec:authorize="hasAuthority('Estimation_List_Page')" th:href="@{/estimation/list}">Estimation list</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAuthority('Customer_Page') ||
+                                        hasAuthority('Customer_List_Page')||
+                                        hasAuthority('All_Sales')||
+                                        hasAuthority('Sale_Page')">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#saleSec"
            aria-expanded="true" aria-controls="saleSec">
             <i class="fa-solid fa-money-check"></i>
@@ -72,14 +80,17 @@
         <div id="saleSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" id="newCustomer" th:href="@{/customer}">Customer</a>
-                <a class="collapse-item" id="customerList" th:href="@{/customer/customer-list}">Customer list</a>
-                <a class="collapse-item" id="salesList" th:href="@{/sale/list}">All Sales</a>
-                <a class="collapse-item" id="newSale" th:href="@{/sale}">Sale</a>
+                <a class="collapse-item" id="newCustomer" sec:authorize="hasAuthority('Customer_Page')" th:href="@{/customer}">Customer</a>
+                <a class="collapse-item" id="customerList" sec:authorize="hasAuthority('Customer_List_Page')" th:href="@{/customer/customer-list}">Customer list</a>
+                <a class="collapse-item" id="salesList" sec:authorize="hasAuthority('All_Sales')" th:href="@{/sale/list}">All Sales</a>
+                <a class="collapse-item" id="newSale" sec:authorize="hasAuthority('Sale_Page')" th:href="@{/sale}">Sale</a>
             </div>
         </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAuthority('New_Worker_Page') ||
+                                        hasAuthority('Worker_List_Page')||
+                                        hasAuthority('Order_List_Page')||
+                                        hasAuthority('New_Order_Page')">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#orderSec"
            aria-expanded="true" aria-controls="orderSec">
             <i class="fa-brands fa-first-order-alt"></i>
@@ -88,15 +99,16 @@
         <div id="orderSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" id="newWorker" th:href="@{/supplier}">New Worker</a>
-                <a class="collapse-item" id="workerList" th:href="@{/purchase}">Worker list</a>
-                <a class="collapse-item" id="orderList" th:href="@{/purchase}">Order list</a>
-                <a class="collapse-item" id="newOrder" th:href="@{/purchase}">New Order</a>
+                <a class="collapse-item" id="newWorker" sec:authorize="hasAuthority('New_Worker_Page')" th:href="@{/supplier}">New Worker</a>
+                <a class="collapse-item" id="workerList" sec:authorize="hasAuthority('Worker_List_Page')" th:href="@{/purchase}">Worker list</a>
+                <a class="collapse-item" id="orderList" sec:authorize="hasAuthority('Order_List_Page')" th:href="@{/purchase}">Order list</a>
+                <a class="collapse-item" id="newOrder" sec:authorize="hasAuthority('New_Order_Page')" th:href="@{/purchase}">New Order</a>
             </div>
         </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAuthority('Sales_Page') ||
+                                        hasAuthority('Purchases_Page')">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#paymentSec"
            aria-expanded="true" aria-controls="paymentSec">
             <i class="fa-solid fa-coins"></i>
@@ -105,8 +117,8 @@
         <div id="paymentSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Add Payment For:</h6>
-                <a class="collapse-item" id="salesPayment" th:href="@{/payment/sales}">Sales</a>
-                <a class="collapse-item" id="purchasePayment" th:href="@{/payment/purchases}">Purchases</a>
+                <a class="collapse-item" id="salesPayment" sec:authorize="hasAuthority('Sales_Page')" th:href="@{/payment/sales}">Sales</a>
+                <a class="collapse-item" id="purchasePayment" sec:authorize="hasAuthority('Purchases_Page')" th:href="@{/payment/purchases}">Purchases</a>
             </div>
         </div>
     </li>
@@ -115,11 +127,21 @@
     <hr class="sidebar-divider">
 
     <!-- Heading -->
-    <div class="sidebar-heading">
+    <div class="sidebar-heading" sec:authorize="hasAuthority('Rate_Page') ||
+                                        hasAuthority('Permission_Groups_Page')||
+                                        hasAuthority('Permissions_Page')||
+                                        hasAuthority('Roles_Page')||
+                                        hasAuthority('Users_Page')||
+                                        hasAuthority('Business_Settings_Page')">
         Settings
     </div>
 
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAuthority('Rate_Page') ||
+                                        hasAuthority('Permission_Groups_Page')||
+                                        hasAuthority('Permissions_Page')||
+                                        hasAuthority('Roles_Page')||
+                                        hasAuthority('Users_Page')||
+                                        hasAuthority('Business_Settings_Page')">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#settingsSec"
            aria-expanded="true" aria-controls="settingsSec">
             <i class="fa-solid fa-screwdriver-wrench"></i>
@@ -127,23 +149,37 @@
         </a>
         <div id="settingsSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Page Options:</h6><a class="collapse-item" th:href="@{/metal-rate}">Rate</a>
-                <a class="collapse-item" id="permissionGroupList" th:href="@{/permission-groups/list}">Permission Groups</a>
-                <a class="collapse-item" id="permissionList" th:href="@{/permissions/list}">Permissions</a>
-                <a class="collapse-item" id="roles" th:href="@{/roles}">Roles</a>
-                <a class="collapse-item" id="users" th:href="@{/users}">Users</a>
-                <a class="collapse-item" th:href="@{/application-settings}">Business Settings</a>
+                <h6 class="collapse-header">Page Options:</h6>
+                <a class="collapse-item" id="metalRate" sec:authorize="hasAuthority('Rate_Page')" th:href="@{/metal-rate}">Rate</a>
+                <a class="collapse-item" id="permissionGroupList"  sec:authorize="hasAuthority('Permission_Groups_Page')" th:href="@{/permission-groups/list}">Permission Groups</a>
+                <a class="collapse-item" id="permissionList" sec:authorize="hasAuthority('Permissions_Page')" th:href="@{/permissions/list}">Permissions</a>
+                <a class="collapse-item" id="roles" sec:authorize="hasAuthority('Roles_Page')" th:href="@{/roles}">Roles</a>
+                <a class="collapse-item" id="users" sec:authorize="hasAuthority('Users_Page')" th:href="@{/users}">Users</a>
+                <a class="collapse-item" sec:authorize="hasAuthority('Business_Settings_Page')"  id="businessSettings" th:href="@{/application-settings}">Business Settings</a>
             </div>
         </div>
     </li>
 
-    <hr class="sidebar-divider">
+    <hr class="sidebar-divider" sec:authorize="hasAuthority('Rate_Page') ||
+                                        hasAuthority('Permission_Groups_Page')||
+                                        hasAuthority('Permissions_Page')||
+                                        hasAuthority('Roles_Page')||
+                                        hasAuthority('Users_Page')||
+                                        hasAuthority('Business_Settings_Page')">
 
     <!-- Heading -->
-    <div class="sidebar-heading">
-        reports
+    <div class="sidebar-heading" sec:authorize="hasAuthority('Purchase_Reports_Page') ||
+                                        hasAuthority('Purchase_Gst_Reports_Page')||
+                                        hasAuthority('Sale_Reports_Page')||
+                                        hasAuthority('Sale_Gst_Reports_Page')||
+                                        hasAuthority('Suppliers_Report_Page')">
+        Reports
     </div>
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAuthority('Purchase_Reports_Page') ||
+                                        hasAuthority('Purchase_Gst_Reports_Page')||
+                                        hasAuthority('Sale_Reports_Page')||
+                                        hasAuthority('Sale_Gst_Reports_Page')||
+                                        hasAuthority('Suppliers_Report_Page')">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#reportsSec"
            aria-expanded="true" aria-controls="reportsSec">
             <i class="fa-solid fa-file-circle-check"></i>
@@ -152,22 +188,28 @@
         <div id="reportsSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" id="purchaseRpt" th:href="@{/reports/purchase}">Purchase</a>
-                <a class="collapse-item" id="purchaseRptGst" th:href="@{/reports/purchase-gst}">Purchase-GST</a>
-                <a class="collapse-item" id="saleRpt" th:href="@{/reports/sale}">Sale</a>
-                <a class="collapse-item" id="saleRptGst" th:href="@{/reports/sale-gst}">Sale-GST</a>
-                <a class="collapse-item" id="todoRpt" th:href="@{/todo}">Suppliers</a>
+                <a class="collapse-item" id="purchaseRpt" sec:authorize="hasAuthority('Purchase_Reports_Page')" th:href="@{/reports/purchase}">Purchase</a>
+                <a class="collapse-item" id="purchaseRptGst" sec:authorize="hasAuthority('Purchase_Gst_Reports_Page')" th:href="@{/reports/purchase-gst}">Purchase-GST</a>
+                <a class="collapse-item" id="saleRpt" sec:authorize="hasAuthority('Sale_Reports_Page')" th:href="@{/reports/sale}">Sale</a>
+                <a class="collapse-item" id="saleRptGst" sec:authorize="hasAuthority('Sale_Gst_Reports_Page')" th:href="@{/reports/sale-gst}">Sale-GST</a>
+                <a class="collapse-item" id="todoRpt" sec:authorize="hasAuthority('Suppliers_Report_Page')" th:href="@{/todo}">Suppliers</a>
             </div>
         </div>
     </li>
 
-    <hr class="sidebar-divider">
+    <hr class="sidebar-divider" sec:authorize="hasAuthority('Purchase_Reports_Page') ||
+                                        hasAuthority('Purchase_Gst_Reports_Page')||
+                                        hasAuthority('Sale_Reports_Page')||
+                                        hasAuthority('Sale_Gst_Reports_Page')||
+                                        hasAuthority('Suppliers_Report_Page')">
 
     <!-- Heading -->
-    <div class="sidebar-heading">
+    <div class="sidebar-heading" sec:authorize="hasAuthority('Purchase_Charts_Page') ||
+                                        hasAuthority('Sales_Chart_Page')">
         Graphical Presentation
     </div>
-    <li class="nav-item">
+    <li class="nav-item" sec:authorize="hasAuthority('Purchase_Charts_Page') ||
+                                        hasAuthority('Sales_Chart_Page')">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#plSec"
            aria-expanded="true" aria-controls="plSec">
             <i class="fa-solid fa-cash-register"></i>
@@ -176,49 +218,15 @@
         <div id="plSec" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Page Options:</h6>
-                <a class="collapse-item" id="purchaseChart" th:href="@{/graph/purchases}">Purchases</a>
-                <a class="collapse-item" id="saleChart" th:href="@{/graph/sales}">Sales</a>
+                <a class="collapse-item" id="purchaseChart" sec:authorize="hasAuthority('Purchase_Charts_Page')"  th:href="@{/graph/purchases}">Purchases</a>
+                <a class="collapse-item" id="saleChart" sec:authorize="hasAuthority('Sales_Chart_Page')"  th:href="@{/graph/sales}">Sales</a>
             </div>
         </div>
     </li>
 
-    <!-- Nav Item - Pages Collapse Menu -->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"-->
-<!--           aria-expanded="true" aria-controls="collapsePages">-->
-<!--            <i class="fas fa-fw fa-folder"></i>-->
-<!--            <span>Pages</span>-->
-<!--        </a>-->
-<!--        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">-->
-<!--            <div class="bg-white py-2 collapse-inner rounded">-->
-<!--                <h6 class="collapse-header">Login Screens:</h6>-->
-<!--                <a class="collapse-item" href="login.html">Login</a>-->
-<!--                <a class="collapse-item" href="register.html">Register</a>-->
-<!--                <a class="collapse-item" href="forgot-password.html">Forgot Password</a>-->
-<!--                <div class="collapse-divider"></div>-->
-<!--                <h6 class="collapse-header">Other Pages:</h6>-->
-<!--                <a class="collapse-item" href="404.html">404 Page</a>-->
-<!--                <a class="collapse-item" href="blank.html">Blank Page</a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </li>-->
-
-    <!-- Nav Item - Charts -->
-<!--    <li class="nav-item">-->
-<!--        <a class="nav-link" href="charts.html">-->
-<!--            <i class="fas fa-fw fa-chart-area"></i>-->
-<!--            <span>Charts</span></a>-->
-<!--    </li>-->
-
-<!--    &lt;!&ndash; Nav Item - Tables &ndash;&gt;-->
-<!--    <li class="nav-item active">-->
-<!--        <a class="nav-link" href="tables.html">-->
-<!--            <i class="fas fa-fw fa-table"></i>-->
-<!--            <span>Tables</span></a>-->
-<!--    </li>-->
-
     <!-- Divider -->
-    <hr class="sidebar-divider d-none d-md-block">
+    <hr class="sidebar-divider d-none d-md-block" sec:authorize="hasAuthority('Purchase_Charts_Page') ||
+                                        hasAuthority('Sales_Chart_Page')">
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

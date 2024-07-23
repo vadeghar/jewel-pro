@@ -5,8 +5,12 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 @Data
-@AllArgsConstructor
 public class ChartData {
     private String label;
     private BigDecimal value;
+
+    public ChartData(String label, BigDecimal value) {
+        this.label = label;
+        this.value = value;
+    }
 }

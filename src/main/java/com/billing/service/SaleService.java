@@ -19,7 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -398,7 +398,7 @@ public class SaleService {
 
     public List<ChartData> getTopCustomers() {
         PageRequest pageable = PageRequest.of(0, 3);
-        return saleRepository.findTopCustomersByTotalAmountLast5Days(pageable);
+        return saleRepository.findTopCustomersByTotalAmountLast5Days();
     }
 
     public List<WeeklyReport> generateReport(ReportFilters filters) {
