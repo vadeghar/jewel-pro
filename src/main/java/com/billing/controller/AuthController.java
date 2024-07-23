@@ -40,10 +40,10 @@ public class AuthController {
 
     // handler method to handle user registration form submit request
     @PostMapping("/register/save")
-    public String registration(@ModelAttribute("user") UserDto userDto,
+    public String registration(@ModelAttribute("user") User user,
                                BindingResult result,
                                Model model) {
-        User existingUser = userService.findUserByUsername(userDto.getUsername());
+        User existingUser = userService.findUserByUsername(user.getUsername());
 
         if (existingUser != null && existingUser.getEmail() != null && !existingUser.getEmail().isEmpty()) {
             result.rejectValue("email", null,
@@ -51,11 +51,11 @@ public class AuthController {
         }
 
         if (result.hasErrors()) {
-            model.addAttribute("user", userDto);
+            model.addAttribute("user", user);
             return "views/registration/register";
         }
 
-        userService.saveUser(userDto);
+        userService.saveUser(user);
         return "redirect:/register?success";
     }
 

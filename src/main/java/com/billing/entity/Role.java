@@ -24,7 +24,7 @@ public class Role {
     private String name;
 
 //    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY) // Eager fetching ensures permissions are loaded with role
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "role_permissions",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
