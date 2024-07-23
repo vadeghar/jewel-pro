@@ -9,26 +9,24 @@ import com.billing.entity.Payment;
 import com.billing.entity.Purchase;
 import com.billing.entity.PurchaseItem;
 import com.billing.entity.Stock;
-import com.billing.enums.ReportTypeEnum;
 import com.billing.enums.StockStatus;
 import com.billing.model.ChartData;
-import com.billing.model.PurchaseReport;
 import com.billing.model.ReportFilters;
 import com.billing.model.WeeklyReport;
 import com.billing.repository.*;
 import com.billing.utils.BillingUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -286,8 +284,9 @@ public class PurchaseService {
         return purchaseRepository.getCurrentMonthTotalPurchaseAmount();
     }
     public List<ChartData> getTopSuppliers() {
-        PageRequest pageable = PageRequest.of(0, 3);
-        return purchaseRepository.findTopSuppliersByTotalAmountLast5Days(pageable);
+//        Pageable pageable = PageRequest.of(0, 3);
+//        Limit.of(3);
+        return purchaseRepository.findTopSuppliersByTotalAmountLast30Days();
     }
 
     public List<WeeklyReport> generateReport(ReportFilters filters) {

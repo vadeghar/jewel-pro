@@ -1,13 +1,11 @@
 package com.billing.service;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import com.billing.entity.Permission;
 import com.billing.repository.PermissionGroupRepository;
 import com.billing.repository.PermissionRepository;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Service

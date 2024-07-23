@@ -1,9 +1,5 @@
 package com.billing.controller;
 
-import com.billing.dto.SaleDTO;
-import com.billing.entity.Sale;
-import com.billing.service.SaleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

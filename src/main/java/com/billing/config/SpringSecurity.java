@@ -24,34 +24,63 @@ public class SpringSecurity {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
 
-                .authorizeHttpRequests((authorize) ->
-                        authorize.antMatchers("/register/**",
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/register/**",
                                 "/register",
                                 "/login",
                                 "/api/v1/**",
                                 "/css/**","/scss/**",
                                 "/js/**", "/img/**",
                                 "/vendor/**").permitAll()
-                                .anyRequest().authenticated()
-                ).formLogin(
-                        form -> form
-                                .loginPage("/login")
-                                .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/home")
-                                .permitAll()
-                ).logout(
-                        logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-//                                .permitAll()
-                                .logoutSuccessUrl("/login")
+                        .anyRequest().authenticated()
                 )
-        ;
+                .formLogin((form) -> form
+                        .loginPage("/login")
+                        .permitAll()
+                )
+                .logout((logout) -> {
+                    logout
+                            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+//                                .permitAll()
+                            .logoutSuccessUrl("/login");
+                });
         return http.build();
     }
+
+//
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http.csrf().disable()
+//
+//                .authorizeHttpRequests((authorize) ->
+//                        authorize.antMatchers("/register/**",
+//                                "/register",
+//                                "/login",
+//                                "/api/v1/**",
+//                                "/css/**","/scss/**",
+//                                "/js/**", "/img/**",
+//                                "/vendor/**").permitAll()
+//                                .anyRequest().authenticated()
+//                ).formLogin(
+//                        form -> form
+//                                .loginPage("/login")
+//                                .loginProcessingUrl("/login")
+//                                .defaultSuccessUrl("/home")
+//                                .permitAll()
+//                ).logout(
+//                        logout -> logout
+//                                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+////                                .permitAll()
+//                                .logoutSuccessUrl("/login")
+//                )
+//        ;
+//        return http.build();
+//    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

@@ -1,15 +1,9 @@
 package com.billing.controller;
 
-import com.billing.dto.ErrorResponse;
-import com.billing.entity.Supplier;
 import com.billing.service.SupplierService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/supplier")

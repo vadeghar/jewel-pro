@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.validation.Valid;
-import java.util.List;
 
 @Controller
 public class AuthController {
@@ -42,7 +40,7 @@ public class AuthController {
 
     // handler method to handle user registration form submit request
     @PostMapping("/register/save")
-    public String registration(@Valid @ModelAttribute("user") UserDto userDto,
+    public String registration(@ModelAttribute("user") UserDto userDto,
                                BindingResult result,
                                Model model) {
         User existingUser = userService.findUserByUsername(userDto.getUsername());

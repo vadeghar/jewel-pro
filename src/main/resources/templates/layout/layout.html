@@ -67,17 +67,17 @@
 <body id="page-top">
     <div id="wrapper">
         <!--sidebar.html  that's here  -->
-        <div th:replace="fragments/sidebar :: sidebar"></div>
+        <div th:replace="~{fragments/sidebar :: sidebar}"></div>
         <div id="content-wrapper" class="d-flex flex-column page-content">
             <!-- Main Content -->
             <div id="content">
-                <div th:replace="fragments/toolbar :: toolbar"></div>
+                <div th:replace="~{fragments/toolbar :: toolbar}"></div>
                 <div id="alert" style="width: 98%; margin-left: 10px;"></div>
                 <div layout:fragment="content"></div>
                 <input type="hidden" name="loadMenu" id="loadMenu">
             </div>
             <!-- End of Main Content -->
-            <div th:replace="fragments/footer :: footer"></div>
+            <div th:replace="~{fragments/footer :: footer}"></div>
         </div>
     </div>
 
@@ -142,7 +142,7 @@
     <!-- Bootstrap core JavaScript-->
     <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
 
     <!-- Core plugin JavaScript-->
@@ -167,7 +167,7 @@
     <script th:src="@{/vendor/datatables/buttons.colVis.min.js}"></script>
 
 
-<!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>-->
+
 
     <!-- Page level custom scripts -->
     <script th:src="@{/js/demo/datatables-demo.js}"></script>

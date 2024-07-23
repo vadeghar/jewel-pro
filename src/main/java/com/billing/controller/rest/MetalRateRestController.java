@@ -1,16 +1,12 @@
 package com.billing.controller.rest;
 
 import com.billing.constant.Metal;
-import com.billing.dto.ErrorResponse;
 import com.billing.entity.MetalRate;
 import com.billing.model.BoardRate;
 import com.billing.service.MetalRateService;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.math.BigDecimal;
 
 @RestController
