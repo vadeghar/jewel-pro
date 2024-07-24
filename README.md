@@ -28,7 +28,7 @@ This Java application is designed for Gold & Silver retail jewellery shops to ma
 - Offers options for generating reports on a monthly, quarterly, and yearly basis.
 - Helps in analyzing sales trends, inventory turnover, and profitability.
 
-### 6. Regular Expenses
+### 6. Regular Expenses (Not done)
 - Tracks regular expenses incurred by the jewellery shop such as rent, utilities, wages, etc.
 - Allows recording and categorizing expenses for better financial management.
 
@@ -36,12 +36,12 @@ This Java application is designed for Gold & Silver retail jewellery shops to ma
 - Manages information about suppliers providing raw materials such as gold and silver.
 - Keeps track of workers' details including their roles, contact information, wages, etc.
 
-### 8. Sale Through Orders
+### 8. Sale Through Orders (Not done)
 - Enables customers to place orders for customized jewellery designs.
 - Allows scheduling delivery dates for orders placed in advance.
 - Facilitates designing and delivering custom orders to customers.
 
-### 9. Loan on Gold
+### 9. Loan on Gold (Not done)
 - Handles transactions related to providing loans to customers against gold.
 - Manages loan details including the amount, interest rate, repayment terms, etc.
 - Helps in ensuring compliance with legal and regulatory requirements.
@@ -52,17 +52,20 @@ This Java application is designed for Gold & Silver retail jewellery shops to ma
 - Run the application and navigate to the provided URL to access the features.
 
 ## Technologies Used:
-- Java
-- Spring Boot
+- Java 21
+- Spring Boot 3.3.2
 - Spring JPA
 - MySQL (Database)
-- Thymeleaf, HTML, CSS, JavaScript (Frontend)
+- Thymeleaf, HTML, CSS, JQuery (Frontend)
 
 ## Contributors:
 - Lakshman Vadeghar
 
 ## License:
 MIT License
+
+## Demo URL
+https://jewel-pro.azurewebsites.net/
 
 Copyright (c) 2024 Lakshman Vadeghar
 
