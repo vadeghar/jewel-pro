@@ -18,33 +18,33 @@
     <link rel="stylesheet" th:href="@{/vendor/datatables/dataTables.bootstrap4.min.css}">
     <link rel="stylesheet" th:href="@{/vendor/jquery/jquery-ui.css}"> <!-- For auto complete feature -->
     <link th:href="@{/vendor/datatables/buttons.bootstrap4.css}" rel="stylesheet">
-    <link th:href="@{/css/sb-admin-2.css}" rel="stylesheet">
+    <link th:href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
 
-    <style>
-        .fade-out {
-          animation: fadeOut 1s forwards;
-        }
+<!--    <style>-->
+<!--        .fade-out {-->
+<!--          animation: fadeOut 1s forwards;-->
+<!--        }-->
 
-        @keyframes fadeOut {
-          from {
-            opacity: 1;
-          }
-          to {
-            opacity: 0;
-            display: none;
-          }
-        }
-        .gold-icon {
-            color: gold;
-        }
-        .silver-icon {
-            color: silver;
-        }
-.dt-buttons {
-        float: right !important;
-        margin-bottom: 0.5rem !important;
-        }
-    </style>
+<!--        @keyframes fadeOut {-->
+<!--          from {-->
+<!--            opacity: 1;-->
+<!--          }-->
+<!--          to {-->
+<!--            opacity: 0;-->
+<!--            display: none;-->
+<!--          }-->
+<!--        }-->
+<!--        .gold-icon {-->
+<!--            color: gold;-->
+<!--        }-->
+<!--        .silver-icon {-->
+<!--            color: silver;-->
+<!--        }-->
+<!--.dt-buttons {-->
+<!--        float: right !important;-->
+<!--        margin-bottom: 0.5rem !important;-->
+<!--        }-->
+<!--    </style>-->
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -110,11 +110,6 @@
             </div>
         </div>
     </div>
-<!--    <div class="d-flex justify-content-center">-->
-<!--        <div class="spinner-grow" role="status">-->
-<!--            <span class="sr-only">Loading...</span>-->
-<!--        </div>-->
-<!--    </div>-->
     <div id="spinner-div" class="pt-5">
         <div class="spinner-grow text-primary" role="status">
         </div>
@@ -123,7 +118,7 @@
     <script th:src="@{/vendor/jquery/jquery.min.js}"></script>
     <script th:src="@{/vendor/jquery/jquery.validate.min.js}"></script>
     <script th:src="@{/vendor/jquery/jquery-ui.min.js}"></script> <!-- For auto complete feature -->
-    <script th:src="@{/vendor/moment/moment.min.js"}></script>
+    <script th:src="@{/vendor/moment/moment.min.js}"></script>
     <script th:src="@{/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <script th:src="@{/vendor/jquery/jquery.dataTables.min.js}"></script>
     <script th:src="@{/vendor/datatables/dataTables.bootstrap4.min.js}"></script>
