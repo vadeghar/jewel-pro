@@ -29,7 +29,7 @@ public class SpringSecurity {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(c -> {c.disable();})
+                .csrf(c -> c.disable())
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(
                                 "/register/**",

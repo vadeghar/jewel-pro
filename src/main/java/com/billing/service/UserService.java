@@ -38,25 +38,9 @@ public class UserService {
     }
 
     public User saveUser(User user) {
-//        User user = new User();
-//        user.setName(userDto.getFirstName() + " " + userDto.getLastName());
-//        user.setEmail(userDto.getEmail());
-//        user.setUsername(userDto.getUsername());
-        // encrypt the password using spring security
-        if (StringUtils.isEmpty(user.getPassword())) {
+        if (StringUtils.isBlank(user.getPassword())) {
             user.setPassword(passwordEncoder.encode("password"));
-        } else {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-
-//        Optional<Role> roleOpt = roleRepository.findByName("ROLE_ADMIN");
-//        Role role = null;
-//        if (!roleOpt.isPresent()) {
-//            role = checkRoleExist();
-//        } else {
-//            role = roleOpt.get();
-//        }
-//        user.setRoles(Set.of(role));
         User user1 = userRepository.save(user);
         return user1;
     }
