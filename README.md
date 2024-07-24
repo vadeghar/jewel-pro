@@ -46,6 +46,11 @@ This Java application is designed for Gold & Silver retail jewellery shops to ma
 - Manages loan details including the amount, interest rate, repayment terms, etc.
 - Helps in ensuring compliance with legal and regulatory requirements.
 
+### 10. Settings
+- Feature based permissions.
+- Assign the required permissions to role.
+- User can have one or more roles assigned. (User able to see, only access assinged role permissions)
+
 ## Getting Started:
 - Clone the repository to your local machine.
 - Set up the database and configure the application properties.
@@ -65,7 +70,7 @@ This Java application is designed for Gold & Silver retail jewellery shops to ma
 MIT License
 
 ## Demo URL
-https://jewel-pro.azurewebsites.net/
+https://jewel-pro.azurewebsites.net/ (admin/admin)
 
 Copyright (c) 2024 Lakshman Vadeghar
 
