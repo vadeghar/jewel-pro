@@ -1,0 +1,53 @@
+1. Purchases -> Supplier -> Save, Reset.
+2. Purchases -> Supplier -> Supplier List -> Supplier all purchases, Edit supplier
+3. Purchases ->
+	Purchase ->
+		Save(PurchasePageSave),
+		Cancel.
+4. Purchases ->
+	Purchase list ->
+		Payments(PurchaseListPageViewPayments),
+		Add payment (PurchaseListPageAddNewPayment) ->
+			Save Payment,
+		View (PurchaseListPageViewPurchase) ->
+			Print Purchase Details, (PurchaseListPageViewPurchasePrint)
+			Payments,  (PurchaseListPageViewPurchaseViewPayments)
+			Add payment, (PurchaseListPageViewPurchaseNewPayment)
+			Edit Purchase -> (PurchaseListPageViewPurchaseEditPurchase)
+				Update, PurchaseListPageViewPurchaseEditPurchaseUpdate
+				Items ->  PurchaseListPageViewPurchaseEditPurchaseItems
+					Back to Purchase,
+					Add/Remove purchase item,
+					Save,
+					cancel,
+				Cancel
+
+5. Estimation -> New Estimation -> Add item, Add Exchange item, Save, Cancel
+6. Estimation -> Estimation List -> View -> Print, Edit -> Add/Remove item, Add/Remove Exchange item, Save, Cancel
+7. Sales -> Customer -> Save, Cancel
+8. Sales -> Customer List -> Customer Purchases -> View Purchase, Edit Customer -> Save, Customer Purchases -> View Purchase
+9. Sales -> All Sales -> View payments, Add New Payment, View Sale -> Print Invoice, Edit Sale ->Add/Remove sale item, Add/Remove Exchange item, Save, Payments List, Add New Payment -> Save Payment
+10. Sale -> Add Sale Item, Add Exchange Item, Save
+11. Orders -> New Worker (Work in progress)
+12. Orders -> Worker List (Work in progress)
+13. Orders -> Order List (Work in progress)
+14. Orders -> New Order (Work in progress)
+15. Payments -> Sales -> All payments of all sales (View only)
+16. Payments -> Purchases -> All payments of all purchases (View only)
+17. Settings -> Rate -> Save, Cancel
+18. Permission Group -> Save, Reset, Edit Permission Group, Delete Permission Group
+19. Permissions -> Save, Reset, Edit Permission, Delete Permission.
+20. Roles -> Save, Reset, Edit, Checkbox selection for permissions showing group by its permission group.
+21. Users -> Save, Reset, Edit User, Checkbox select for role.
+22. Business Settings -> Save, Edit
+23. Reports -> Purchases -> Report, Reset
+24. Reports -> Purchase-GST -> Report, Reset
+25. Reports -> Sale -> Report, Reset
+26. Reports -> Sale-GST -> Report, Reset
+27. Reports -> Suppliers -> Report, Reset
+28. Charts -> Purchase -> Go
+29. Chart -> Sales -> Go
+30. Top of the page -> Edit three types of rate (24ct, 22ct, Silver)
+31. Top Right corner -> User Name display and other options -> Profile -> Update name, username, save, Cancel
+32. Top Right corner -> User Name display and other options -> Settings -> Update password, save, Cancel
+33. Top Right corner -> User Name display and other options -> Logout -> Logs out from the current session
