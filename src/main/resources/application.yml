@@ -24,5 +24,5 @@ spring:
         enabled: false
 logging:
   level:
-    org.hibernate.SQL: DEBUG
+#    org.hibernate.SQL: DEBUG
     com.billing: DEBUG
