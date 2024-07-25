@@ -16,6 +16,8 @@ import java.util.List;
 @Repository
 public interface PurchaseRepository extends JpaRepository<Purchase, Long>/*, JpaSpecificationExecutor<Purchase>*/ {
 
+    List<Purchase> findAllByActivePurchaseAndCreatedBy(String activePurchase, String createdBy);
+
     List<Purchase> findAllByActivePurchase(String activePurchase);
 
     List<Purchase> findBySupplierId(Long id);

@@ -52,6 +52,9 @@ function setActiveCollapseItem(itemId) {
 }
 
 function simpleCall(url, method, title, tabId, requestData, responseCallback) {
+    const headers = {
+        'username': $('#loggedInUser').text()
+    };
 	doSignAndSend({
 		url: url,
 		type: method,
@@ -70,7 +73,8 @@ function simpleCall(url, method, title, tabId, requestData, responseCallback) {
 		},
 		complete: function() {
 		    $("#spinner-div").hide();
-		}
+		},
+		headers: headers
 	});
 }
 
@@ -192,3 +196,23 @@ function showSuccessMsg(sText) {
     }, 3000); // Duration the alert should be visible before fading out (in milliseconds)
 }
 
+function validateForm(formId, _rules, _messages) {
+  $(formId).validate({
+    rules: _rules,
+    messages: _messages,
+    errorElement: 'div',
+    errorPlacement: function(error, element) {
+        error.addClass('invalid-feedback');
+        error.insertAfter(element);
+    },
+    highlight: function(element, errorClass, validClass) {
+        $(element).addClass(errorClass).removeClass(validClass);
+        $(element).closest('.form-group').addClass('has-error');
+    },
+    unhighlight: function(element, errorClass, validClass) {
+        $(element).removeClass(errorClass).addClass(validClass);
+        $(element).closest('.form-group').removeClass('has-error');
+    }
+  });
+  return $(formId).valid();
+}

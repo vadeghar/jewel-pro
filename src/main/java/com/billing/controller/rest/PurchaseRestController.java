@@ -28,9 +28,9 @@ public class PurchaseRestController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllPurchase() {
+    public ResponseEntity<?> getAllPurchase(@RequestHeader("username") String username) {
         log.debug("PurchaseController >> getAllPurchase >>");
-        List<PurchaseDTO> purchaseDTOList = purchaseService.getAllPurchases();
+        List<PurchaseDTO> purchaseDTOList = purchaseService.getAllPurchases(username);
         log.debug("PurchaseController << getAllPurchase <<");
         return ResponseEntity.ok().body(purchaseDTOList);
     }

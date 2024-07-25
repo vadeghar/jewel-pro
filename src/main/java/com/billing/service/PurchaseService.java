@@ -153,9 +153,14 @@ public class PurchaseService {
         return dbPurchase.getId();
     }
 
-    public List<PurchaseDTO> getAllPurchases() {
+    public List<PurchaseDTO> getAllPurchases(String username) {
         log.debug("PurchaseService >> getAllPurchases");
-        List<Purchase> purchaseList = purchaseRepository.findAllByActivePurchase("YES");
+        List<Purchase> purchaseList = null;
+        if (username != null && username.equalsIgnoreCase("admin")) {
+            purchaseList = purchaseRepository.findAllByActivePurchase("YES");
+        } else {
+            purchaseList = purchaseRepository.findAllByActivePurchaseAndCreatedBy("YES", username);
+        }
         List<PurchaseDTO> purchaseDTOList = purchaseList.stream().map(p -> toDto(p)).collect(Collectors.toList());
         log.debug("PurchaseService << getAllPurchases <<");
         return purchaseDTOList;

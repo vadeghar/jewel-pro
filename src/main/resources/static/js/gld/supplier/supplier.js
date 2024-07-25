@@ -1,6 +1,34 @@
 var _customerContext = '/supplier'
 var url = baseUrl + _customerContext;
+var _rules = {
+    name: "required",
+    phone: {
+        required: true,
+        minlength: 10
+    },
+    location: "required",
+    businessName: "required",
+    businessGstNo: "required"
+}
 
+var _messages = {
+    name: {
+        required: "Please enter your name."
+    },
+    phone: {
+        required: "Please select active status.",
+        minlength: "Number should be 10 digits."
+    },
+    location:{
+         required: "Please enter location."
+    },
+    businessName:{
+         required: "Please enter Business name."
+    },
+    businessGstNo:{
+      required: "Please enter GST No."
+    }
+}
 $(document).ready(function() {
     var urlParams = getUrlVars();
     if(urlParams.id) {
@@ -11,11 +39,16 @@ $(document).ready(function() {
     }
 });
 
-$(document).on('click', '#saveSupplier', function() {
-    //customerForm
-    var customerRequest = formToJson('#supplierForm');
-    console.log(JSON.stringify(customerRequest));
-    simpleCall(url, 'post', '', '', JSON.stringify(customerRequest), saveSupplierCallback);
+$(document).on('click', '#saveSupplier', function(event) {
+    var valid = validateForm("#supplierForm", _rules, _messages)
+  if (!valid) {
+    event.preventDefault();
+    return;
+  }
+  event.preventDefault(); // Prevent form submission (optional)
+  var customerRequest = formToJson('#supplierForm');
+  console.log(JSON.stringify(customerRequest));
+  simpleCall(url, 'post', '', '', JSON.stringify(customerRequest), saveSupplierCallback);
 });
 $(document).on('click', '#resetSupplier', function() {
     resetForm('#customerForm');
